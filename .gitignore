@@ -269,3 +269,10 @@ _doc/sphinxdoc/source/phdoc_static/style_notebook_snippet.css
 _doc/sphinxdoc/source/gallery1/*
 _doc/sphinxdoc/source/gallery2/*
 _doc/sphinxdoc/source/HISTORY.rst
+src/csharpyml/binaries/model.zip
+src/csharpyml/binaries/mltest.py
+src/csharpyml/binaries/iris_data_id.txt
+_doc/notebooks/iris_data_id_test.txt
+_doc/notebooks/iris_data_id_train.txt
+_doc/notebooks/model.zip
+_doc/notebooks/prediction.txt

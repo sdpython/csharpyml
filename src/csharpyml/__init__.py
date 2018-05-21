@@ -1,7 +1,7 @@
 """
 @file
-@brief Module *python3_module_template*.
-Empty module, template for others.
+@brief Module *csharpyml*,
+:epkg:`Python`, :epkg:`C#` and :epkg:`ML.net`.
 """
 
 __version__ = "0.1"

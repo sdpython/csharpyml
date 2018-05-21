@@ -47,7 +47,8 @@ class TestCodeStyle(ExtTestCase):
                          "No name 'AddReference' in module 'clr'",
                          "csmagics.py:113: W0703",
                          "add_reference.py:14: W0703",
-                         "No name 'version_c' in module 'src.csharpy.cparts.cmodule'",
+                         "No name 'version_c' in module 'src.csharpyml.cparts.cmodule'",
+                         "Unable to import 'CSharPyMLExtension'",
                          ])
 
     def test_style_test(self):
@@ -68,10 +69,12 @@ class TestCodeStyle(ExtTestCase):
                          "imported as skip_",
                          "Unused import src",
                          "Unused import clr",
-                         "Unable to import 'CSharPyExtension'",
+                         "Unable to import 'CSharPyMLExtension'",
                          "Unable to import 'System'",
                          "Module 'clr' has no 'AddReference' member",
                          "Unable to import 'System.Collections.Generic'",
+                         "Instance of 'tuple' has no 'target' member",
+                         "Instance of 'tuple' has no 'data' member",
                          ])
 
 

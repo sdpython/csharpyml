@@ -21,7 +21,7 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from src.csharpy import __version__, check
+from src.csharpyml import __version__, check
 
 
 class TestVersion (unittest.TestCase):

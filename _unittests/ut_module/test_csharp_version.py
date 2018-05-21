@@ -20,16 +20,16 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from src.csharpy.binaries import add_csharp_extension
-from src.csharpy import __version__
+from src.csharpyml import __version__
+from src.csharpyml.binaries import add_csharpml_extension
 
 
 class TestCSharpVersion(ExtTestCase):
     """Test csharp version is aligned with module version."""
 
     def test_version_number(self):
-        add_csharp_extension()
-        from CSharPyExtension import Constants
+        add_csharpml_extension()
+        from CSharPyMLExtension import Constants
         vers = Constants.Version()
         self.assertEqual(__version__, vers)
 

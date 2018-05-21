@@ -152,9 +152,9 @@ if not r:
     root = os.path.abspath(os.path.dirname(__file__))
 
     if "build_ext" in sys.argv:
-        
+
         from pyquickhelper.loghelper import run_cmd
-        
+
         def build_machinelearning():
             "builds machine learning"
             print('[csharpyml.machinelearning]')
@@ -167,22 +167,22 @@ if not r:
                     "Unable to build machinelearning code.\nCMD: {0}\n--ERR--\n{1}".format(cmd, err))
             elif len(out) > 0:
                 print('[csharpyml.dotnet] OUT')
-                print(out)                
-        
+                print(out)
+
         # git submodule add https://github.com/dotnet/machinelearning.git cscode/machinelearning
         # We build a dotnet application.
         if '--inplace' not in sys.argv:
             raise Exception("Option --inplace must be set up.")
-        
+
         env = os.environ.get('DOTNET_CLI_TELEMETRY_OPTOUT', None)
         if env is None:
             os.environ['DOTNET_CLI_TELEMETRY_OPTOUT'] = '1'
         print('[csharpyml.env] DOTNET_CLI_TELEMETRY_OPTOUT={0}'.format(
             os.environ['DOTNET_CLI_TELEMETRY_OPTOUT']))
-            
+
         # builds machinelearning
         build_machinelearning()
-        
+
         # builds the other libraries
         cmds = ['dotnet restore CSharPyMLExtension_netcore.sln',
                 'dotnet build -c Release CSharPyMLExtension_netcore.sln']
@@ -205,7 +205,7 @@ if not r:
         copied = 0
         for name in explore_folder_iterfile(folder, pattern='.*[.]((dll)|(so))$'):
             full = os.path.join(folder, name)
-            if 'Release' in full:
+            if 'Release' in full and 'Microsoft.ML.Test' not in full and "xunit." not in full:
                 short_name = os.path.split(os.path.splitext(name)[0])[-1]
                 if short_name in must_copy:
                     must_copy[short_name] += 1
@@ -217,6 +217,12 @@ if not r:
         min_must_copy = min(must_copy.values())
         if copied == 0 or min_must_copy == 0:
             raise RuntimeError("Missing binaries in '{0}'".format(folder))
+
+        # Copy specific files.
+        r"""
+        packages\newtonsoft.json\10.0.3\lib\netstandard1.3
+        packages\system.codedom\4.4.0\lib\netstandard2.0
+        """
 
     if sys.platform.startswith("win"):
         extra_compile_args = None

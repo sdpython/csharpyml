@@ -22,7 +22,7 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from src.csharpy.cparts import version_c
+from src.csharpyml.cparts import version_c
 
 
 class TestCModule(ExtTestCase):

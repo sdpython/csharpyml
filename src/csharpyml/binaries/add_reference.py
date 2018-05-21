@@ -31,7 +31,7 @@ def AddReference(name):
             raise
 
 
-def add_csharp_extension():
+def add_csharpml_extension():
     """
     Imports *CSharpExtension* into global context.
 
@@ -46,15 +46,15 @@ def add_csharp_extension():
         .. runpython::
             :showcode:
 
-            from csharpyml.binaries import add_csharp_extension
+            from csharpyml.binaries import add_csharpml_extension
             from csharpyml import __version__
 
             add_csharp_extension()
 
             # This line needs to be after the previous one.
-            from CSharPyExtension import Constants
+            from CSharPyMLExtension import Constants
 
             vers = Constants.Version()
             print(__version__, vers)
     """
-    AddReference("CSharPyExtension")
+    AddReference("CSharPyMLExtension")
