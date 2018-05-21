@@ -62,7 +62,7 @@ Installation
 ::
 
     pip install csharpyml
-    
+
 *Linux*
 
 Follow the instructions described in

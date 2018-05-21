@@ -6,17 +6,16 @@
 from IPython.display import Javascript
 from IPython.core.magic import magics_class, cell_magic
 from pyquickhelper.ipythonhelper import MagicCommandParser, MagicClassWithHelpers
-from ..runtime import create_cs_function
 
 
 @magics_class
-class CsMagics(MagicClassWithHelpers):
+class CsMLMagics(MagicClassWithHelpers):
     """
     Defines magic commands for notebooks.
     """
 
     @staticmethod
-    def CS_parser():
+    def maml_parser():
         """
         Defines the way to parse the magic command ``%%CS``.
         """
@@ -32,12 +31,12 @@ class CsMagics(MagicClassWithHelpers):
         return parser
 
     @cell_magic
-    def CS(self, line, cell):
+    def maml(self, line, cell):
         """
-        Defines magic command ``%%CS``.
+        Defines magic command ``%%maml``.
 
         .. nbref::
-            :title: %%CS
+            :title: %%maml
 
             The magic command wraps the :epkg:`C#` code into a
             :epkg:`Python` function the user can call.
@@ -125,8 +124,4 @@ def register_magics(ip):
     """
     Registers magics commands.
     """
-    ip.register_magics(CsMagics)
-    patch = ("IPython.config.cell_magic_highlight['csmagic'] = "
-             "{'reg':[/^%%CS/]};")
-    Javascript(data=patch, lib=[
-               "https://github.com/codemirror/CodeMirror/blob/master/mode/clike/clike.js"])
+    ip.register_magics(CsMLMagics)

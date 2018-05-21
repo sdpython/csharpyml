@@ -12,4 +12,3 @@
     The module also clones the repository
     `dotnet/machinelearning <https://github.com/dotnet/machinelearning>`_
     to start from the latest sources.
-

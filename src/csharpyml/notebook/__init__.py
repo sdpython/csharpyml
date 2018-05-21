@@ -4,4 +4,4 @@
 @brief Uses `pythonnet <https://github.com/sdpython/pythonnet>`_.
 """
 
-from .csmagics import register_magics
+from .csmlmagics import register_magics
