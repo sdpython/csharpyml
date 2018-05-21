@@ -152,16 +152,38 @@ if not r:
     root = os.path.abspath(os.path.dirname(__file__))
 
     if "build_ext" in sys.argv:
+        
+        from pyquickhelper.loghelper import run_cmd
+        
+        def build_machinelearning():
+            "builds machine learning"
+            print('[csharpyml.machinelearning]')
+            this = os.path.dirname(__file__)
+            folder = os.path.join(this, 'cscode', 'machinelearning')
+            cmd = "build -Release"
+            out, err = run_cmd(cmd, wait=True, change_path=folder)
+            if len(err) > 0:
+                raise RuntimeError(
+                    "Unable to build machinelearning code.\nCMD: {0}\n--ERR--\n{1}".format(cmd, err))
+            elif len(out) > 0:
+                print('[csharpyml.dotnet] OUT')
+                print(out)                
+        
         # git submodule add https://github.com/dotnet/machinelearning.git cscode/machinelearning
         # We build a dotnet application.
         if '--inplace' not in sys.argv:
             raise Exception("Option --inplace must be set up.")
-        from pyquickhelper.loghelper import run_cmd
+        
         env = os.environ.get('DOTNET_CLI_TELEMETRY_OPTOUT', None)
         if env is None:
             os.environ['DOTNET_CLI_TELEMETRY_OPTOUT'] = '1'
         print('[csharpyml.env] DOTNET_CLI_TELEMETRY_OPTOUT={0}'.format(
             os.environ['DOTNET_CLI_TELEMETRY_OPTOUT']))
+            
+        # builds machinelearning
+        build_machinelearning()
+        
+        # builds the other libraries
         cmds = ['dotnet restore CSharPyMLExtension_netcore.sln',
                 'dotnet build -c Release CSharPyMLExtension_netcore.sln']
         folder = os.path.abspath("cscode")

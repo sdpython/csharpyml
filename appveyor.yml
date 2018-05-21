@@ -42,6 +42,6 @@ test_script:
 after_test:
   - "%PYTHON%\\python -u setup.py bdist_wheel"
 
-artifacts:
-  - path: dist
-    name: csharpy
+# artifacts:
+#  - path: dist
+#     name: csharpyml
