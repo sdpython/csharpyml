@@ -160,7 +160,7 @@ if not r:
             print('[csharpyml.machinelearning]')
             this = os.path.dirname(__file__)
             folder = os.path.join(this, 'cscode', 'machinelearning')
-            cmd = "build -Release"
+            cmd = "dotnet build -Release"
             out, err = run_cmd(cmd, wait=True, change_path=folder)
             if len(err) > 0:
                 raise RuntimeError(
