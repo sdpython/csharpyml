@@ -152,6 +152,7 @@ if not r:
     root = os.path.abspath(os.path.dirname(__file__))
 
     if "build_ext" in sys.argv:
+        # git submodule add https://github.com/dotnet/machinelearning.git cscode/machinelearning
         # We build a dotnet application.
         if '--inplace' not in sys.argv:
             raise Exception("Option --inplace must be set up.")

@@ -1,0 +1,3 @@
+[submodule "cscode/machinelearning"]
+	path = cscode/machinelearning
+	url = https://github.com/dotnet/machinelearning.git
