@@ -80,8 +80,7 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            python3 -m pip install pyquickhelper
-            python3 -m pip install -r requirements.txt
+            python3 -m pip install -r requirements.txt            
             python3 -m pip install scipy scikit-learn
             
       - run:
@@ -143,8 +142,8 @@ jobs:
       # - run:
       #     name: copy documentation
       #     command: |
-       #      mkdir -p test-reports/doc
-        #     cp -r  _doc/sphinxdoc/build/html test-reports/doc
+      #       mkdir -p test-reports/doc
+      #       cp -r  _doc/sphinxdoc/build/html test-reports/doc
             
       # - store_artifacts:
       #     path: test-reports
