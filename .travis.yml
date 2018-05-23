@@ -64,6 +64,8 @@ install:
 before_script:
   - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
   - gcc --version
+  - ls cscode
+  - ls cscode/machinelearning
   - python setup.py build_ext --inplace
 
 script:

@@ -113,6 +113,8 @@ jobs:
           command: |
             . venv/bin/activate
             export DOTNET_CLI_TELEMETRY_OPTOUT=1
+            ls cscode
+            ls cscode/machinelearning
             python3 setup.py build_ext --inplace
 
       - run:
