@@ -160,7 +160,7 @@ if not r:
             print('[csharpyml.machinelearning]')
             this = os.path.dirname(__file__)
             folder = os.path.join(this, 'cscode', 'machinelearning')
-            cmd = "dotnet build -Release"
+            cmd = "build -Release"
             out, err = run_cmd(cmd, wait=True, change_path=folder)
             if len(err) > 0:
                 raise RuntimeError(
@@ -168,6 +168,11 @@ if not r:
             elif len(out) > 0:
                 print('[csharpyml.dotnet] OUT')
                 print(out)
+            bin = os.path.join(folder, "bin")
+            if not os.path.exists(bin):
+                existing = os.listdir(folder)
+                raise FileNotFoundError("Unable to find '{0}', build failed. Found:\n{1}".format(
+                                        bin, "\n".join(existing)))
 
         # git submodule add https://github.com/dotnet/machinelearning.git cscode/machinelearning
         # We build a dotnet application.
