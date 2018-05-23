@@ -170,7 +170,7 @@ if not r:
                 existing = os.listdir(folder)
                 raise FileNotFoundError("Unable to find '{0}', build failed. Found:\n{1}".format(
                                         full, "\n".join(existing)))
-            cmd += '-Release'
+            cmd += ' -Release'
             out, err = run_cmd(cmd, wait=True, change_path=folder)
             if len(err) > 0:
                 raise RuntimeError(
