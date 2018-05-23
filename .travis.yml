@@ -40,6 +40,19 @@ addons:
     packages:
       - mono-devel
       - ca-certificates-mono
+      - clang
+      - cmake
+      - libunwind8
+      - curl
+      # ubuntu https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#ubuntu
+      - libunwind8
+      - liblttng-ust0
+      - libcurl3
+      - libssl1.0.0
+      - libuuid1
+      - libkrb5-3
+      - zlib1g
+      - libicu52
 
 before_install:
   # Set-up dll path for embedded tests

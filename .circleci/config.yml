@@ -26,6 +26,15 @@ jobs:
             sudo apt-get install apt-transport-https
 
       - run:
+          name: install C++ dependencies
+          command: |
+            sudo apt-get update
+            sudo apt-get cmake libunwind8 curl
+            # Debian 8 https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#ubuntu
+            sudo apt-get libunwind8 liblttng-ust0 libcurl3 libuuid1 libkrb5-3 zlib1g
+            sudo apt-get libssl1.0.0
+
+      - run:
           name: install mono
           command: |
             sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
@@ -50,7 +59,7 @@ jobs:
       - run:
           name: install clang
           command: |
-            sudo apt-get install clang
+                    sudo apt-get install clang
 
       - run:
           name: Install pandoc
