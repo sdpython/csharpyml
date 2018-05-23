@@ -160,7 +160,17 @@ if not r:
             print('[csharpyml.machinelearning]')
             this = os.path.dirname(__file__)
             folder = os.path.join(this, 'cscode', 'machinelearning')
-            cmd = "build -Release"
+            cmd = "build{0}"
+            if sys.platform.startswith("win"):
+                cmd = cmd.format('.cmd')
+            else:
+                cmd = cmd.format('.sh')
+            full = os.path.join(folder, cmd)
+            if not os.path.exists(full):
+                existing = os.listdir(folder)
+                raise FileNotFoundError("Unable to find '{0}', build failed. Found:\n{1}".format(
+                                        full, "\n".join(existing)))
+            cmd += '-Release'
             out, err = run_cmd(cmd, wait=True, change_path=folder)
             if len(err) > 0:
                 raise RuntimeError(
