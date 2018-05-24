@@ -82,7 +82,7 @@ before_script:
   - cd cscode/machinelearning
   - ls
   - bash --help
-  - build.sh -Release
+  - bash --verbose build.sh -Release
   - cd ../..
   - python setup.py build_ext --inplace
 

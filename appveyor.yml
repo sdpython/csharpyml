@@ -36,7 +36,7 @@ before_build:
 
 before_test:
   - cd cscode\machinelearning
-  - build -Release
+  - build.cmd -Release
   - cd ..\..
   - "%PYTHON%\\python -u setup.py build_ext --inplace"
   

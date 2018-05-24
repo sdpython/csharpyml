@@ -129,7 +129,7 @@ jobs:
             cd cscode/machinelearning
             ls
             bash --help
-            build.sh -Release
+            bash --verbose build.sh -Release
             cd ../..
 
       - run:
