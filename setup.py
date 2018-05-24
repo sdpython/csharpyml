@@ -171,9 +171,18 @@ if not r:
                 raise FileNotFoundError("Unable to find '{0}', build failed. Found:\n{1}".format(
                                         full, "\n".join(existing)))
             if not sys.platform.startswith("win"):
-                cmd = "bash " + cmd
+                cmd = "bash --verbose " + cmd
             cmd += ' -Release'
             out, err = run_cmd(cmd, wait=True, change_path=folder)
+            if len(err) > 0:
+                # Filter out small errors.
+                errs = []
+                lines = err.split('\n')
+                for line in lines:
+                    if 'ILAsmVersion.txt: No such file or directory' in line:
+                        continue
+                    errs.append(line)
+                err = "\n".join(errs)
             if len(err) > 0:
                 raise RuntimeError(
                     "Unable to build machinelearning code.\nCMD: {0}\n--ERR--\n{1}".format(cmd, err))

@@ -59,7 +59,7 @@ jobs:
       - run:
           name: install clang
           command: |
-                    sudo apt-get install clang
+                    sudo apt-get install clang-5.0
 
       - run:
           name: Install pandoc
