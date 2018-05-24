@@ -80,6 +80,8 @@ before_script:
   - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
   - gcc --version
   - cd cscode/machinelearning
+  - ls
+  - bash --help
   - build.sh -Release
   - cd ../..
   - python setup.py build_ext --inplace

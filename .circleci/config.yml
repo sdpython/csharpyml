@@ -127,6 +127,8 @@ jobs:
           command: |
             . venv/bin/activate
             cd cscode/machinelearning
+            ls
+            bash --help
             build.sh -Release
             cd ../..
 
