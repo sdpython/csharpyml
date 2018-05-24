@@ -207,7 +207,10 @@ if not r:
             os.environ['DOTNET_CLI_TELEMETRY_OPTOUT']))
 
         # builds machinelearning
-        build_machinelearning()
+        if '--skipml' in sys.argv:
+            sys.argv = [_ for _ in sys.argv if _ != '--skipml']
+        else:
+            build_machinelearning()        
 
         # builds the other libraries
         cmds = ['dotnet restore CSharPyMLExtension_netcore.sln',

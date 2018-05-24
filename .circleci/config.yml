@@ -59,7 +59,9 @@ jobs:
       - run:
           name: install clang
           command: |
-                    sudo apt-get install clang-5.0
+                    cmake --version
+                    g++ --version
+                    sudo apt-get install clang-4.0 lldb-4.0 --fix-missing
 
       - run:
           name: Install pandoc
@@ -137,7 +139,7 @@ jobs:
           command: |
             . venv/bin/activate
             export DOTNET_CLI_TELEMETRY_OPTOUT=1
-            python3 setup.py build_ext --inplace
+            python3 setup.py build_ext --inplace --skipml
 
       - run:
           name: run tests                  
