@@ -35,8 +35,9 @@ before_build:
   - cmd: dotnet restore ./src/src.csproj --verbosity m
 
 before_test:
-  - dir cscode
-  - dir cscode\machinelearning
+  - cd cscode\machinelearning
+  - build -Release
+  - cd ..\..
   - "%PYTHON%\\python -u setup.py build_ext --inplace"
   
 test_script:

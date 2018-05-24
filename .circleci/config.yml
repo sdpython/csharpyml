@@ -123,12 +123,18 @@ jobs:
           key: v3-dependencies-{{ checksum "requirements.txt" }}
         
       - run:
+          name: build machinelearning
+          command: |
+            . venv/bin/activate
+            cd cscode/machinelearning
+            build -Release
+            cd ../..
+
+      - run:
           name: build extension
           command: |
             . venv/bin/activate
             export DOTNET_CLI_TELEMETRY_OPTOUT=1
-            ls cscode
-            ls cscode/machinelearning
             python3 setup.py build_ext --inplace
 
       - run:
