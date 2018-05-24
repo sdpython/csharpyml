@@ -29,10 +29,10 @@ jobs:
           name: install C++ dependencies
           command: |
             sudo apt-get update
-            sudo apt-get cmake libunwind8 curl
+            sudo apt-get install cmake libunwind8 curl
             # Debian 8 https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#ubuntu
-            sudo apt-get libunwind8 liblttng-ust0 libcurl3 libuuid1 libkrb5-3 zlib1g
-            sudo apt-get libssl1.0.0
+            sudo apt-get install libunwind8 liblttng-ust0 libcurl3 libuuid1 libkrb5-3 zlib1g
+            sudo apt-get install libssl1.0.0
 
       - run:
           name: install mono
