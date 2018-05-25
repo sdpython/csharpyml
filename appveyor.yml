@@ -27,13 +27,15 @@ install:
   - "set PATH=%PATH%;C:\\projects\\jyquickhelper\\build\\update_modules\\Graphviz\\bin"
   - set DOTNET_CLI_TELEMETRY_OPTOUT=1
 
+build: off
+
 before_build:
   # Display .NET Core version
   - cmd: dotnet --version
   # Display minimal restore text
   - cmd: dotnet restore ./src/src.csproj --verbosity
 
-build:
+before_test:
   - cd cscode\machinelearning
   - build.cmd -Release
   - cd ..\..

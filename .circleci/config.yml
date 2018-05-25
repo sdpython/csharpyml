@@ -63,16 +63,6 @@ jobs:
             echo "Done (4)"
 
       - run:
-          name: install clang
-          command: |
-                    # wget http://http.debian.net/debian/pool/main/l/llvm-toolchain-5.0/llvm-toolchain-5.0_5.0.1.orig-clang.tar.bz2
-                    # Next file is already a compiled version of clang for Debian 8.
-                    wget  http://releases.llvm.org/6.0.0/clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
-                    tar xvf clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
-                    export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:$PATH
-                    sudo echo "export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:\$PATH" >> ~/.bashrc
-
-      - run:
           name: Install pandoc
           command: |
                     sudo apt-get update 
@@ -115,7 +105,6 @@ jobs:
             . venv/bin/activate
             python3 -m pip install -U pip
             python3 -m pip install -U setuptools wheel
-            dotnet --help
             git clone https://github.com/pythonnet/pythonnet.git
             cd pythonnet
             python3 setup.py install --xplat
@@ -127,6 +116,16 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
              python3 -m pip install csharpy
+
+      - run:
+          name: install clang
+          command: |
+                    # wget http://http.debian.net/debian/pool/main/l/llvm-toolchain-5.0/llvm-toolchain-5.0_5.0.1.orig-clang.tar.bz2
+                    # Next file is already a compiled version of clang for Debian 8.
+                    wget  http://releases.llvm.org/6.0.0/clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
+                    tar xvf clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
+                    export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:$PATH
+                    sudo echo "export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:\$PATH" >> ~/.bashrc
 
       - save_cache:
           paths:
