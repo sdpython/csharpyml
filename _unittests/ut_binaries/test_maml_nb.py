@@ -1,5 +1,5 @@
 """
-@brief      test log(time=6s)
+@brief      test log(time=7s)
 
 You should indicate a time in seconds. The program ``run_unittests.py``
 will sort all test files by increasing time and run them.
@@ -7,6 +7,8 @@ will sort all test files by increasing time and run them.
 import sys
 import os
 import unittest
+from io import StringIO
+from contextlib import redirect_stdout
 from sklearn.datasets import load_iris
 import pandas
 from pyquickhelper.pycode import ExtTestCase, get_temp_folder
@@ -24,18 +26,18 @@ except ImportError:
         sys.path.append(path)
     import src
 
-from src.csharpyml.binaries import maml
+from src.csharpyml.notebook.csmlmagics import CsMLMagics
 
 
-class TestMaml(ExtTestCase):
+class TestMamlNb(ExtTestCase):
     """Test maml command line."""
 
     def test_src(self):
         "skip pylint"
         self.assertFalse(src is None)
 
-    def test_maml(self):
-        temp = get_temp_folder(__file__, "temp_maml")
+    def test_maml_nb(self):
+        temp = get_temp_folder(__file__, "temp_maml_nb")
 
         iris = load_iris()
         X = iris.data
@@ -57,9 +59,12 @@ class TestMaml(ExtTestCase):
         out=__MODEL__
         """.strip("\n ").replace('__MODEL__', model).replace('__DATA__', dest)
 
-        out, _ = maml(script)
+        out = StringIO()
+        with redirect_stdout(out):
+            magic = CsMLMagics()
+            magic.maml('', script)
         self.assertExists(model)
-        self.assertIn("LBFGS Optimizer", out)
+        self.assertIn("LBFGS Optimizer", out.getvalue())
 
 
 if __name__ == "__main__":
