@@ -111,14 +111,12 @@ jobs:
             cd ..
 
       - run:
-          name: install csharpy
+          name: remove clang
           command: |
-            python3 -m venv venv
-            . venv/bin/activate
-             python3 -m pip install csharpy
+                    sudo apt-get remove clang
 
       - run:
-          name: install clang
+          name: install clang 6.0
           command: |
                     # wget http://http.debian.net/debian/pool/main/l/llvm-toolchain-5.0/llvm-toolchain-5.0_5.0.1.orig-clang.tar.bz2
                     # Next file is already a compiled version of clang for Debian 8.
@@ -126,6 +124,13 @@ jobs:
                     tar xvf clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
                     export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:$PATH
                     sudo echo "export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:\$PATH" >> ~/.bashrc
+
+      - run:
+          name: install csharpy
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+             python3 -m pip install csharpy
 
       - save_cache:
           paths:
