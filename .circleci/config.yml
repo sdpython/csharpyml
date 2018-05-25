@@ -65,13 +65,10 @@ jobs:
       - run:
           name: install clang
           command: |
-                    wget  http://releases.llvm.org/6.0.0/clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
                     # wget http://http.debian.net/debian/pool/main/l/llvm-toolchain-5.0/llvm-toolchain-5.0_5.0.1.orig-clang.tar.bz2
+                    # Next file is already a compiled version of clang for Debian 8.
+                    wget  http://releases.llvm.org/6.0.0/clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
                     tar xvf clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
-                    cd clang+llvm-6.0.0-x86_64-linux-gnu-debian8
-                    ./configure
-                    make
-                    sudo make install
                     export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:$PATH
                     sudo echo "export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:\$PATH" >> ~/.bashrc
 

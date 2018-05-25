@@ -201,7 +201,7 @@ def build_module():
 
     # builds the other libraries
     cmds = ['dotnet restore CSharPyMLExtension_netcore.sln',
-            'dotnet build --verbose -c Release CSharPyMLExtension_netcore.sln']
+            'dotnet build -c Release CSharPyMLExtension_netcore.sln']
     folder = os.path.abspath("cscode")
     outs = []
     for cmd in cmds:
