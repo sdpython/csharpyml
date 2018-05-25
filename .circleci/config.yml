@@ -119,7 +119,8 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            export PATH=clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin:$PATH
+            export PATH=/home/circleci/repo/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin:$PATH
+            clang --version
             python3 -m pip install -U pip
             python3 -m pip install -U setuptools wheel
             git clone https://github.com/pythonnet/pythonnet.git
