@@ -110,8 +110,11 @@ jobs:
                     # Next file is already a compiled version of clang for Debian 8.
                     wget  http://releases.llvm.org/6.0.0/clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
                     tar xvf clang+llvm-6.0.0-x86_64-linux-gnu-debian8.tar.xz
-                    export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:$PATH
-                    sudo echo "export PATH=~/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/:\$PATH" >> ~/.bashrc
+                    export PATH=clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin:$PATH
+                    sudo echo "export PATH=clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin:\$PATH" >> ~/.bashrc
+                    ls -l
+                    clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin/clang --version
+                    clang --version
 
       - run:
           name: install pythonnet
