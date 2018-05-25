@@ -20,6 +20,7 @@ install:
   - "%PYTHON%\\python -m pip install --upgrade pip"
   - "%PYTHON%\\Scripts\\pip install pymyinstall"
   - "%PYTHON%\\Scripts\\pymy_install3 --set=pyquickhelper"
+  - "%PYTHON%\\Scripts\\pymy_install3 scikit-learn"
   - "%PYTHON%\\Scripts\\pip install pyquickhelper jyquickhelper"
   - "%PYTHON%\\Scripts\\pip install -r requirements.txt"
   - "%PYTHON%\\Scripts\\pip install pythonnet csharpy"
@@ -32,12 +33,13 @@ before_build:
   # Display .NET Core version
   - cmd: dotnet --version
   # Display minimal restore text
-  - cmd: dotnet restore ./src/src.csproj --verbosity m
+  - cmd: dotnet restore ./src/src.csproj --verbosity
 
-before_test:
+build:
   - cd cscode\machinelearning
   - build.cmd -Release
   - cd ..\..
+  - "%PYTHON%\\python -u setup.py copybinml"
   - "%PYTHON%\\python -u setup.py build_ext --inplace"
   
 test_script:

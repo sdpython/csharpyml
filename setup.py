@@ -3,6 +3,7 @@ import sys
 import os
 import shutil
 import warnings
+import re
 from setuptools import setup, Extension
 from setuptools import find_packages
 
@@ -143,146 +144,216 @@ if is_local():
 else:
     r = False
 
+
+def build_machinelearning():
+    "builds machinelearning"
+    from pyquickhelper.loghelper import run_cmd
+    print('[csharpyml.machinelearning]')
+    this = os.path.abspath(os.path.dirname(__file__))
+    folder = os.path.join(this, 'cscode', 'machinelearning')
+    cmd = "build{0}"
+    if sys.platform.startswith("win"):
+        cmd = cmd.format('.cmd')
+    else:
+        cmd = cmd.format('.sh')
+    full = os.path.join(folder, cmd)
+    if not os.path.exists(full):
+        existing = os.listdir(folder)
+        raise FileNotFoundError("Unable to find '{0}', build failed. Found:\n{1}".format(
+                                full, "\n".join(existing)))
+    if not sys.platform.startswith("win"):
+        cmd = "bash --verbose " + cmd
+    cmd += ' -Release'
+    out, err = run_cmd(cmd, wait=True, change_path=folder)
+    if len(err) > 0:
+        # Filter out small errors.
+        errs = []
+        lines = err.split('\n')
+        for line in lines:
+            if 'ILAsmVersion.txt: No such file or directory' in line:
+                continue
+            errs.append(line)
+        err = "\n".join(errs)
+    if len(err) > 0:
+        raise RuntimeError(
+            "Unable to build machinelearning code.\nCMD: {0}\n--ERR--\n{1}".format(cmd, err))
+    elif len(out) > 0:
+        print('[csharpyml.dotnet] OUT')
+        print(out)
+    bin = os.path.join(folder, "bin")
+    if not os.path.exists(bin):
+        existing = os.listdir(folder)
+        raise FileNotFoundError("Unable to find '{0}', build failed. Found:\n{1}".format(
+                                bin, "\n".join(existing)))
+
+
+def build_module():
+    "build the module"
+    # git submodule add https://github.com/dotnet/machinelearning.git cscode/machinelearning
+    # We build a dotnet application.
+    from pyquickhelper.loghelper import run_cmd
+
+    env = os.environ.get('DOTNET_CLI_TELEMETRY_OPTOUT', None)
+    if env is None:
+        os.environ['DOTNET_CLI_TELEMETRY_OPTOUT'] = '1'
+    print('[csharpyml.env] DOTNET_CLI_TELEMETRY_OPTOUT={0}'.format(
+        os.environ['DOTNET_CLI_TELEMETRY_OPTOUT']))
+
+    # builds the other libraries
+    cmds = ['dotnet restore CSharPyMLExtension_netcore.sln',
+            'dotnet build --verbose -c Release CSharPyMLExtension_netcore.sln']
+    folder = os.path.abspath("cscode")
+    outs = []
+    for cmd in cmds:
+        out, err = run_cmd(cmd, fLOG=print, wait=True, change_path=folder)
+        if len(err) > 0:
+            raise RuntimeError(
+                "Unable to compile C# code.\nCMD: {0}\n--ERR--\n{1}".format(cmd, err))
+        elif len(out) > 0:
+            outs.append(out)
+            print('[csharpyml.dotnet] OUT')
+            print(out)
+
+    # Copy specific files.
+    copy_assemblies()
+
+
+def extract_version_target(path):
+    "3.5.1/lib/netstandard1.0 --> (3, 5, 1), 'netstandard1.0')"
+    reg = re.compile(
+        '([0-9]+[.][0-9]+[.][0-9]+).*[/\\\\](netstandard[0-9][.][0-9])')
+    res = reg.search(path)
+    if res:
+        g1, g2 = res.groups()
+        if g1:
+            g1 = tuple(int(_) for _ in g1.split('.'))
+        else:
+            g1 = None
+        if not g2:
+            g2 = None
+        return g1, g2
+    else:
+        reg = re.compile('(netstandard[0-9][.][0-9])')
+        res = reg.search(path)
+        if res:
+            return None, res.groups()[0]
+        else:
+            reg = re.compile('(netcoreapp[0-9][.][0-9])')
+            res = reg.search(path)
+            if res:
+                return None, res.groups()[0]
+            else:
+                reg = re.compile('(Native)')
+                res = reg.search(path)
+                if res:
+                    return None, res.groups()[0]
+                else:
+                    return None, None
+
+
+def find_folder_package(folder):
+    "Finds the best location within a package"
+    from pyquickhelper.filehelper import explore_folder
+    dirs, _ = explore_folder(folder)
+    found = []
+    for d in dirs:
+        version, net = extract_version_target(d)
+        if version is not None and net is not None:
+            found.append((version, net, d))
+        elif net is not None:
+            found.append((None, net, d))
+    if not found:
+        raise FileNotFoundError("Not suitable path for '{0}'".format(folder))
+    else:
+        mx = max(found)
+        return mx
+
+
+def copy_assemblies(ml=False):
+    "Copies all assemblies in the right location."
+    from pyquickhelper.filehelper import synchronize_folder
+    if ml:
+        folders = ['cscode/machinelearning/packages/google.protobuf',
+                   'cscode/machinelearning/packages/newtonsoft.json',
+                   'cscode/machinelearning/packages/parquet.net',
+                   'cscode/machinelearning/packages/system.reflection',
+                   'cscode/machinelearning/bin/x64.Release/Native',
+                   'cscode/machinelearning/bin/AnyCPU.Release/Microsoft.ML.Predictor.Tests',
+                   ]
+    else:
+        folders = ['cscode/CSharPyMLExtension/bin/Release']
+    dest = 'src/csharpyml/binaries'
+    for fold in folders:
+        v, n, found = find_folder_package(fold)
+        if "packages" in fold:
+            if v is None:
+                raise FileNotFoundError(
+                    "Unable to find a suitable version for package '{0}'".format(fold))
+        elif 'Native' not in found and 'netcoreapp' not in found and 'netstandard' not in found:
+            raise FileNotFoundError(
+                "Unable to find a suitable folder binaries '{0}'".format(fold))
+        print("[csharpyml.copy] '{0}' -> '{1}'".format(found, dest))
+        synchronize_folder(found, dest, fLOG=print, no_deletion=True)
+
+
 if not r:
     if len(sys.argv) in (1, 2) and sys.argv[-1] in ("--help-commands",):
         from pyquickhelper.pycode import process_standard_options_for_setup_help
         process_standard_options_for_setup_help(sys.argv)
+
     from pyquickhelper.pycode import clean_readme
     long_description = clean_readme(long_description)
     root = os.path.abspath(os.path.dirname(__file__))
+    end = False
 
-    if "build_ext" in sys.argv:
-
-        from pyquickhelper.loghelper import run_cmd
-
-        def build_machinelearning():
-            "builds machine learning"
-            print('[csharpyml.machinelearning]')
-            this = os.path.abspath(os.path.dirname(__file__))
-            folder = os.path.join(this, 'cscode', 'machinelearning')
-            cmd = "build{0}"
-            if sys.platform.startswith("win"):
-                cmd = cmd.format('.cmd')
-            else:
-                cmd = cmd.format('.sh')
-            full = os.path.join(folder, cmd)
-            if not os.path.exists(full):
-                existing = os.listdir(folder)
-                raise FileNotFoundError("Unable to find '{0}', build failed. Found:\n{1}".format(
-                                        full, "\n".join(existing)))
-            if not sys.platform.startswith("win"):
-                cmd = "bash --verbose " + cmd
-            cmd += ' -Release'
-            out, err = run_cmd(cmd, wait=True, change_path=folder)
-            if len(err) > 0:
-                # Filter out small errors.
-                errs = []
-                lines = err.split('\n')
-                for line in lines:
-                    if 'ILAsmVersion.txt: No such file or directory' in line:
-                        continue
-                    errs.append(line)
-                err = "\n".join(errs)
-            if len(err) > 0:
-                raise RuntimeError(
-                    "Unable to build machinelearning code.\nCMD: {0}\n--ERR--\n{1}".format(cmd, err))
-            elif len(out) > 0:
-                print('[csharpyml.dotnet] OUT')
-                print(out)
-            bin = os.path.join(folder, "bin")
-            if not os.path.exists(bin):
-                existing = os.listdir(folder)
-                raise FileNotFoundError("Unable to find '{0}', build failed. Found:\n{1}".format(
-                                        bin, "\n".join(existing)))
-
-        # git submodule add https://github.com/dotnet/machinelearning.git cscode/machinelearning
-        # We build a dotnet application.
+    if "copybinml" in sys.argv:
+        copy_assemblies(ml=True)
+        end = True
+    elif "copybin" in sys.argv:
+        copy_assemblies(ml=False)
+        end = True
+    elif "build_ext" in sys.argv:
         if '--inplace' not in sys.argv:
             raise Exception("Option --inplace must be set up.")
-
-        env = os.environ.get('DOTNET_CLI_TELEMETRY_OPTOUT', None)
-        if env is None:
-            os.environ['DOTNET_CLI_TELEMETRY_OPTOUT'] = '1'
-        print('[csharpyml.env] DOTNET_CLI_TELEMETRY_OPTOUT={0}'.format(
-            os.environ['DOTNET_CLI_TELEMETRY_OPTOUT']))
-
         # builds machinelearning
-        if '--skipml' in sys.argv:
-            sys.argv = [_ for _ in sys.argv if _ != '--skipml']
-        else:
-            build_machinelearning()        
-
-        # builds the other libraries
-        cmds = ['dotnet restore CSharPyMLExtension_netcore.sln',
-                'dotnet build -c Release CSharPyMLExtension_netcore.sln']
-        folder = os.path.abspath("cscode")
-        outs = []
-        for cmd in cmds:
-            out, err = run_cmd(cmd, fLOG=print, wait=True, change_path=folder)
-            if len(err) > 0:
-                raise RuntimeError(
-                    "Unable to compile C# code.\nCMD: {0}\n--ERR--\n{1}".format(cmd, err))
-            elif len(out) > 0:
-                outs.append(out)
-                print('[csharpyml.dotnet] OUT')
-                print(out)
-
-        # Copy files.
-        from pyquickhelper.filehelper import explore_folder_iterfile
-        dest = os.path.join('src', 'csharpyml', 'binaries')
-        must_copy = {'CSharPyMLExtension': 0}
-        copied = 0
-        for name in explore_folder_iterfile(folder, pattern='.*[.]((dll)|(so))$'):
-            full = os.path.join(folder, name)
-            if 'Release' in full and 'Microsoft.ML.Test' not in full and "xunit." not in full:
-                short_name = os.path.split(os.path.splitext(name)[0])[-1]
-                if short_name in must_copy:
-                    must_copy[short_name] += 1
-                copied += 1
-                print("[csharpyml.copy] '{0}'".format(name))
-                shutil.copy(name, dest)
-            else:
-                print("[csharpyml.skip] '{0}'".format(name))
-        min_must_copy = min(must_copy.values())
-        if copied == 0 or min_must_copy == 0:
-            raise RuntimeError("Missing binaries in '{0}'".format(folder))
-
-        # Copy specific files.
-        r"""
-        packages\newtonsoft.json\10.0.3\lib\netstandard1.3
-        packages\system.codedom\4.4.0\lib\netstandard2.0
-        """
+        if '--submodules' in sys.argv:
+            sys.argv = [_ for _ in sys.argv if _ != '--submodules']
+            build_machinelearning()
+            copy_assemblies(ml=True)
+        build_module()
+        copy_assemblies()
 
     if sys.platform.startswith("win"):
         extra_compile_args = None
     else:
         extra_compile_args = ['-std=c++11']
 
-    # C parts
-    ext_cparts = Extension('src.csharpyml.cparts.cmodule',
-                           [os.path.join(root, 'src/csharpyml/cparts/version.cpp'),
-                               os.path.join(root, 'src/csharpyml/cparts/cmodule.cpp')],
-                           extra_compile_args=extra_compile_args,
-                           include_dirs=[os.path.join(root, 'src/csharpyml/cparts')])
+    if not end:
+        # C parts
+        ext_cparts = Extension('src.csharpyml.cparts.cmodule',
+                               [os.path.join(root, 'src/csharpyml/cparts/version.cpp'),
+                                   os.path.join(root, 'src/csharpyml/cparts/cmodule.cpp')],
+                               extra_compile_args=extra_compile_args,
+                               include_dirs=[os.path.join(root, 'src/csharpyml/cparts')])
 
-    # Regular setup.
-    setup(
-        name=project_var_name,
-        ext_modules=[ext_cparts],
-        version='%s%s' % (sversion, subversion),
-        author='Xavier Dupré',
-        author_email='xavier.dupre@gmail.com',
-        license="MIT",
-        url="http://www.xavierdupre.fr/app/csharpyml/",
-        download_url="https://github.com/sdpython/csharpyml/",
-        description=DESCRIPTION,
-        long_description=long_description,
-        keywords=KEYWORDS,
-        classifiers=CLASSIFIERS,
-        packages=packages,
-        package_dir=package_dir,
-        package_data=package_data,
-        # data_files=data_files,
-        install_requires=['pythonnet', 'pyquickhelper'],
-        # include_package_data=True,
-    )
+        # Regular setup.
+        setup(
+            name=project_var_name,
+            ext_modules=[ext_cparts],
+            version='%s%s' % (sversion, subversion),
+            author='Xavier Dupré',
+            author_email='xavier.dupre@gmail.com',
+            license="MIT",
+            url="http://www.xavierdupre.fr/app/csharpyml/",
+            download_url="https://github.com/sdpython/csharpyml/",
+            description=DESCRIPTION,
+            long_description=long_description,
+            keywords=KEYWORDS,
+            classifiers=CLASSIFIERS,
+            packages=packages,
+            package_dir=package_dir,
+            package_data=package_data,
+            # data_files=data_files,
+            install_requires=['pythonnet', 'pyquickhelper'],
+            # include_package_data=True,
+        )
