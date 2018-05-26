@@ -1,5 +1,5 @@
 """
-@brief      test log(time=3s)
+@brief      test log(time=2s)
 
 You should indicate a time in seconds. The program ``run_unittests.py``
 will sort all test files by increasing time and run them.
@@ -27,14 +27,14 @@ except ImportError:
 from src.csharpyml.binaries import maml
 
 
-class TestMaml(ExtTestCase):
+class TestMaml0(ExtTestCase):
     """Test maml command line."""
 
     def test_src(self):
         "skip pylint"
         self.assertFalse(src is None)
 
-    def test_maml(self):
+    def test_maml0(self):
         temp = get_temp_folder(__file__, "temp_maml")
 
         iris = datasets.load_iris()
@@ -57,9 +57,11 @@ class TestMaml(ExtTestCase):
         out=__MODEL__
         """.strip("\n ").replace('__MODEL__', model).replace('__DATA__', dest)
 
-        out, _ = maml(script)
+        # If it fails, it usually hangs out on linux.
+        # It is better to directly display the standad C# output
+        # to see what the error is, mostly a missing DLL.
+        out, _ = maml(script, catch_output=False)
         self.assertExists(model)
-        self.assertIn("LBFGS Optimizer", out)
 
 
 if __name__ == "__main__":

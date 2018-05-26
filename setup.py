@@ -278,6 +278,7 @@ def copy_assemblies(ml=False):
                    'cscode/machinelearning/packages/parquet.net',
                    'cscode/machinelearning/packages/system.reflection',
                    'cscode/machinelearning/packages/netstandard.library',
+                   "cscode/machinelearning/packages/system.threading.tasks.dataflow",
                    'cscode/machinelearning/bin/x64.Release/Native',
                    'cscode/machinelearning/bin/AnyCPU.Release/Microsoft.ML.Predictor.Tests',
                    "cscode/machinelearning/bin/AnyCPU.Release/Microsoft.ML.Sweeper",
