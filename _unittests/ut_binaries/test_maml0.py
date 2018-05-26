@@ -60,7 +60,7 @@ class TestMaml0(ExtTestCase):
         # If it fails, it usually hangs out on linux.
         # It is better to directly display the standad C# output
         # to see what the error is, mostly a missing DLL.
-        out, _ = maml(script, catch_output=False)
+        maml(script, catch_output=False)
         self.assertExists(model)
 
 

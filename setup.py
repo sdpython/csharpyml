@@ -261,11 +261,14 @@ def find_folder_package(folder):
         if version is not None and net is not None:
             found.append((version, net, d))
         elif net is not None:
-            found.append((None, net, d))
+            found.append(("", net, d))
     if not found:
         raise FileNotFoundError("Not suitable path for '{0}'".format(folder))
     else:
-        mx = max(found)
+        try:
+            mx = max(found)
+        except TypeError as e:
+            raise TypeError("Unable to find a version in '{0}'\n{1}".format(folder, found)) from e
         return mx
 
 
