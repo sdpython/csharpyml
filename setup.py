@@ -258,7 +258,7 @@ def find_folder_package(folder):
     found = []
     for d in dirs:
         version, net = extract_version_target(d)
-        if verrsion is None:
+        if version is None:
             version = (0, 0, 0)
         if version is not None and net is not None:
             found.append((version, net, d))
