@@ -37,9 +37,7 @@ class TestMaml(ExtTestCase):
     def test_maml(self):
         temp = get_temp_folder(__file__, "temp_maml")
 
-        print('A')
         iris = datasets.load_iris()
-        print('B')
         X = iris.data
         y = iris.target
         df = pandas.DataFrame(
@@ -50,7 +48,6 @@ class TestMaml(ExtTestCase):
         df.to_csv(dest, sep=',', index=False)
         model = os.path.join(temp, "model.zip")
 
-        print('C')
         script = """
         train
         data=__DATA__
@@ -60,9 +57,7 @@ class TestMaml(ExtTestCase):
         out=__MODEL__
         """.strip("\n ").replace('__MODEL__', model).replace('__DATA__', dest)
 
-        print('D')
-        out, _ = maml(script)
-        print('E')
+        out, _ = maml(script, catch_output=False)
         self.assertExists(model)
         self.assertIn("LBFGS Optimizer", out)
 
