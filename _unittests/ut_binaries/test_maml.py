@@ -7,7 +7,7 @@ will sort all test files by increasing time and run them.
 import sys
 import os
 import unittest
-from sklearn.datasets import load_iris
+from sklearn import datasets
 import pandas
 from pyquickhelper.pycode import ExtTestCase, get_temp_folder
 
@@ -37,7 +37,9 @@ class TestMaml(ExtTestCase):
     def test_maml(self):
         temp = get_temp_folder(__file__, "temp_maml")
 
-        iris = load_iris()
+        print('A')
+        iris = datasets.load_iris()
+        print('B')
         X = iris.data
         y = iris.target
         df = pandas.DataFrame(
@@ -48,6 +50,7 @@ class TestMaml(ExtTestCase):
         df.to_csv(dest, sep=',', index=False)
         model = os.path.join(temp, "model.zip")
 
+        print('C')
         script = """
         train
         data=__DATA__
@@ -57,7 +60,9 @@ class TestMaml(ExtTestCase):
         out=__MODEL__
         """.strip("\n ").replace('__MODEL__', model).replace('__DATA__', dest)
 
+        print('D')
         out, _ = maml(script)
+        print('E')
         self.assertExists(model)
         self.assertIn("LBFGS Optimizer", out)
 

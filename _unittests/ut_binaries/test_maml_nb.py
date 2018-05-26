@@ -9,7 +9,7 @@ import os
 import unittest
 from io import StringIO
 from contextlib import redirect_stdout
-from sklearn.datasets import load_iris
+from sklearn import datasets
 import pandas
 from pyquickhelper.pycode import ExtTestCase, get_temp_folder
 
@@ -39,7 +39,7 @@ class TestMamlNb(ExtTestCase):
     def test_maml_nb(self):
         temp = get_temp_folder(__file__, "temp_maml_nb")
 
-        iris = load_iris()
+        iris = datasets.load_iris()
         X = iris.data
         y = iris.target
         df = pandas.DataFrame(
