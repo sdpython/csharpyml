@@ -53,12 +53,11 @@ with :epkg:`C#` and :epkg:`Python`.
 It can easily compile and wrap a :epkg:`C#` function
 into :epkg:`Python`:
 
-::
+.. runpython::
+    :showcode:
 
-    from csharpyml.runtime import create_cs_function
-    code = "public static double SquareX(double x) {return x*x ; }"
-    SquareX = create_cs_function("SquareX", code)
-    print(SquareX(4))
+    from csharpyml.binaries import maml
+    maml('?')
 
 The module relies in `pythonnet <https://github.com/pythonnet/pythonnet>`_
 and adds continuous integration other projects could leverage.
