@@ -18,6 +18,10 @@ install:
   - git submodule update --init
 
 before_script:
+  - cd cscode\machinelearning
+  - build.cmd -Release
+  - cd ..\..
+  - python -u setup.py copybinml
   - python -u setup.py build_ext --inplace
 script:
   - { CMD: "python -u setup.py unittests", NAME: "UT" }
