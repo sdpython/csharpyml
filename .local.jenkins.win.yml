@@ -19,7 +19,7 @@ install:
 
 before_script:
   - cd cscode\machinelearning
-  - build.cmd -Release
+  - cmd /C build.cmd -Release
   - cd ..\..
   - python -u setup.py copybinml
   - python -u setup.py build_ext --inplace

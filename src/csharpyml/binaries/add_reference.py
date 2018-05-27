@@ -49,7 +49,7 @@ def add_csharpml_extension():
             from csharpyml.binaries import add_csharpml_extension
             from csharpyml import __version__
 
-            add_csharp_extension()
+            add_csharpml_extension()
 
             # This line needs to be after the previous one.
             from CSharPyMLExtension import Constants
