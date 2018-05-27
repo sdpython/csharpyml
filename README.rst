@@ -49,7 +49,7 @@ README
 Introduction
 ------------
 
-Helpers to play with C#, Python and ML.net.
+Helpers to play with *C#*, *Python* and *ML.net*.
 The module also relies on
 `pythonnet <https://github.com/pythonnet/pythonnet>`_ and
 `csharpy <http://www.xavierdupre.fr/app/csharpy/helpsphinx/index.html>`_.

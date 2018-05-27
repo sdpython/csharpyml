@@ -49,16 +49,7 @@ What is it?
 -----------
 
 *csharpyml* implements an easy way to play
-with :epkg:`C#` and :epkg:`Python`.
-It can easily compile and wrap a :epkg:`C#` function
-into :epkg:`Python`:
-
-.. runpython::
-    :showcode:
-
-    from csharpyml.binaries import maml
-    maml('?')
-
+with :epkg:`C#`, :epkg:`Python` and :epkg:`ML.net`.
 The module relies in `pythonnet <https://github.com/pythonnet/pythonnet>`_
 and adds continuous integration other projects could leverage.
 
@@ -72,6 +63,23 @@ Documentation
     i_ex
     i_faq
     i_nb
+
+It can easily compile and wrap a :epkg:`C#` function
+into :epkg:`Python`:
+
+.. runpython::
+    :showcode:
+
+    from csharpyml.binaries import maml
+    maml('?')
+
+The list of available trainers can be obtained with:
+
+.. runpython::
+    :showcode:
+
+    from csharpyml.binaries import maml
+    maml('? kind=trainer')
 
 Galleries
 ---------
