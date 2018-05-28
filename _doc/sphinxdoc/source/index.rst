@@ -26,9 +26,6 @@ csharpymlml
         :alt: MIT License
         :target: http://opensource.org/licenses/MIT
 
-    .. image:: https://coveralls.io/repos/sdpython/csharpyml/badge.svg?branch=master&service=github
-        :target: https://coveralls.io/github/sdpython/csharpyml?branch=master
-
     .. image:: https://requires.io/github/sdpython/csharpyml/requirements.svg?branch=master
          :target: https://requires.io/github/sdpython/csharpyml/requirements/?branch=master
          :alt: Requirements Status
