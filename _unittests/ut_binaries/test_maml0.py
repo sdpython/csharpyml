@@ -35,7 +35,8 @@ class TestMaml0(ExtTestCase):
         self.assertFalse(src is None)
 
     def test_maml0(self):
-        temp = get_temp_folder(__file__, "temp_maml")
+        "test the command line, do not catch standard output"
+        temp = get_temp_folder(__file__, "temp_maml0")
 
         iris = datasets.load_iris()
         X = iris.data

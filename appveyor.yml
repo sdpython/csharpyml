@@ -30,10 +30,7 @@ install:
 build: off
 
 before_build:
-  # Display .NET Core version
   - cmd: dotnet --version
-  # Display minimal restore text
-  - cmd: dotnet restore ./src/src.csproj --verbosity
 
 before_test:
   - cd cscode\machinelearning
