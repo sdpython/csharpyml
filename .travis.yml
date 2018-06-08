@@ -6,7 +6,6 @@ git:
   
 matrix:
   include:
-# --------------------- XPLAT builds ------------------------
     - python: 3.6
       env: &xplat-env
         - BUILD_OPTS=--xplat
@@ -21,8 +20,6 @@ matrix:
           packages:
             - mono-devel
             - ca-certificates-mono 
-            #- dotnet-hostfxr-2.1.200
-            #- dotnet-runtime-2.1.200
             - dotnet-sdk-2.1.200
 
 env:
