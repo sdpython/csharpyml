@@ -1,0 +1,14 @@
+
+.. blogpost::
+    :title: Libssl 1.0.0 cannot be found on CircleCI
+    :keywords: CI, circleci
+    :date: 2018-06-13
+    :categories: build
+
+    I wonder why
+    but *libssl 1.0.0* cannot be installed on the dockeer image for
+    `Python 3.6.5 <https://github.com/CircleCI-Public/circleci-dockerfiles/tree/master/python/images/3.6.5>`_
+    but it can on the one for
+    `Python 3.6.4 <https://github.com/CircleCI-Public/circleci-dockerfiles/tree/master/python/images/3.6.4>`_:
+    `back to Python 3.6.4 <https://github.com/sdpython/machinelearningext/commit/a8017cc33d429364ae11f1ecff4dba659400fe98>`_.
+    I should investigate why...
