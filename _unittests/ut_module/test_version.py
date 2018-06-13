@@ -37,7 +37,7 @@ class TestVersion (unittest.TestCase):
             "..",
             "..",
             "setup.py")
-        with open(setup, "r") as f:
+        with open(setup, "r", encoding='utf-8') as f:
             c = f.read()
         reg = re.compile("sversion *= \\\"(.*)\\\"")
 
