@@ -41,7 +41,8 @@ CLASSIFIERS = [
 
 packages = find_packages('src', exclude='src')
 package_dir = {k: "src/" + k.replace(".", "/") for k in packages}
-package_data = {project_var_name + ".binaries": ["*.dll", "*.so"]}
+package_data = {project_var_name +
+                ".binaries.Release": ["*.dll", "*.so", "*.json", "*.xml"]}
 
 ############
 # functions
@@ -145,7 +146,7 @@ else:
     r = False
 
 
-def build_machinelearning():
+def build_machinelearning(version="Release"):
     "builds machinelearning"
     from pyquickhelper.loghelper import run_cmd
     print('[csharpyml.machinelearning]')
@@ -163,7 +164,7 @@ def build_machinelearning():
                                 full, "\n".join(existing)))
     if not sys.platform.startswith("win"):
         cmd = "bash --verbose " + cmd
-    cmd += ' -Release'
+    cmd += ' -' + version
     out, err = run_cmd(cmd, wait=True, change_path=folder)
     if len(err) > 0:
         # Filter out small errors.
@@ -187,7 +188,7 @@ def build_machinelearning():
                                 bin, "\n".join(existing)))
 
 
-def build_module():
+def build_module(version="Release"):
     "build the module"
     # git submodule add https://github.com/dotnet/machinelearning.git cscode/machinelearning
     # We build a dotnet application.
@@ -201,7 +202,7 @@ def build_module():
 
     # builds the other libraries
     cmds = ['dotnet restore CSharPyMLExtension_netcore.sln',
-            'dotnet build -c Release CSharPyMLExtension_netcore.sln']
+            'dotnet build -c %s CSharPyMLExtension_netcore.sln' % version]
     folder = os.path.abspath("cscode")
     outs = []
     for cmd in cmds:
@@ -215,7 +216,7 @@ def build_module():
             print(out)
 
     # Copy specific files.
-    copy_assemblies()
+    copy_assemblies(version=version)
 
 
 def extract_version_target(path):
@@ -270,11 +271,12 @@ def find_folder_package(folder):
         try:
             mx = max(found)
         except TypeError as e:
-            raise TypeError("Unable to find a version in '{0}'\n{1}".format(folder, found)) from e
+            raise TypeError(
+                "Unable to find a version in '{0}'\n{1}".format(folder, found)) from e
         return mx
 
 
-def copy_assemblies(ml=False):
+def copy_assemblies(ml=False, version="Release"):
     "Copies all assemblies in the right location."
     from pyquickhelper.filehelper import synchronize_folder
     if ml:
@@ -284,24 +286,43 @@ def copy_assemblies(ml=False):
                    'cscode/machinelearning/packages/system.reflection',
                    'cscode/machinelearning/packages/netstandard.library',
                    "cscode/machinelearning/packages/system.threading.tasks.dataflow",
-                   'cscode/machinelearning/bin/x64.Release/Native',
-                   'cscode/machinelearning/bin/AnyCPU.Release/Microsoft.ML.Predictor.Tests',
-                   "cscode/machinelearning/bin/AnyCPU.Release/Microsoft.ML.Sweeper",
+                   'cscode/machinelearning/bin/x64.%s/Native' % version,
+                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML' % version,
+                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.Sweeper' % version,
+                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.KMeansClustering' % version,
+                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.StandardLearners' % version,
+                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.PCA' % version,
                    ]
+        dests = ['cscode/bin/machinelearning/%s' % version]
     else:
-        folders = ['cscode/CSharPyMLExtension/bin/Release']
-    dest = 'src/csharpyml/binaries'
-    for fold in folders:
-        v, n, found = find_folder_package(fold)
-        if "packages" in fold:
-            if v is None:
-                raise FileNotFoundError(
-                    "Unable to find a suitable version for package '{0}'".format(fold))
-        elif 'Native' not in found and 'netcoreapp' not in found and 'netstandard' not in found:
-            raise FileNotFoundError(
-                "Unable to find a suitable folder binaries '{0}'".format(fold))
-        print("[csharpyml.copy] '{0}' -> '{1}'".format(found, dest))
-        synchronize_folder(found, dest, fLOG=print, no_deletion=True)
+        folders = ['cscode/bin/machinelearning/%s' % version,
+                   'cscode/CSharPyMLExtension/bin/%s' % version]
+        dests = ['src/csharpyml/binaries/%s' % version]
+    for dest in dests:
+        if not os.path.exists(dest):
+            os.makedirs(dest)
+        if not ml:
+            init = os.path.join(dest, '__init__.py')
+            if not os.path.exists(init):
+                with open(init, 'w') as f:
+                    pass
+        for fold in folders:
+            try:
+                v, n, found = find_folder_package(fold)
+                do_check = True
+            except FileNotFoundError:
+                found = fold
+                do_check = False
+            if do_check:
+                if "packages" in fold:
+                    if v is None:
+                        raise FileNotFoundError(
+                            "Unable to find a suitable version for package '{0}'".format(fold))
+                elif 'Native' not in found and 'netcoreapp' not in found and 'netstandard' not in found:
+                    raise FileNotFoundError(
+                        "Unable to find a suitable folder binaries '{0}'".format(fold))
+            print("[csharpyml.copy] '{0}' -> '{1}'".format(found, dest))
+            synchronize_folder(found, dest, fLOG=print, no_deletion=True)
 
 
 if not r:
@@ -314,11 +335,25 @@ if not r:
     root = os.path.abspath(os.path.dirname(__file__))
     end = False
 
+    # version
+    version = None
+    if "debug" in sys.argv:
+        version = "Debug"
+    elif "Debug" in sys.argv:
+        version = "Debug"
+    elif "release" in sys.argv:
+        version = "Release"
+    elif "Release" in sys.argv:
+        version = "Release"
+    sys.argv = [_ for _ in sys.argv if _ not in (
+        "debug", "Debug", "release", "Release")]
+    version2 = version if version else "Release"
+
     if "copybinml" in sys.argv:
-        copy_assemblies(ml=True)
+        copy_assemblies(ml=True, version=version2)
         end = True
     elif "copybin" in sys.argv:
-        copy_assemblies(ml=False)
+        copy_assemblies(ml=False, version=version2)
         end = True
     elif "build_ext" in sys.argv:
         if '--inplace' not in sys.argv:
@@ -326,10 +361,10 @@ if not r:
         # builds machinelearning
         if '--submodules' in sys.argv:
             sys.argv = [_ for _ in sys.argv if _ != '--submodules']
-            build_machinelearning()
-            copy_assemblies(ml=True)
-        build_module()
-        copy_assemblies()
+            build_machinelearning(version=version2)
+            copy_assemblies(ml=True, version=version2)
+        build_module(version=version2)
+        copy_assemblies(version=version2)
 
     if sys.platform.startswith("win"):
         extra_compile_args = None

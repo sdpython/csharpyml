@@ -59,13 +59,9 @@ jobs:
           command: |
             curl -sSL "https://packages.microsoft.com/keys/microsoft.asc" | sudo -E apt-key add -
             echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-trusty-prod trusty main" | sudo tee -a /etc/apt/sources.list > /dev/null
-            echo "Done (1)"
             sudo apt-get update
-            echo "Done (2)"
             sudo -E apt-get -yq update &>> ~/apt-get-update.log
-            echo "Done (3)"
             sudo -E apt-get -yqf --no-install-suggests --no-install-recommends --force-yes install dotnet-sdk-2.1.200
-            echo "Done (4)"
 
       - run:
           name: Install pandoc
@@ -146,7 +142,7 @@ jobs:
           key: v3-dependencies-{{ checksum "requirements.txt" }}
         
       - run:
-          name: build machinelearning
+          name: build machinelearning release
           command: |
             . venv/bin/activate
             export PATH=/home/circleci/repo/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin:$PATH
@@ -157,10 +153,33 @@ jobs:
             cd ../..
 
       - run:
-          name: copy binaries
+          name: build machinelearning debug
           command: |
             . venv/bin/activate
-            python3 setup.py copybinml
+            export PATH=/home/circleci/repo/clang+llvm-6.0.0-x86_64-linux-gnu-debian8/bin:$PATH
+            cd cscode/machinelearning
+            ls
+            bash --help
+            bash --verbose build.sh -Debug
+            cd ../..
+
+      - run:
+          name: copy binaries ML release
+          command: |
+            . venv/bin/activate
+            python3 setup.py copybinml release
+
+      - run:
+          name: copy binaries debug
+          command: |
+            . venv/bin/activate
+            python3 setup.py copybinml ML debug
+
+      - run:
+          name: copy binaries debug
+          command: |
+            . venv/bin/activate
+            python3 setup.py copybin
 
       - run:
           name: build extension
@@ -170,7 +189,27 @@ jobs:
             python3 setup.py build_ext --inplace
 
       - run:
-          name: run tests                  
+          name: run C# tests release
+          env:
+            DOTNET_CLI_TELEMETRY_OPTOUT:1
+          command: |
+            . venv/bin/activate
+            cd cscode
+            dotnet test -c Release TestCSharPyMLExtension
+            cd ..
+
+      - run:
+          name: run C# tests debug
+          env:
+            DOTNET_CLI_TELEMETRY_OPTOUT:1
+          command: |
+            . venv/bin/activate
+            cd cscode
+            dotnet test -c Debug TestCSharPyMLExtension
+            cd ..
+
+      - run:
+          name: run python tests                  
           env:
             DOTNET_CLI_TELEMETRY_OPTOUT:1
           command: |

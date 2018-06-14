@@ -20,8 +20,10 @@ install:
 before_script:
   - cd cscode\machinelearning
   - cmd /C build.cmd -Release
+  - cmd /C build.cmd -Debug
   - cd ..\..
-  - python -u setup.py copybinml
+  - python -u setup.py copybinml debug
+  - python -u setup.py copybinml release
   - python -u setup.py build_ext --inplace
 script:
   - { CMD: "python -u setup.py unittests", NAME: "UT" }

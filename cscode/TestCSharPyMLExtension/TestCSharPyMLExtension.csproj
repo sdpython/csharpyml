@@ -1,13 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.2.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CSharPyMLExtension\CSharPyMLExtension.csproj" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Reference Include="Microsoft.ML">
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.dll</HintPath>
@@ -52,5 +61,16 @@
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.UniversalModelFormat.dll</HintPath>
     </Reference>
   </ItemGroup>
+  
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Copy  
+        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative.dll"  
+        DestinationFolder="$(OutDir)"  
+    />
+    <Copy  
+        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\FastTreeNative.dll"  
+        DestinationFolder="$(OutDir)"  
+    />
+  </Target>  
 
 </Project>
