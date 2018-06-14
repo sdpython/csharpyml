@@ -64,11 +64,11 @@
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Copy  
-        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative.dll"  
+        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative$(TargetExt)"
         DestinationFolder="$(OutDir)"  
     />
     <Copy  
-        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\FastTreeNative.dll"  
+        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\FastTreeNative$(TargetExt)"
         DestinationFolder="$(OutDir)"  
     />
   </Target>  
