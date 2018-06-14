@@ -176,13 +176,11 @@ jobs:
             python3 setup.py copybinml ML debug
 
       - run:
-          name: check
+          name: check native
           command: |
             . venv/bin/activate
-            ls cscode
-            ls cscode/bin
-            ls cscode/bin/machinelearning
-            ls cscode/bin/machinelearning/Debug
+            ls cscode/bin/machinelearning/Debug/*.so
+            ls cscode/bin/machinelearning/Release/*.so
 
       - run:
           name: build C# release
