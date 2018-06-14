@@ -137,7 +137,7 @@ if is_local():
         requirements=["pyquickhelper", "jyquickhelper"],
         additional_notebook_path=["pyquickhelper", "jyquickhelper"],
         additional_local_path=["pyquickhelper", "jyquickhelper"],
-        copy_add_ext=["dll", 'so'], layout=["pdf", "html"])
+        copy_add_ext=["dll", 'so'], layout=["html"])
     if not r and not ({"bdist_msi", "sdist",
                        "bdist_wheel", "publish", "publish_doc", "register",
                        "upload_docs", "bdist_wininst", "build_ext"} & set(sys.argv)):
