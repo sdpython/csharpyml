@@ -40,8 +40,8 @@ before_test:
   - "%PYTHON%\\python -u setup.py copybinml debug"
   - "%PYTHON%\\python -u setup.py copybinml release"
   - cd cscode
-  - dotnet build -c Release TestCSharPyMLExtension
-  - dotnet build -c Debug TestCSharPyMLExtension
+  - dotnet build -c Release CSharPyMLExtension_netcore.sln
+  - dotnet build -c Debug CSharPyMLExtension_netcore.sln
   - cd ..
   - "%PYTHON%\\python -u setup.py copybin"
   - "%PYTHON%\\python -u setup.py build_ext --inplace"
