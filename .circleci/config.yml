@@ -176,6 +176,15 @@ jobs:
             python3 setup.py copybinml ML debug
 
       - run:
+          name: check
+          command: |
+            . venv/bin/activate
+            ls cscode
+            ls cscode/bin
+            ls cscode/bin/machinelearning
+            ls cscode/bin/machinelearning/Debug
+
+      - run:
           name: build C# release
           env:
             DOTNET_CLI_TELEMETRY_OPTOUT:1
