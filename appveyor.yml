@@ -48,8 +48,8 @@ before_test:
   
 test_script:
   - cd cscode
-  - dotnet test -c Release TestCSharPyMLExtension
   - dotnet test -c Debug TestCSharPyMLExtension
+  - dotnet test -c Release TestCSharPyMLExtension
   - cd ..
   - "%PYTHON%\\python -u setup.py unittests"
 
