@@ -34,6 +34,7 @@ class TestMaml0(ExtTestCase):
         "skip pylint"
         self.assertFalse(src is None)
 
+    @unittest.skip(reason='Unskip to get output on continuous integration')
     def test_maml0(self):
         "test the command line, do not catch standard output"
         temp = get_temp_folder(__file__, "temp_maml0")

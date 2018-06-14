@@ -75,6 +75,7 @@ class TestCodeStyle(ExtTestCase):
                          "Unable to import 'System.Collections.Generic'",
                          "Instance of 'tuple' has no 'target' member",
                          "Instance of 'tuple' has no 'data' member",
+                         'if __name__ == "__main__":',
                          ])
 
 

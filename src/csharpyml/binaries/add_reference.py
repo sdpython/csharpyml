@@ -24,7 +24,7 @@ def AddReference(name):
                 if not os.path.exists(os.path.join(rel, '__init__.py')):
                     raise FileNotFoundError(
                         "Unable to find folders 'Release' or 'Debug' in '{0}'".format(this))
-                this = rel     
+                this = rel
             if this and os.path.exists(this):
                 sys.path.append(this)
                 try:
