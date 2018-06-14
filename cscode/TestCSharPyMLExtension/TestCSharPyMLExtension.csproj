@@ -62,7 +62,7 @@
     </Reference>
   </ItemGroup>
   
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT'">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
     <Copy  
         SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative.dll"
         DestinationFolder="$(OutDir)"  
@@ -73,7 +73,7 @@
     />
   </Target>  
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' != 'Windows_NT'">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' != 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
     <Copy  
         SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so"
         DestinationFolder="$(OutDir)"  
