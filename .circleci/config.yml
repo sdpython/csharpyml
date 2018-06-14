@@ -176,17 +176,24 @@ jobs:
             python3 setup.py copybinml ML debug
 
       - run:
-          name: copy binaries debug
+          name: build C# release
+          env:
+            DOTNET_CLI_TELEMETRY_OPTOUT:1
           command: |
             . venv/bin/activate
-            python3 setup.py copybin
+            cd cscode
+            dotnet build -c Release TestCSharPyMLExtension
+            cd ..
 
       - run:
-          name: build extension
+          name: build C# debug
+          env:
+            DOTNET_CLI_TELEMETRY_OPTOUT:1
           command: |
             . venv/bin/activate
-            export DOTNET_CLI_TELEMETRY_OPTOUT=1
-            python3 setup.py build_ext --inplace
+            cd cscode
+            dotnet build -c Debug TestCSharPyMLExtension
+            cd ..
 
       - run:
           name: run C# tests release
@@ -207,6 +214,13 @@ jobs:
             cd cscode
             dotnet test -c Debug TestCSharPyMLExtension
             cd ..
+
+      - run:
+          name: build extension
+          command: |
+            . venv/bin/activate
+            export DOTNET_CLI_TELEMETRY_OPTOUT=1
+            python3 setup.py build_ext --inplace
 
       - run:
           name: run python tests                  

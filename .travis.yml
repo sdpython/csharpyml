@@ -85,6 +85,10 @@ before_script:
   - cd ../..
   - python setup.py copybinml debug
   - python setup.py copybinml release
+  - cd cscode
+  - dotnet build -c Release TestCSharPyMLExtension
+  - dotnet build -c Debug TestCSharPyMLExtension
+  - cd ..
   - python setup.py copybin
   - python setup.py build_ext --inplace
 
