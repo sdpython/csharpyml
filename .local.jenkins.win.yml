@@ -25,8 +25,8 @@ before_script:
   - python -u setup.py copybinml debug
   - python -u setup.py copybinml release
   - cd cscode
-  - dotnet build -c Release TestCSharPyMLExtension
-  - dotnet build -c Debug TestCSharPyMLExtension
+  - dotnet build -c Release CSharPyMLExtension_netcore.sln
+  - dotnet build -c Debug CSharPyMLExtension_netcore.sln
   - cd ..
   - python -u setup.py copybin
   - python -u setup.py build_ext --inplace

@@ -75,11 +75,11 @@
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' != 'Windows_NT'">
     <Copy  
-        SourceFiles="bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so"
+        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so"
         DestinationFolder="$(OutDir)"  
     />
     <Copy  
-        SourceFiles="bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so"
+        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so"
         DestinationFolder="$(OutDir)"  
     />
   </Target>  
