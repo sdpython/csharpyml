@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.0</TargetFramework>
-
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -61,31 +60,26 @@
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.UniversalModelFormat.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
+   
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
     <Message Text="(Win) Copy From '$(SolutionDir)\bin\machinelearning\$(ConfigurationName)'" />
     <Message Text="(Win) Copy To '$(OutDir)'" />  
-    <Copy  
-        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative.dll"
-        DestinationFolder="$(OutDir)"  
-    />
-    <Copy  
-        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\FastTreeNative.dll"
-        DestinationFolder="$(OutDir)"  
-    />
+    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative.dll" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\FastTreeNative.dll" DestinationFolder="$(OutDir)" />
   </Target>  
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(OS)' != 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' != 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
     <Message Text="(To) Copy From '$(SolutionDir)\bin\machinelearning\$(ConfigurationName)'" />
     <Message Text="(To) Copy To '$(OutDir)'" />  
-    <Copy  
-        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so"
-        DestinationFolder="$(OutDir)"  
-    />
-    <Copy  
-        SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so"
-        DestinationFolder="$(OutDir)"  
-    />
+    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so" DestinationFolder="$(OutDir)" />
+  </Target>  
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="@echo (Check) Src: '$(SolutionDir)\bin\machinelearning\$(ConfigurationName)'" />
+    <Exec Command="@echo (Check) Dest: '$(OutDir)'" />  
+    <Exec Command="@echo (Check) OS: '$(OS)'" />  
+    <Exec Command="@echo (Check) Platform: '$(Platform)'" />  
   </Target>  
 
 </Project>
