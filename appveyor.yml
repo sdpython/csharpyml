@@ -39,14 +39,14 @@ before_test:
   - cd ..\..
   - "%PYTHON%\\python -u setup.py copybinml debug"
   - "%PYTHON%\\python -u setup.py copybinml release"
+  - dir cscode\bin\machinelearning\Debug
   - cd cscode
   - dotnet build -c Release CSharPyMLExtension_netcore.sln
   - dotnet build -c Debug CSharPyMLExtension_netcore.sln
   - cd ..
+  - dir cscode\TestCSharPyMLExtension\bin\Debug\netcoreapp2.0
   - "%PYTHON%\\python -u setup.py copybin"
   - "%PYTHON%\\python -u setup.py build_ext --inplace"
-  - dir cscode\TestCSharPyMLExtension\bin\Debug\netcoreapp2.0
-  - dir cscode\TestCSharPyMLExtension\bin\Release\netcoreapp2.0
   
 test_script:
   - cd cscode
