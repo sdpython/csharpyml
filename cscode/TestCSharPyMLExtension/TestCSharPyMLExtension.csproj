@@ -62,24 +62,17 @@
   </ItemGroup>
    
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
-    <Message Text="(Win) Copy From '$(SolutionDir)\bin\machinelearning\$(ConfigurationName)'" />
-    <Message Text="(Win) Copy To '$(OutDir)'" />  
-    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative.dll" DestinationFolder="$(OutDir)" />
-    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\FastTreeNative.dll" DestinationFolder="$(OutDir)" />
+    <Exec Command="@echo OS|Platform: '$(OS)|$(Platform)'" />  
+    <Exec Command="@echo Copy from '$(SolutionDir)bin\machinelearning\$(ConfigurationName)'" />
+    <Exec Command="@echo Copy to: '$(OutDir)'" />  
+    <Exec Command="copy \"$(SolutionDir)bin\machinelearning\$(ConfigurationName)\*Native*.dll\" \"$(OutDir)\"" />
   </Target>  
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' != 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
-    <Message Text="(To) Copy From '$(SolutionDir)\bin\machinelearning\$(ConfigurationName)'" />
-    <Message Text="(To) Copy To '$(OutDir)'" />  
-    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so" DestinationFolder="$(OutDir)" />
-    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so" DestinationFolder="$(OutDir)" />
-  </Target>  
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="@echo (Check) Src: '$(SolutionDir)\bin\machinelearning\$(ConfigurationName)'" />
-    <Exec Command="@echo (Check) Dest: '$(OutDir)'" />  
-    <Exec Command="@echo (Check) OS: '$(OS)'" />  
-    <Exec Command="@echo (Check) Platform: '$(Platform)'" />  
+    <Exec Command="echo OS|Platform: '$(OS)|$(Platform)'" />  
+    <Exec Command="echo Copy from '$(SolutionDir)bin\machinelearning\$(ConfigurationName)'" />
+    <Exec Command="echo Copy to: '$(OutDir)'" />  
+    <Exec Command="cp \"$(SolutionDir)bin\machinelearning\$(ConfigurationName)\*Native*.so\" \"$(OutDir)\"" />
   </Target>  
 
 </Project>
