@@ -60,20 +60,25 @@
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.UniversalModelFormat.dll</HintPath>
     </Reference>
   </ItemGroup>
-  
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="@echo OS|Platform: '$(OS)|$(Platform)'" />  
-    <Exec Command="@echo Copy from '$(SolutionDir)bin/machinelearning/$(ConfigurationName)'" />
-    <Exec Command="@echo Copy to: '$(OutDir)'" />  
-  </Target>  
-     
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
-    <!--<Exec Command="copy \"$(SolutionDir)bin\\machinelearning\\$(ConfigurationName)\\*Native*.dll\" \"$(OutDir)\"" />-->
-  </Target>  
 
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' == 'Unix' AND '$(SolutionDir)' != '*Undefined*' ">
-    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so" DestinationFolder="$(OutDir)" />
-    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so" DestinationFolder="$(OutDir)" />
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="echo OS-Platform: $(OS)-$(Platform)" />
+    <Exec Command="echo Copy from $(SolutionDir)bin/machinelearning/$(ConfigurationName)" />
+    <Exec Command="echo Copy to: $(OutDir)" />
+    
+    <Copy Condition=" '$(OS)' == 'Unix' AND '$(SolutionDir)' != '*Undefined*' "
+          SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so"
+          DestinationFolder="$(OutDir)" />
+    <Copy Condition=" '$(OS)' == 'Unix' AND '$(SolutionDir)' != '*Undefined*' "
+          SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so"
+          DestinationFolder="$(OutDir)" />
+          
+    <Copy Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' "
+          SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative.dll"
+          DestinationFolder="$(OutDir)" />
+    <Copy Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' "
+          SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\FastTreeNative.dll"
+          DestinationFolder="$(OutDir)" />
   </Target>  
 
 </Project>
