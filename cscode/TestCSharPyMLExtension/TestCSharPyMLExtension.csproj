@@ -72,7 +72,8 @@
     <Exec Command="echo OS|Platform: '$(OS)|$(Platform)'" />  
     <Exec Command="echo Copy from '$(SolutionDir)bin/machinelearning/$(ConfigurationName)'" />
     <Exec Command="echo Copy to: '$(OutDir)'" />  
-    <Exec Command="cp \"$(SolutionDir)bin/machinelearning/$(ConfigurationName)/*Native*.so\" \"$(OutDir)\"" />
+    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so" DestinationFolder="$(OutDir)" />
+    <Copy SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so" DestinationFolder="$(OutDir)" />
   </Target>  
 
 </Project>
