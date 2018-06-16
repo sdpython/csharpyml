@@ -63,9 +63,9 @@
    
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
     <Exec Command="@echo OS|Platform: '$(OS)|$(Platform)'" />  
-    <Exec Command="@echo Copy from '$(SolutionDir)bin\machinelearning\$(ConfigurationName)'" />
+    <Exec Command="@echo Copy from '$(SolutionDir)bin\\machinelearning\\$(ConfigurationName)'" />
     <Exec Command="@echo Copy to: '$(OutDir)'" />  
-    <Exec Command="copy \"$(SolutionDir)bin\machinelearning\$(ConfigurationName)\*Native*.dll\" \"$(OutDir)\"" />
+    <Exec Command="copy \"$(SolutionDir)bin\\machinelearning\\$(ConfigurationName)\\*Native*.dll\" \"$(OutDir)\"" />
   </Target>  
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition=" '$(OS)' != 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' ">
