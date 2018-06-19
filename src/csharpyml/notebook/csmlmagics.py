@@ -32,6 +32,7 @@ class CsMLMagics(MagicClassWithHelpers):
 
         .. nbref::
             :title: %%maml
+            :lid: cmagic-maml
 
             The magic command wraps the function @see fn maml.
 

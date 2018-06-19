@@ -1,0 +1,13 @@
+
+div.blogpost p {
+	font-weight: normal;
+	color: #000000;
+}
+
+.highlight-ipython3 {
+	background-color: #B404AE;
+}
+
+pre.highlight-default {
+	background-color: #b5b5b5;
+}

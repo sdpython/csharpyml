@@ -15,7 +15,7 @@ set_sphinx_variables(__file__, "csharpyml", "sdpython", 2018,
 blog_root = "http://www.xavierdupre.fr/app/csharpyml/helpsphinx/"
 
 html_context = {
-    'css_files': get_default_stylesheet(),
+    'css_files': get_default_stylesheet() + ['_static/my-styles.css', '_static/gallery.css'],
 }
 
 nblinks = {'slideshowrst': 'http://www.xavierdupre.fr/'}
