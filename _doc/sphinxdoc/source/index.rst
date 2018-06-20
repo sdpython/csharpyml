@@ -95,9 +95,8 @@ Installation
 
 *Windows*
 
-::
-
-    pip install csharpyml
+Follow the instructions described in
+`appveyor.yml <https://github.com/sdpython/csharpyml/blob/master/appveyor.yml>`_.
 
 *Linux*
 
@@ -112,6 +111,7 @@ Navigation
 
     indexmenu
     HISTORY
+    license
 
 .. toctree::
     :hidden:
@@ -123,5 +123,5 @@ Navigation
 +----------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+
 | :ref:`modindex`      |  :ref:`l-EX2`       | :ref:`search`       | :ref:`l-license`   | :ref:`l-changes`       | :ref:`l-README`                                |
 +----------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+
-| :ref:`genindex`      |  :ref:`l-FAQ2`      | :ref:`l-notebooks`  | :ref:`ext-tohelp`  | :ref:`l-statcode`      | `Unit Test Coverage <coverage/index.html>`_    |
+| :ref:`genindex`      |  :ref:`l-FAQ2`      | :ref:`l-notebooks`  | :ref:`l-HISTORY`   | :ref:`l-statcode`      | `Unit Test Coverage <coverage/index.html>`_    |
 +----------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+
