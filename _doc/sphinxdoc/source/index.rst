@@ -68,7 +68,7 @@ into :epkg:`Python`:
     :showcode:
 
     from csharpyml.binaries import maml
-    print(maml('?'))
+    print(maml('?')[0])
 
 The list of available trainers can be obtained with:
 
@@ -76,7 +76,7 @@ The list of available trainers can be obtained with:
     :showcode:
 
     from csharpyml.binaries import maml
-    print(maml('? kind=trainer'))
+    print(maml('? kind=trainer')[0])
 
 This function also exists as a magic command
 :ref:`%%maml <cmagic-maml>`.
