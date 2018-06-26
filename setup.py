@@ -302,7 +302,7 @@ def copy_assemblies(lib=None, version="Release"):
                    'cscode/machinelearningext/machinelearningext/PipelineHelper/bin/%s' % version,
                    'cscode/machinelearningext/machinelearningext/PipelineTransforms/bin/%s' % version,
                    ]
-        dests = ['cscode/bin/machinelearning/%s' % version,
+        dests = ['cscode/bin/machinelearningext/%s' % version,
                  'src/csharpyml/binaries/%s' % version,
                  ]
     else:
