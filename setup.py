@@ -179,13 +179,43 @@ def build_machinelearning(version="Release"):
         raise RuntimeError(
             "Unable to build machinelearning code.\nCMD: {0}\n--ERR--\n{1}".format(cmd, err))
     elif len(out) > 0:
-        print('[csharpyml.dotnet] OUT')
+        print('[csharpyml.machinelearning] OUT')
         print(out)
     bin = os.path.join(folder, "bin")
     if not os.path.exists(bin):
         existing = os.listdir(folder)
         raise FileNotFoundError("Unable to find '{0}', build failed. Found:\n{1}".format(
                                 bin, "\n".join(existing)))
+
+
+def build_machinelearningext(version="Release"):
+    "build the module machinelearningext"
+    from pyquickhelper.loghelper import run_cmd
+
+    env = os.environ.get('DOTNET_CLI_TELEMETRY_OPTOUT', None)
+    if env is None:
+        os.environ['DOTNET_CLI_TELEMETRY_OPTOUT'] = '1'
+    print('[csharpyml.env] DOTNET_CLI_TELEMETRY_OPTOUT={0}'.format(
+        os.environ['DOTNET_CLI_TELEMETRY_OPTOUT']))
+
+    # builds the other libraries
+    cmds = ['dotnet restore machinelearningext.sln',
+            'dotnet build -c %s machinelearningext.sln' % version]
+    folder = os.path.abspath("cscode")
+    folder = os.path.join("machinelearningext", "machinelearningext")
+    outs = []
+    for cmd in cmds:
+        out, err = run_cmd(cmd, fLOG=print, wait=True, change_path=folder)
+        if len(err) > 0:
+            raise RuntimeError(
+                "Unable to compile C# code.\nCMD: {0}\n--ERR--\n{1}".format(cmd, err))
+        elif len(out) > 0:
+            outs.append(out)
+            print('[csharpyml.dotnet] OUT')
+            print(out)
+
+    # Copy specific files.
+    copy_assemblies(version=version)
 
 
 def build_module(version="Release"):
@@ -296,7 +326,9 @@ def copy_assemblies(lib=None, version="Release"):
                    'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.StandardLearners' % version,
                    'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.PCA' % version,
                    ]
-        dests = ['cscode/bin/machinelearning/%s' % version]
+        dests = ['cscode/bin/machinelearning/%s' % version,
+                 'cscode/bin/machinelearningext/machinelearning/dist/%s' % version,
+                 ]
     elif lib == 'mlext':
         folders = ['cscode/machinelearningext/machinelearningext/DataManipulation/bin/%s' % version,
                    'cscode/machinelearningext/machinelearningext/PipelineHelper/bin/%s' % version,
@@ -367,7 +399,7 @@ if not r:
         copy_assemblies(lib='mlext', version=version2)
         end = True
     elif "copybin" in sys.argv:
-        copy_assemblies(ml=None, version=version2)
+        copy_assemblies(lib=None, version=version2)
         end = True
     elif "build_ext" in sys.argv:
         if '--inplace' not in sys.argv:
@@ -376,7 +408,9 @@ if not r:
         if '--submodules' in sys.argv:
             sys.argv = [_ for _ in sys.argv if _ != '--submodules']
             build_machinelearning(version=version2)
-            copy_assemblies(ml=True, version=version2)
+            copy_assemblies(lib="ml", version=version2)
+            build_machinelearningext(version=version2)
+            copy_assemblies(lib="mlext", version=version2)
         build_module(version=version2)
         copy_assemblies(version=version2)
 

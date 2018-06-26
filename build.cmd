@@ -25,11 +25,6 @@ python -u setup.py copybinml release
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 :copybin:
-@echo [build.cmd] copy binaries for machinelearning
-if not exist cscode\machinelearningext\machinelearning\dist mkdir cscode\machinelearningext\machinelearning\dist
-xcopy /Y /S cscode\bin\machinelearning\*.* cscode\machinelearningext\machinelearning\dist
-if %errorlevel% neq 0 exit /b %errorlevel%
-
 @echo [build.cmd] build machinelearningext
 cd cscode\machinelearningext\machinelearningext
 dotnet build -c Release machinelearningext.sln

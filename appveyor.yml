@@ -41,8 +41,6 @@ before_test:
   - "%PYTHON%\\python -u setup.py copybinml debug"
   - "%PYTHON%\\python -u setup.py copybinml release"
   # machinelearningext
-  - xcopy /Y /S cscode\bin\machinelearning\*.* cscode\machinelearningext\dist
-  - if not exist cscode\machinelearningext\dist mkdir cscode\machinelearningext\dist
   - cd cscode\machinelearningext\machinelearningext
   - dotnet build -c Release machinelearningext.sln
   - dotnet build -c Debug machinelearningext.sln

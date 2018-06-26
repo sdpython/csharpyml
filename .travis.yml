@@ -87,10 +87,6 @@ before_script:
   - python setup.py copybinml debug
   - python setup.py copybinml release
   # machinelearingext
-  - mkdir -p cscode/machinelearningext/machinelearning/dist/Debug
-  - mkdir -p cscode/machinelearningext/machinelearning/dist/Release
-  - cp cscode/bin/machinelearning/Debug/*.* cscode/machinelearningext/machinelearning/dist/Debug
-  - cp cscode/bin/machinelearning/Release/*.* cscode/machinelearningext/machinelearning/dist/Release
   - cd cscode/machinelearningext/machinelearningext
   - dotnet build -c Release machinelearningext.sln
   - dotnet build -c Debug machinelearningext.sln

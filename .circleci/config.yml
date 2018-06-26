@@ -176,15 +176,6 @@ jobs:
             python3 setup.py copybinml debug
 
       - run:
-          name: move machine learning binaries
-          command: |
-            . venv/bin/activate
-            mkdir -p cscode/machinelearningext/machinelearning/dist/Debug
-            mkdir -p cscode/machinelearningext/machinelearning/dist/Release
-            cp cscode/bin/machinelearning/Debug/*.* cscode/machinelearningext/machinelearning/dist/Debug
-            cp cscode/bin/machinelearning/Release/*.* cscode/machinelearningext/machinelearning/dist/Release
-
-      - run:
           name: build machinelearningext release
           env:
             DOTNET_CLI_TELEMETRY_OPTOUT:1
