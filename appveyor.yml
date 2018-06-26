@@ -33,18 +33,27 @@ before_build:
   - cmd: dotnet --version
 
 before_test:
+  # machinelearning
   - cd cscode\machinelearning
   - build.cmd -Release
   - build.cmd -Debug
   - cd ..\..
   - "%PYTHON%\\python -u setup.py copybinml debug"
   - "%PYTHON%\\python -u setup.py copybinml release"
-  - dir cscode\bin\machinelearning\Debug
+  # machinelearningext
+  - xcopy /Y /S cscode\bin\*.* cscode\machinelearningext\dist
+  - if not exist cscode\machinelearningext\dist mkdir cscode\machinelearningext\dist
+  - cd cscode\machinelearningext
+  - dotnet build -c Release machinelearningext.sln
+  - dotnet build -c Debug machinelearningext.sln
+  - cd ..\..
+  - "%PYTHON%\\python -u setup.py copybinmlext Debug"
+  - "%PYTHON%\\python -u setup.py copybinmlext Release"  
+  # csharpyml
   - cd cscode
   - dotnet build -c Release CSharPyMLExtension_netcore.sln
   - dotnet build -c Debug CSharPyMLExtension_netcore.sln
   - cd ..
-  - dir cscode\TestCSharPyMLExtension\bin\Debug\netcoreapp2.0
   - "%PYTHON%\\python -u setup.py copybin"
   - "%PYTHON%\\python -u setup.py build_ext --inplace"
   

@@ -170,17 +170,52 @@ jobs:
             python3 setup.py copybinml release
 
       - run:
-          name: copy binaries debug
+          name: copy binaries ML debug
           command: |
             . venv/bin/activate
-            python3 setup.py copybinml ML debug
+            python3 setup.py copybinml debug
 
       - run:
-          name: check native
+          name: move machine learning binaries
           command: |
             . venv/bin/activate
-            ls cscode/bin/machinelearning/Debug/*.so
-            ls cscode/bin/machinelearning/Release/*.so
+            md cscode/machinelearningext/dist
+            md cscode/machinelearningext/dist/Debug
+            md cscode/machinelearningext/dist/Release
+            cp cscode/bin/Debug/*.* cscode/machinelearningext/dist/Debug
+            cp cscode/bin/Release/*.* cscode/machinelearningext/dist/Release
+
+      - run:
+          name: build machinelearningext release
+          env:
+            DOTNET_CLI_TELEMETRY_OPTOUT:1
+          command: |
+            . venv/bin/activate
+            cd cscode/machinelearningext
+            dotnet build -c Release machinelearningext.sln
+            cd ..
+
+      - run:
+          name: build machinelearningext debug
+          env:
+            DOTNET_CLI_TELEMETRY_OPTOUT:1
+          command: |
+            . venv/bin/activate
+            cd cscode/machinelearningext
+            dotnet build -c Debug machinelearningext.sln
+            cd ..
+
+      - run:
+          name: copy binaries MLext release
+          command: |
+            . venv/bin/activate
+            python3 setup.py copybinmlext release
+
+      - run:
+          name: copy binaries MLext debug
+          command: |
+            . venv/bin/activate
+            python3 setup.py copybinmlext debug
 
       - run:
           name: build C# release

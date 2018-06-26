@@ -276,10 +276,13 @@ def find_folder_package(folder):
         return mx
 
 
-def copy_assemblies(ml=False, version="Release"):
-    "Copies all assemblies in the right location."
+def copy_assemblies(lib=None, version="Release"):
+    """
+    Copies all assemblies in the right location.
+    *lib* can be ``None``, ``ml`` or ``mlext``.
+    """
     from pyquickhelper.filehelper import synchronize_folder
-    if ml:
+    if lib=='ml':
         folders = ['cscode/machinelearning/packages/google.protobuf',
                    'cscode/machinelearning/packages/newtonsoft.json',
                    'cscode/machinelearning/packages/parquet.net',
@@ -294,6 +297,11 @@ def copy_assemblies(ml=False, version="Release"):
                    'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.PCA' % version,
                    ]
         dests = ['cscode/bin/machinelearning/%s' % version]
+    elif lib == 'mlext':
+        folders = ['cscode/machinelearningext/DataManipulation/bin/%s' % version,
+                   'cscode/machinelearningext/PipelineHelper/bin/%s' % version,
+                   'cscode/machinelearningext/PipelineTransforms/bin/%s' % version,
+                   ]
     else:
         folders = ['cscode/bin/machinelearning/%s' % version,
                    'cscode/CSharPyMLExtension/bin/%s' % version]
@@ -350,10 +358,13 @@ if not r:
     version2 = version if version else "Release"
 
     if "copybinml" in sys.argv:
-        copy_assemblies(ml=True, version=version2)
+        copy_assemblies(lib='ml', version=version2)
+        end = True
+    elif "copybinmlext" in sys.argv:
+        copy_assemblies(lib='mlext', version=version2)
         end = True
     elif "copybin" in sys.argv:
-        copy_assemblies(ml=False, version=version2)
+        copy_assemblies(ml=None, version=version2)
         end = True
     elif "build_ext" in sys.argv:
         if '--inplace' not in sys.argv:
