@@ -77,6 +77,7 @@ install:
 before_script:
   - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
   - gcc --version
+  # machinelearning
   - cd cscode/machinelearning
   - ls
   - bash --help
@@ -85,6 +86,19 @@ before_script:
   - cd ../..
   - python setup.py copybinml debug
   - python setup.py copybinml release
+  # machinelearingext
+  - md cscode/machinelearningext/dist
+  - md cscode/machinelearningext/dist/Debug
+  - md cscode/machinelearningext/dist/Release
+  - cp cscode/bin/Debug/*.* cscode/machinelearningext/machinelearning/dist/Debug
+  - cp cscode/bin/Release/*.* cscode/machinelearningext/machinelearning/dist/Release
+  - cd cscode/machinelearningext/machinelearningext
+  - dotnet build -c Release machinelearningext.sln
+  - dotnet build -c Debug machinelearningext.sln
+  - cd ../../..
+  - python setup.py copybinmlext debug
+  - python setup.py copybinmlext release  
+  # CSharpyMLExtension
   - cd cscode
   - dotnet build -c Release CSharPyMLExtension_netcore.sln
   - dotnet build -c Debug CSharPyMLExtension_netcore.sln

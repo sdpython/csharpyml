@@ -298,10 +298,13 @@ def copy_assemblies(lib=None, version="Release"):
                    ]
         dests = ['cscode/bin/machinelearning/%s' % version]
     elif lib == 'mlext':
-        folders = ['cscode/machinelearningext/DataManipulation/bin/%s' % version,
-                   'cscode/machinelearningext/PipelineHelper/bin/%s' % version,
-                   'cscode/machinelearningext/PipelineTransforms/bin/%s' % version,
+        folders = ['cscode/machinelearningext/machinelearningext/DataManipulation/bin/%s' % version,
+                   'cscode/machinelearningext/machinelearningext/PipelineHelper/bin/%s' % version,
+                   'cscode/machinelearningext/machinelearningext/PipelineTransforms/bin/%s' % version,
                    ]
+        dests = ['cscode/bin/machinelearning/%s' % version,
+                 'src/csharpyml/binaries/%s' % version,
+                 ]
     else:
         folders = ['cscode/bin/machinelearning/%s' % version,
                    'cscode/CSharPyMLExtension/bin/%s' % version]
@@ -309,7 +312,7 @@ def copy_assemblies(lib=None, version="Release"):
     for dest in dests:
         if not os.path.exists(dest):
             os.makedirs(dest)
-        if not ml:
+        if lib is None:
             init = os.path.join(dest, '__init__.py')
             if not os.path.exists(init):
                 with open(init, 'w') as f:

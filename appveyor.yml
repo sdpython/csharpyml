@@ -41,12 +41,12 @@ before_test:
   - "%PYTHON%\\python -u setup.py copybinml debug"
   - "%PYTHON%\\python -u setup.py copybinml release"
   # machinelearningext
-  - xcopy /Y /S cscode\bin\*.* cscode\machinelearningext\dist
+  - xcopy /Y /S cscode\bin\machinelearning\*.* cscode\machinelearningext\dist
   - if not exist cscode\machinelearningext\dist mkdir cscode\machinelearningext\dist
-  - cd cscode\machinelearningext
+  - cd cscode\machinelearningext\machinelearningext
   - dotnet build -c Release machinelearningext.sln
   - dotnet build -c Debug machinelearningext.sln
-  - cd ..\..
+  - cd ..\..\..
   - "%PYTHON%\\python -u setup.py copybinmlext Debug"
   - "%PYTHON%\\python -u setup.py copybinmlext Release"  
   # csharpyml

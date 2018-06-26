@@ -182,8 +182,8 @@ jobs:
             md cscode/machinelearningext/dist
             md cscode/machinelearningext/dist/Debug
             md cscode/machinelearningext/dist/Release
-            cp cscode/bin/Debug/*.* cscode/machinelearningext/dist/Debug
-            cp cscode/bin/Release/*.* cscode/machinelearningext/dist/Release
+            cp cscode/bin/Debug/*.* cscode/machinelearningext/machinelearning/dist/Debug
+            cp cscode/bin/Release/*.* cscode/machinelearningext/machinelearning/dist/Release
 
       - run:
           name: build machinelearningext release
@@ -191,9 +191,9 @@ jobs:
             DOTNET_CLI_TELEMETRY_OPTOUT:1
           command: |
             . venv/bin/activate
-            cd cscode/machinelearningext
+            cd cscode/machinelearningext/machinelearningext
             dotnet build -c Release machinelearningext.sln
-            cd ..
+            cd ../../..
 
       - run:
           name: build machinelearningext debug
@@ -201,9 +201,9 @@ jobs:
             DOTNET_CLI_TELEMETRY_OPTOUT:1
           command: |
             . venv/bin/activate
-            cd cscode/machinelearningext
+            cd cscode/machinelearningext/machinelearningext
             dotnet build -c Debug machinelearningext.sln
-            cd ..
+            cd ../../..
 
       - run:
           name: copy binaries MLext release
