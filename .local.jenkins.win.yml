@@ -18,12 +18,23 @@ install:
   - git submodule update --init
 
 before_script:
+  # machinelearning
   - cd cscode\machinelearning
   - cmd /C build.cmd -Release
   - cmd /C build.cmd -Debug
   - cd ..\..
   - python -u setup.py copybinml debug
   - python -u setup.py copybinml release
+  # machinelearningext
+  - xcopy /Y /S cscode\bin\machinelearning\*.* cscode\machinelearningext\dist
+  - if not exist cscode\machinelearningext\dist mkdir cscode\machinelearningext\dist
+  - cd cscode\machinelearningext\machinelearningext
+  - dotnet build -c Release machinelearningext.sln
+  - dotnet build -c Debug machinelearningext.sln
+  - cd ..\..\..
+  - "%PYTHON%\\python -u setup.py copybinmlext Debug"
+  - "%PYTHON%\\python -u setup.py copybinmlext Release"  
+  # csharpyml
   - cd cscode
   - dotnet build -c Release CSharPyMLExtension_netcore.sln
   - dotnet build -c Debug CSharPyMLExtension_netcore.sln

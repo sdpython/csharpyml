@@ -87,9 +87,8 @@ before_script:
   - python setup.py copybinml debug
   - python setup.py copybinml release
   # machinelearingext
-  - md cscode/machinelearningext/dist
-  - md cscode/machinelearningext/dist/Debug
-  - md cscode/machinelearningext/dist/Release
+  - mkdir -p cscode/machinelearningext/machinelearning/dist/Debug
+  - mkdir -p cscode/machinelearningext/machinelearning/dist/Release
   - cp cscode/bin/Debug/*.* cscode/machinelearningext/machinelearning/dist/Debug
   - cp cscode/bin/Release/*.* cscode/machinelearningext/machinelearning/dist/Release
   - cd cscode/machinelearningext/machinelearningext
