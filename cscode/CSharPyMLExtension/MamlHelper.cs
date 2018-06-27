@@ -1,4 +1,6 @@
-﻿using System;
+﻿// See the LICENSE file in the project root for more information.
+
+using System;
 using System.IO;
 using System.Text;
 using Microsoft.ML.Runtime.Tools;
@@ -27,21 +29,13 @@ namespace CSharPyMLExtension
             string res;
             if (catch_output)
             {
-                var sbout = new StringBuilder();
-                var sberr = new StringBuilder();
-                var sout = new StringWriter(sbout);
-                var serr = new StringWriter(sberr);
-                var cur_out = Console.Out;
-                var cur_err = Console.Error;
-                Console.SetOut(sout);
-                Console.SetError(serr);
-
-                errCode = Maml.MainAll(script);
-
-                Console.SetOut(cur_out);
-                Console.SetError(cur_err);
-
-                res = $"--OUT--\n{sbout.ToString()}\n--ERR--\n{sberr.ToString()}";
+                using (var capture = new StdCapture())
+                {
+                    errCode = Maml.MainAll(script);
+                    var sout = capture.StdOut;
+                    var serr = capture.StdErr;
+                    res = $"--OUT--\n{sout}\n--ERR--\n{serr}";
+                }
             }
             else
             {

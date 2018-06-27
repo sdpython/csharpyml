@@ -37,5 +37,9 @@ def custom_latex_processing(latex):
 
 epkg_dictionary.update({
     'C#': 'https://en.wikipedia.org/wiki/C_Sharp_(programming_language)',
+    'C# DataFrame': 'https://github.com/sdpython/machinelearningext/blob/master/machinelearningext/DataManipulation/DataFrame.cs',
+    'csv': 'https://en.wikipedia.org/wiki/Comma-separated_values',
+    'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
+    'DataKind': 'https://github.com/dotnet/machinelearning/blob/master/src/Microsoft.ML.Core/Data/DataKind.cs#L13',
     'ML.net': 'https://github.com/dotnet/machinelearning',
 })

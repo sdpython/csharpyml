@@ -327,7 +327,7 @@ def copy_assemblies(lib=None, version="Release"):
                    'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.PCA' % version,
                    ]
         dests = ['cscode/bin/machinelearning/%s' % version,
-                 'cscode/bin/machinelearningext/machinelearning/dist/%s' % version,
+                 'cscode/machinelearningext/machinelearning/dist/%s' % version,
                  ]
     elif lib == 'mlext':
         folders = ['cscode/machinelearningext/machinelearningext/DataManipulation/bin/%s' % version,
@@ -339,6 +339,7 @@ def copy_assemblies(lib=None, version="Release"):
                  ]
     else:
         folders = ['cscode/bin/machinelearning/%s' % version,
+                   'cscode/bin/machinelearningext/%s' % version,
                    'cscode/CSharPyMLExtension/bin/%s' % version]
         dests = ['src/csharpyml/binaries/%s' % version]
     for dest in dests:
@@ -365,7 +366,7 @@ def copy_assemblies(lib=None, version="Release"):
                     raise FileNotFoundError(
                         "Unable to find a suitable folder binaries '{0}'".format(fold))
             print("[csharpyml.copy] '{0}' -> '{1}'".format(found, dest))
-            synchronize_folder(found, dest, fLOG=print, no_deletion=True)
+            synchronize_folder(found, dest, fLOG=print, no_deletion=True, size_different=False)
 
 
 if not r:

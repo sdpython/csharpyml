@@ -1,6 +1,6 @@
 """
 @file
-@brief
+@brief Implements function around :epkg:`ML.net` command line.
 """
 from .add_reference import AddReference
 

@@ -4,6 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
   </ItemGroup>
@@ -50,6 +58,9 @@
     </Reference>
     <Reference Include="Microsoft.ML.UniversalModelFormat">
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.UniversalModelFormat.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ML.Ext.DataManipulation">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Microsoft.ML.Ext.DataManipulation.dll</HintPath>
     </Reference>
   </ItemGroup>
 

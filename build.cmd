@@ -47,7 +47,13 @@ cmd /C dotnet build -c Debug CSharPyMLExtension_netcore.sln
 if %errorlevel% neq 0 exit /b %errorlevel%
 cd ..
 
+@echo [build.cmd] copy binaries
+python -u setup.py copybin debug
+if %errorlevel% neq 0 exit /b %errorlevel%
+python -u setup.py copybin release
+if %errorlevel% neq 0 exit /b %errorlevel%
+
+
 :end:
-if not exist machinelearning\bin\x64.Debug @echo [build.cmd] Cannot build.
 @echo [build.cmd] Completed.
 

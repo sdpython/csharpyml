@@ -1,13 +1,20 @@
 """
 @file
-@brief
+@brief Add references to DLL.
 """
 from clr import AddReference as ClrAddReference
 
 
-def AddReference(name):
+def AddReference(name, version=None):
     """
     Imports a :epkg:`C#` dll.
+    
+    @param      name        name of the DLL.
+    @param      version     ``'Release'`` or ``'Debug'`
+    @return                 imported DLL
+    
+    If the version is None, it first tries ``'Release'``
+    then ``'Debug'``.
     """
     try:
         return ClrAddReference(name)
@@ -16,10 +23,14 @@ def AddReference(name):
             import sys
             import os
             this = os.path.abspath(os.path.dirname(__file__))
-            rel = os.path.join(this, "Release")
+            if version is None:
+                vers = 'Release'
+            else:
+                vers = version
+            rel = os.path.join(this, vers)
             if os.path.exists(os.path.join(rel, '__init__.py')):
                 this = rel
-            else:
+            elif version is None:
                 rel = os.path.join(this, "Debug")
                 if not os.path.exists(os.path.join(rel, '__init__.py')):
                     raise FileNotFoundError(
