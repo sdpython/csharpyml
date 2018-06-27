@@ -7,6 +7,7 @@ will sort all test files by increasing time and run them.
 import sys
 import os
 import unittest
+import numpy
 from sklearn import datasets
 import pandas
 from pyquickhelper.pycode import ExtTestCase, get_temp_folder
@@ -33,6 +34,7 @@ class TestCsDataFrame(ExtTestCase):
     def test_src(self):
         "skip pylint"
         self.assertFalse(src is None)
+        self.assertFalse(datasets is None)
 
     def test_shape(self):
         data = "AA,BB,CC\n1,4.5,e\n2,-5.6,rr"
@@ -56,8 +58,13 @@ class TestCsDataFrame(ExtTestCase):
         self.assertEqual(data, ts)
 
     def test_df(self):
-        df = pandas.DataFrame(data=dict(AA=[1,2], BB=[4.5, -5.6], CC=['e', 'rr']))
+        df = pandas.DataFrame(
+            data=dict(AA0=[1, 2], AA=[1, 4], BB=[4.5, -5.6], CC=['e', 'rr']))
+        df['AA0'] = df['AA0'].astype(numpy.int32)
         csdf = CSDataFrame.read_df(df)
+        sch = [csdf.Schema.GetColumnType(i).ToString()
+               for i in range(df.shape[1])]
+        self.assertEqual(sch, ['I4', 'I8', 'R8', 'Text'])
         df2 = csdf.to_df()
         self.assertEqualDataFrame(df, df2)
 

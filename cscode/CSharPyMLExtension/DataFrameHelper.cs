@@ -20,68 +20,57 @@ namespace CSharPyMLExtension
             return new DataFrame();
         }
 
-        /// <summary>
-        /// Adds a column to an existing dataframe.
-        /// Column type is generic. Data is copied.
-        /// </summary>
-        /// <param name="df">DataFrame</param>
-        /// <param name="name">column name</param>
-        /// <param name="values">values (must not be empty)</param>
-        static void AddGenericColumnToDataFrame<DType>(DataFrame df, string name, DType[] values, bool copy)
-            where DType : IEquatable<DType>, IComparable<DType>
-        {
-            DType[] col;
-            if (copy)
-            {
-                col = new DType[values.Length];
-                for (int i = 0; i < values.Length; ++i)
-                    col[i] = values[i];
-            }
-            else
-                col = values;
-            df.AddColumn(name, col);
-        }
-
-        public static void AddColumnToDataFrame(DataFrame df, string name, bool[] values)
+        public static void AddColumnToDataFramebool(DataFrame df, string name, bool[] values)
         {
             var bval = new DvBool[values.Length];
             for (int i = 0; i < values.Length; ++i)
                 bval[i] = values[i];
-            AddGenericColumnToDataFrame(df, name, values, false);
+            df.AddColumn(name, bval);
         }
 
-        public static void AddColumnToDataFrame(DataFrame df, string name, Int32[] values)
+        public static void AddColumnToDataFrameint32(DataFrame df, string name, Int32[] values)
         {
             var bval = new DvInt4[values.Length];
             for (int i = 0; i < values.Length; ++i)
                 bval[i] = values[i];
-            AddGenericColumnToDataFrame(df, name, values, false);
+            df.AddColumn(name, bval);
         }
 
-        public static void AddColumnToDataFrame(DataFrame df, string name, Int64[] values)
+        public static void AddColumnToDataFrameint64(DataFrame df, string name, Int64[] values)
         {
             var bval = new DvInt8[values.Length];
             for (int i = 0; i < values.Length; ++i)
                 bval[i] = values[i];
-            AddGenericColumnToDataFrame(df, name, values, false);
+            df.AddColumn(name, bval);
         }
 
-        public static void AddColumnToDataFrame(DataFrame df, string name, float[] values)
+        public static void AddColumnToDataFrameuint(DataFrame df, string name, uint[] values)
         {
-            AddGenericColumnToDataFrame(df, name, values, true);
+            var cpy = new uint[values.Length];
+            Array.Copy(values, cpy, values.Length);
+            df.AddColumn(name, cpy);
         }
 
-        public static void AddColumnToDataFrame(DataFrame df, string name, double[] values)
+        public static void AddColumnToDataFramefloat32(DataFrame df, string name, float[] values)
         {
-            AddGenericColumnToDataFrame(df, name, values, true);
+            var cpy = new float[values.Length];
+            Array.Copy(values, cpy, values.Length);
+            df.AddColumn(name, cpy);
         }
 
-        public static void AddColumnToDataFrame(DataFrame df, string name, string[] values)
+        public static void AddColumnToDataFramefloat64(DataFrame df, string name, double[] values)
+        {
+            var cpy = new double[values.Length];
+            Array.Copy(values, cpy, values.Length);
+            df.AddColumn(name, cpy);
+        }
+
+        public static void AddColumnToDataFramestring(DataFrame df, string name, string[] values)
         {
             var bval = new DvText[values.Length];
             for (int i = 0; i < values.Length; ++i)
                 bval[i] = new DvText(values[i]);
-            AddGenericColumnToDataFrame(df, name, values, false);
+            df.AddColumn(name, bval);
         }
 
         /// <summary>
@@ -123,9 +112,107 @@ namespace CSharPyMLExtension
         public static string DataFrameToString(DataFrame df)
         {
             using (var capture = new StdCapture())
-            {
                 return df.ToString();
-            }
+        }
+
+        public static DvBool[] DataFrameColumnToArrrayDvBool(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<DvBool>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type bool.");
+            return col.Data;
+        }
+
+        public static bool[] DataFrameColumnToArrraybool(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<DvBool>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type bool.");
+            var copy = new bool[col.Length];
+            for (int j = 0; j < copy.Length; ++j)
+                copy[j] = (bool)col.Data[j];
+            return copy;
+        }
+
+        public static DvInt4[] DataFrameColumnToArrrayDvInt4(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<DvInt4>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type int.");
+            return col.Data;
+        }
+
+        public static uint[] DataFrameColumnToArrrayuint32(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<uint>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type uint.");
+            return col.Data;
+        }
+
+        public static Int32[] DataFrameColumnToArrrayint32(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<DvInt4>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type int.");
+            var copy = new Int32[col.Length];
+            for (int j = 0; j < copy.Length; ++j)
+                copy[j] = (int)col.Data[j];
+            return copy;
+        }
+
+        public static DvInt8[] DataFrameColumnToArrrayDvInt8(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<DvInt8>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type Int64.");
+            return col.Data;
+        }
+
+        public static Int64[] DataFrameColumnToArrrayint64(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<DvInt8>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type Int64.");
+            var copy = new Int64[col.Length];
+            for (int j = 0; j < copy.Length; ++j)
+                copy[j] = (Int64)col.Data[j];
+            return copy;
+        }
+
+        public static float[] DataFrameColumnToArrrayfloat32(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<float>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type float.");
+            return col.Data;
+        }
+
+        public static double[] DataFrameColumnToArrrayfloat64(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<double>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type double.");
+            return col.Data;
+        }
+
+        public static DvText[] DataFrameColumnToArrrayDvText(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<DvText>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type string.");
+            return col.Data;
+        }
+
+        public static string[] DataFrameColumnToArrraystring(DataFrame df, int i)
+        {
+            var col = df.GetColumn(i).Column as DataColumn<DvText>;
+            if (col == null)
+                throw new TypeError($"Column {i} is not of type Int64.");
+            var copy = new string[col.Length];
+            for (int j = 0; j < copy.Length; ++j)
+                copy[j] = col.Data[j].ToString();
+            return copy;
         }
     }
 }

@@ -312,7 +312,7 @@ def copy_assemblies(lib=None, version="Release"):
     *lib* can be ``None``, ``ml`` or ``mlext``.
     """
     from pyquickhelper.filehelper import synchronize_folder
-    if lib=='ml':
+    if lib == 'ml':
         folders = ['cscode/machinelearning/packages/google.protobuf',
                    'cscode/machinelearning/packages/newtonsoft.json',
                    'cscode/machinelearning/packages/parquet.net',
@@ -366,7 +366,7 @@ def copy_assemblies(lib=None, version="Release"):
                     raise FileNotFoundError(
                         "Unable to find a suitable folder binaries '{0}'".format(fold))
             print("[csharpyml.copy] '{0}' -> '{1}'".format(found, dest))
-            synchronize_folder(found, dest, fLOG=print, no_deletion=True, size_different=False)
+            synchronize_folder(found, dest, fLOG=print, no_deletion=True)
 
 
 if not r:
