@@ -2,10 +2,7 @@
 
 using System;
 using System.IO;
-using System.Collections.Generic;
 using System.Text;
-using Microsoft.ML.Runtime.Data;
-using Microsoft.ML.Ext.DataManipulation;
 
 
 namespace CSharPyMLExtension
