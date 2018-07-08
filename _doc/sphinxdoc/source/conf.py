@@ -42,4 +42,5 @@ epkg_dictionary.update({
     'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
     'DataKind': 'https://github.com/dotnet/machinelearning/blob/master/src/Microsoft.ML.Core/Data/DataKind.cs#L13',
     'ML.net': 'https://github.com/dotnet/machinelearning',
+    'Windows': 'https://www.microsoft.com/',
 })

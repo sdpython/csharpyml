@@ -67,7 +67,7 @@ class CSDataFrame:
 
     @staticmethod
     def read_csv(filename, sep=',', header=True, names=None,
-                 kinds=None, nrows=-1, guess_rows=10):
+                 kinds=None, nrows=-1, guess_rows=10, index=False):
         """
         Creates a dataframe from a :epkg:`csv` file.
 
@@ -78,6 +78,7 @@ class CSDataFrame:
         @param      kinds           types of each columns (see below)
         @param      guess_rows      number of rows to guess the type is not overriden by
                                     kinds
+        @param      index           add a column with the row index
         @return                     @see cl CSDataFrame
 
         *kinds* can be None to let the function guess the right type,
@@ -91,11 +92,11 @@ class CSDataFrame:
             of a variable or an array. It is equivalent to an integer.
             The mapping is defined in file :epkg:`DataKind`.
         """
-        return CSDataFrame(CSDataFrame.get_cs_class().ReadCsv(filename, sep, header, names, kinds, nrows, guess_rows))
+        return CSDataFrame(CSDataFrame.get_cs_class().ReadCsv(filename, sep, header, names, kinds, nrows, guess_rows, index))
 
     @staticmethod
     def read_str(content, sep=',', header=True, names=None,
-                 kinds=None, nrows=-1, guess_rows=10):
+                 kinds=None, nrows=-1, guess_rows=10, index=False):
         """
         Creates a dataframe from a string.
 
@@ -106,6 +107,7 @@ class CSDataFrame:
         @param      kinds           types of each columns (see below)
         @param      guess_rows      number of rows to guess the type is not overriden by
                                     kinds
+        @param      index           add a column with the row index
         @return                     @see cl CSDataFrame
 
         *kinds* can be None to let the function guess the right type,
@@ -119,7 +121,7 @@ class CSDataFrame:
             of a variable or an array. It is equivalent to an integer.
             The mapping is defined in file :epkg:`DataKind`.
         """
-        return CSDataFrame(CSDataFrame.get_cs_class().ReadStr(content, sep, header, names, kinds, nrows, guess_rows))
+        return CSDataFrame(CSDataFrame.get_cs_class().ReadStr(content, sep, header, names, kinds, nrows, guess_rows, index))
 
     def __str__(self):
         """
