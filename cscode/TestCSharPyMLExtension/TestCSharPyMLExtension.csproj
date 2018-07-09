@@ -56,9 +56,6 @@
     <Reference Include="Microsoft.ML.Sweeper">
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.Sweeper.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ML.UniversalModelFormat">
-      <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.UniversalModelFormat.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
@@ -66,19 +63,11 @@
     <Exec Command="echo Copy from $(SolutionDir)bin/machinelearning/$(ConfigurationName)" />
     <Exec Command="echo Copy to: $(OutDir)" />
     
-    <Copy Condition=" '$(OS)' == 'Unix' AND '$(SolutionDir)' != '*Undefined*' "
-          SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so"
-          DestinationFolder="$(OutDir)" />
-    <Copy Condition=" '$(OS)' == 'Unix' AND '$(SolutionDir)' != '*Undefined*' "
-          SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so"
-          DestinationFolder="$(OutDir)" />
+    <Copy Condition=" '$(OS)' == 'Unix' AND '$(SolutionDir)' != '*Undefined*' " SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libCpuMathNative.so" DestinationFolder="$(OutDir)" />
+    <Copy Condition=" '$(OS)' == 'Unix' AND '$(SolutionDir)' != '*Undefined*' " SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\libFastTreeNative.so" DestinationFolder="$(OutDir)" />
           
-    <Copy Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' "
-          SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative.dll"
-          DestinationFolder="$(OutDir)" />
-    <Copy Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' "
-          SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\FastTreeNative.dll"
-          DestinationFolder="$(OutDir)" />
+    <Copy Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' " SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\CpuMathNative.dll" DestinationFolder="$(OutDir)" />
+    <Copy Condition=" '$(OS)' == 'Windows_NT' AND '$(SolutionDir)' != '*Undefined*' " SourceFiles="$(SolutionDir)\bin\machinelearning\$(ConfigurationName)\FastTreeNative.dll" DestinationFolder="$(OutDir)" />
   </Target>  
 
 </Project>

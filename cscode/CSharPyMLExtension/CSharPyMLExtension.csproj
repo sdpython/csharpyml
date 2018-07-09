@@ -56,9 +56,6 @@
     <Reference Include="Microsoft.ML.Sweeper">
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.Sweeper.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ML.UniversalModelFormat">
-      <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.UniversalModelFormat.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.ML.Ext.DataManipulation">
       <HintPath>..\bin\machinelearningext\$(Configuration)\Microsoft.ML.Ext.DataManipulation.dll</HintPath>
     </Reference>

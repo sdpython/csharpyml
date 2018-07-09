@@ -67,7 +67,8 @@ class CSDataFrame:
 
     @staticmethod
     def read_csv(filename, sep=',', header=True, names=None,
-                 kinds=None, nrows=-1, guess_rows=10, index=False):
+                 kinds=None, nrows=-1, guess_rows=10, encoding=None,
+                 index=False):
         """
         Creates a dataframe from a :epkg:`csv` file.
 
@@ -78,6 +79,7 @@ class CSDataFrame:
         @param      kinds           types of each columns (see below)
         @param      guess_rows      number of rows to guess the type is not overriden by
                                     kinds
+        @param      encoding        encoding
         @param      index           add a column with the row index
         @return                     @see cl CSDataFrame
 
@@ -92,7 +94,7 @@ class CSDataFrame:
             of a variable or an array. It is equivalent to an integer.
             The mapping is defined in file :epkg:`DataKind`.
         """
-        return CSDataFrame(CSDataFrame.get_cs_class().ReadCsv(filename, sep, header, names, kinds, nrows, guess_rows, index))
+        return CSDataFrame(CSDataFrame.get_cs_class().ReadCsv(filename, sep, header, names, kinds, nrows, guess_rows, encoding, index))
 
     @staticmethod
     def read_str(content, sep=',', header=True, names=None,
@@ -145,6 +147,10 @@ class CSDataFrame:
         # TS = 13, TimeSpan = 13, DT = 14, DateTime = 14, DZ = 15, DateTimeZone = 15,
         # UG = 16, U16 = 16
         cl = CSDataFrame.get_cs_class()
+        if self._obj.Source is None:
+            obj = self._obj
+        else:
+            obj = self._obj.Copy()
 
         shape = self._obj.Shape
         data = OrderedDict()
@@ -155,25 +161,25 @@ class CSDataFrame:
             kind = schema.GetColumnType(i).ToString()
             if kind == 'I4':
                 data[name] = list(
-                    cl.DataFrameColumnToArrrayint32(self._obj, i))
+                    cl.DataFrameColumnToArrrayint32(obj, i))
                 apply.append((name, numpy.int32))
             elif kind == 'U4':
-                data[name] = list(cl.DataFrameColumnToArrrayuint(self._obj, i))
+                data[name] = list(cl.DataFrameColumnToArrrayuint(obj, i))
             elif kind == 'I8':
                 data[name] = list(
-                    cl.DataFrameColumnToArrrayint64(self._obj, i))
+                    cl.DataFrameColumnToArrrayint64(obj, i))
             elif kind == 'R4':
                 data[name] = list(
-                    cl.DataFrameColumnToArrrayfloat32(self._obj, i))
+                    cl.DataFrameColumnToArrrayfloat32(obj, i))
                 apply.append((name, numpy.float32))
             elif kind == 'R8':
                 data[name] = list(
-                    cl.DataFrameColumnToArrrayfloat64(self._obj, i))
+                    cl.DataFrameColumnToArrrayfloat64(obj, i))
             elif kind in {'TX', 'Text'}:
                 data[name] = list(
-                    cl.DataFrameColumnToArrraystring(self._obj, i))
+                    cl.DataFrameColumnToArrraystring(obj, i))
             elif kind in {'BL', 'Bool'}:
-                data[name] = list(cl.DataFrameColumnToArrraybool(self._obj, i))
+                data[name] = list(cl.DataFrameColumnToArrraybool(obj, i))
             else:
                 raise TypeError(
                     "Unable to handle type kind {0} for column {1}: '{2}'.".format(kind, i, name))
@@ -182,14 +188,39 @@ class CSDataFrame:
             res[name] = res[name].astype(ty)
         return res
 
+    class _wrap_return_:
+        """
+        Wraps a C# object into a Python
+        if the returned object is a DataFrame.
+        """
+
+        def __init__(self, name, fct):
+            self.name = name
+            self.fct = fct
+
+        def __call__(self, *args, **kwargs):
+            ret = self.fct(*args, **kwargs)
+            if hasattr(ret, "GroupBy"):
+                return CSDataFrame(ret)
+            else:
+                return ret
+
     def __getattr__(self, name):
         """
         Looks first in the Python class then in the :epkg:`C#` class.
         """
         if hasattr(self.__class__, name):
+            # Python
             return getattr(self.__class__, name)
         elif hasattr(self._obj, name):
-            return getattr(self._obj, name)
+            # C#, wrapped results.
+            if name in {'Shape', 'Schema', 'Length', 'Columns', 'ColumnCount',
+                        'ALL', 'Kinds', 'Source', 'ColumnsSet', 'loc', 'iloc',
+                        'CanShuffle'}:
+                # Property
+                return getattr(self._obj, name)
+            else:
+                return CSDataFrame._wrap_return_(name, getattr(self._obj, name))
         else:
             raise AttributeError("Class '{0}' has no attribute '{1}'".format(
                 self.__class__.__name__, name))

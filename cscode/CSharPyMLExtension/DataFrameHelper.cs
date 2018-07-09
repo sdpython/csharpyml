@@ -1,6 +1,7 @@
 ﻿// See the LICENSE file in the project root for more information.
 
 using System;
+using System.Text;
 using Microsoft.ML.Runtime.Data;
 using Microsoft.ML.Ext.DataManipulation;
 
@@ -79,7 +80,7 @@ namespace CSharPyMLExtension
         /// </summary>
         public static DataFrame ReadStr(string content, char sep = ',', bool header = true,
                                     string[] names = null, int[] dtypes = null,
-                                    int nrows = -1, int guess_rows = 10)
+                                    int nrows = -1, int guess_rows = 10, bool index = false)
         {
             DataKind?[] kinds = null;
             if (dtypes != null)
@@ -88,7 +89,7 @@ namespace CSharPyMLExtension
                 for (int i = 0; i < kinds.Length; ++i)
                     kinds[i] = dtypes[i] < 0 ? (DataKind?)null : (DataKind?)(DataKind)dtypes[i];
             }
-            return DataFrame.ReadStr(content, sep, header, names, kinds, nrows, guess_rows);
+            return DataFrame.ReadStr(content, sep, header, names, kinds, nrows, guess_rows, index);
         }
 
         /// <summary>
@@ -97,7 +98,8 @@ namespace CSharPyMLExtension
         /// </summary>
         public static DataFrame ReadCsv(string filename, char sep = ',', bool header = true,
                                     string[] names = null, int[] dtypes = null,
-                                    int nrows = -1, int guess_rows = 10)
+                                    int nrows = -1, int guess_rows = 10, string encoding = null,
+                                    bool index = false)
         {
             DataKind?[] kinds = null;
             if (dtypes != null)
@@ -106,7 +108,9 @@ namespace CSharPyMLExtension
                 for (int i = 0; i < kinds.Length; ++i)
                     kinds[i] = dtypes[i] < 0 ? null : (DataKind?)(DataKind)dtypes[i];
             }
-            return DataFrame.ReadCsv(filename, sep, header, names, kinds, nrows, guess_rows);
+            return DataFrame.ReadCsv(filename, sep, header, names, kinds, nrows, guess_rows,
+                                     encoding == null ? null : Encoding.GetEncoding(encoding),
+                                     index: index);
         }
 
         public static string DataFrameToString(DataFrame df)

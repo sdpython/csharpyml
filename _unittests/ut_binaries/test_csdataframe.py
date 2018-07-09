@@ -62,11 +62,24 @@ class TestCsDataFrame(ExtTestCase):
             data=dict(AA0=[1, 2], AA=[1, 4], BB=[4.5, -5.6], CC=['e', 'rr']))
         df['AA0'] = df['AA0'].astype(numpy.int32)
         csdf = CSDataFrame.read_df(df)
+        sch = csdf.Schema
         sch = [csdf.Schema.GetColumnType(i).ToString()
                for i in range(df.shape[1])]
         self.assertEqual(sch, ['I4', 'I8', 'R8', 'Text'])
         df2 = csdf.to_df()
         self.assertEqualDataFrame(df, df2)
+
+    def test_head(self):
+        df = pandas.DataFrame(
+            data=dict(AA0=[1, 2], AA=[1, 4], BB=[4.5, -5.6], CC=['e', 'rr']))
+        df['AA0'] = df['AA0'].astype(numpy.int32)
+        csdf = CSDataFrame.read_df(df)
+        df1 = csdf.to_df().head(1)
+        head = csdf.Head(1)
+        df2 = head.to_df()
+        self.assertEqual(df1.shape, (1, 4))
+        self.assertEqual(df2.shape, (1, 4))
+        self.assertEqualDataFrame(df1, df2)
 
 
 if __name__ == "__main__":
