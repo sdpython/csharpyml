@@ -3,7 +3,7 @@
 using System;
 using System.Text;
 using Microsoft.ML.Runtime.Data;
-using Microsoft.ML.Ext.DataManipulation;
+using Scikit.ML.DataManipulation;
 
 
 namespace CSharPyMLExtension

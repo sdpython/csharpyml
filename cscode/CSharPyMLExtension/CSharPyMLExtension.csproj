@@ -57,7 +57,7 @@
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.Sweeper.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ML.Ext.DataManipulation">
-      <HintPath>..\bin\machinelearningext\$(Configuration)\Microsoft.ML.Ext.DataManipulation.dll</HintPath>
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.DataManipulation.dll</HintPath>
     </Reference>
   </ItemGroup>
 
