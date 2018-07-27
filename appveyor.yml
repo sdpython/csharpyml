@@ -20,10 +20,10 @@ install:
   - "%PYTHON%\\python -m pip install --upgrade pip"
   - "%PYTHON%\\Scripts\\pip install pymyinstall"
   - "%PYTHON%\\Scripts\\pymy_install3 --set=pyquickhelper"
-  - "%PYTHON%\\Scripts\\pymy_install3 scikit-learn scipy"
+  - "%PYTHON%\\Scripts\\pymy_install3 scikit-learn scipy pythonnet"
   - "%PYTHON%\\Scripts\\pip install pyquickhelper jyquickhelper"
   - "%PYTHON%\\Scripts\\pip install -r requirements.txt"
-  - "%PYTHON%\\Scripts\\pip install pythonnet csharpy"
+  - "%PYTHON%\\Scripts\\pip install csharpy"
   - "set PATH=%PATH%;C:\\projects\\jyquickhelper\\build\\update_modules\\Graphviz\\bin"
   - set DOTNET_CLI_TELEMETRY_OPTOUT=1
 
