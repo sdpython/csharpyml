@@ -2,7 +2,9 @@ coverage
 jyquickhelper
 Pillow
 pycparser
+pyensae
 pylint
+pymyinstall
 pyquickhelper>=1.8
 scikit-learn
 scipy
