@@ -1,6 +1,6 @@
 """
 @file
-@brief Makes C# Dataframe available in Python.
+@brief Makes :epkg:`C# DataFrame` available in :epkg:`Python`.
 """
 from collections import OrderedDict
 import numpy

@@ -1,8 +1,6 @@
 ﻿// See the LICENSE file in the project root for more information.
 
 using System;
-using System.IO;
-using System.Text;
 using Microsoft.ML.Runtime.Tools;
 
 
@@ -19,7 +17,7 @@ namespace CSharPyMLExtension
     }
 
     /// <summary>
-    /// Helpers to run script through maml.
+    /// Helpers to run scripts through maml.
     /// </summary>
     public static class MamlHelper
     {

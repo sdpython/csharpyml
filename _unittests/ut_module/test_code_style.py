@@ -51,6 +51,7 @@ class TestCodeStyle(ExtTestCase):
                          "Unable to import 'CSharPyMLExtension'",
                          'W0212: Access to a protected member _obj',
                          'add_reference.py:21: W0703',
+                         "Unable to import 'src.csharpyml.cparts.cmodule'",
                          ])
 
     def test_style_test(self):

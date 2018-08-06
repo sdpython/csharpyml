@@ -333,6 +333,7 @@ def copy_assemblies(lib=None, version="Release"):
         folders = ['cscode/machinelearningext/machinelearningext/DataManipulation/bin/%s' % version,
                    'cscode/machinelearningext/machinelearningext/PipelineHelper/bin/%s' % version,
                    'cscode/machinelearningext/machinelearningext/PipelineTransforms/bin/%s' % version,
+                   'cscode/machinelearningext/machinelearningext/ScikitAPI/bin/%s' % version,
                    ]
         dests = ['cscode/bin/machinelearningext/%s' % version,
                  'src/csharpyml/binaries/%s' % version,

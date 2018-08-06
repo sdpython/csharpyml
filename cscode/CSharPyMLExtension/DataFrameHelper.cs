@@ -9,7 +9,7 @@ using Scikit.ML.DataManipulation;
 namespace CSharPyMLExtension
 {
     /// <summary>
-    /// Easier function to use from Python.
+    /// Easier functions to use from Python.
     /// </summary>
     public static class DataFrameHelper
     {

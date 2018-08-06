@@ -8,7 +8,7 @@ using System.Text;
 namespace CSharPyMLExtension
 {
     /// <summary>
-    /// Capture standard output and error.
+    /// Captures standard output and error.
     /// </summary>
     public class StdCapture: IDisposable
     {
