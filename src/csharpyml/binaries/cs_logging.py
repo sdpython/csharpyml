@@ -3,9 +3,7 @@
 @brief Makes :epkg:`C# ScikitPipeline` available in :epkg:`Python`.
 """
 import sys
-import pandas
 from .add_reference import add_csharpml_extension
-from .cs_dataframe import CSDataFrame
 
 
 class CSLogging:
@@ -25,10 +23,12 @@ class CSLogging:
 
     @staticmethod
     def print_stdout(text):
+        "Writes on ``sys.stdout``."
         sys.stdout.write(text.strip("\r"))
 
     @staticmethod
     def print_stderr(text):
+        "Writes on ``sys.stderr``."
         sys.stderr.write(text.strip("\r"))
 
     def __init__(self, stdout="python", seed=-1, verbose=True, sensitivity="All", conc=0):

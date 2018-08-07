@@ -97,7 +97,7 @@ class TestCsPipeline(ExtTestCase):
 
     def test_transform_array(self):
         X, y = datasets.load_iris(return_X_y=True)
-        X_train, X_test, y_train, y_test = train_test_split(
+        X_train, X_test, __, _ = train_test_split(
             X.astype(numpy.float32), y.astype(numpy.float32))
         pipe = CSPipeline(
             ["concat{col=Feat:X0,X1,X2,X3}", "poly{col=Feat}"], stdout="python", verbose=0)
