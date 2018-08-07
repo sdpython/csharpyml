@@ -35,9 +35,6 @@
     <Reference Include="Microsoft.ML.FastTree">
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.FastTree.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.ML.InternalStreams">
-      <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.InternalStreams.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.ML.KMeansClustering">
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.KMeansClustering.dll</HintPath>
     </Reference>

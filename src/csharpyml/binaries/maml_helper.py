@@ -26,3 +26,50 @@ def maml(script, catch_output=True):
     else:
         MamlHelper.MamlAll(script, False)
         return None, None
+
+
+def get_transforms_list():
+    """
+    Returns the list of transforms as a unique strings
+    to display.
+
+    .. runpython::
+        :showcode:
+
+        from csharpyml.binaries import get_transforms_list
+        print(get_transforms_list())
+    """
+    out, _ = maml("? kind=datatransform")
+    return out
+
+
+def get_learners_list():
+    """
+    Returns the list of learners as a unique strings
+    to display.
+
+    .. runpython::
+        :showcode:
+
+        from csharpyml.binaries import get_learners_list
+        print(get_learners_list())
+    """
+    out, _ = maml("? kind=trainer")
+    return out
+
+
+def get_help(cl):
+    """
+    Returns short documentation on one transform or learner.
+
+    @param      cl      transform or learner name
+    @return             string
+
+    .. runpython::
+        :showcode:
+
+        from csharpyml.binaries import get_help
+        print(get_help("lr"))
+    """
+    out, _ = maml("? " + cl)
+    return out

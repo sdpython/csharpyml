@@ -35,35 +35,72 @@ class CSDataFrame:
             self._obj = obj
 
     @staticmethod
-    def read_df(df):
+    def read_df(df, columns=None):
         """
         Converts a :epkg:`DataFrame` into a :epkg:`C# DataFrame`.
 
         @param      df      :epkg:`DataFrame`
+        @param      columns overwrites the column names
         @return             @see cl CSDataFrame
         """
         cl = CSDataFrame.get_cs_class()
         res = CSDataFrame()
-        names = df.columns
-        dtypes = df.dtypes
-        for i in range(df.shape[1]):
-            col = list(df.iloc[:, i])
-            typ = dtypes[i]
-            if typ == numpy.bool_:
-                cl.AddColumnToDataFramebool(res._obj, names[i], col)
-            elif typ == numpy.uint32:
-                cl.AddColumnToDataFrameuint(res._obj, names[i], col)
-            elif typ == numpy.int32:
-                cl.AddColumnToDataFrameint32(res._obj, names[i], col)
-            elif typ == numpy.int64:
-                cl.AddColumnToDataFrameint64(res._obj, names[i], col)
-            elif typ == numpy.float32:
-                cl.AddColumnToDataFramefloat32(res._obj, names[i], col)
-            elif typ == numpy.float64:
-                cl.AddColumnToDataFramefloat64(res._obj, names[i], col)
-            else:
-                cl.AddColumnToDataFramestring(res._obj, names[i], col)
-        return res
+        if isinstance(df, pandas.DataFrame):
+            names = columns or df.columns
+            dtypes = df.dtypes
+            for i in range(df.shape[1]):
+                col = list(df.iloc[:, i])
+                typ = dtypes[i]
+                if typ == numpy.bool_:
+                    cl.AddColumnToDataFramebool(res._obj, names[i], col)
+                elif typ == numpy.uint32:
+                    cl.AddColumnToDataFrameuint(res._obj, names[i], col)
+                elif typ == numpy.int32:
+                    cl.AddColumnToDataFrameint32(res._obj, names[i], col)
+                elif typ == numpy.int64:
+                    cl.AddColumnToDataFrameint64(res._obj, names[i], col)
+                elif typ == numpy.float32:
+                    cl.AddColumnToDataFramefloat32(res._obj, names[i], col)
+                elif typ == numpy.float64:
+                    cl.AddColumnToDataFramefloat64(res._obj, names[i], col)
+                else:
+                    cl.AddColumnToDataFramestring(res._obj, names[i], col)
+            return res
+        elif isinstance(df, numpy.ndarray):
+            names = columns or ["X%d" % i for i in range(df.shape[1])]
+            typ = df.dtype
+            for i in range(df.shape[1]):
+                col = list(df[:, i])
+                if typ == numpy.bool_:
+                    cl.AddColumnToDataFramebool(res._obj, names[i], col)
+                elif typ == numpy.uint32:
+                    cl.AddColumnToDataFrameuint(res._obj, names[i], col)
+                elif typ == numpy.int32:
+                    cl.AddColumnToDataFrameint32(res._obj, names[i], col)
+                elif typ == numpy.int64:
+                    cl.AddColumnToDataFrameint64(res._obj, names[i], col)
+                elif typ == numpy.float32:
+                    cl.AddColumnToDataFramefloat32(res._obj, names[i], col)
+                elif typ == numpy.float64:
+                    cl.AddColumnToDataFramefloat64(res._obj, names[i], col)
+                else:
+                    cl.AddColumnToDataFramestring(res._obj, names[i], col)
+            return res
+        else:
+            raise TypeError("df must be a pandas DataFrame or a numpy array.")
+
+    @staticmethod
+    def read_view(idataview, nrows=-1):
+        """
+        Converts a :epkg:`C# IDataView` into a :epkg:`C# IDataView`.
+
+        @param      df      :epkg:`C# IDataView`
+        @param      nrows   keeps only the first rows
+        @return             @see cl CSDataFrame
+        """
+        cl = CSDataFrame.get_cs_class()
+        obj = cl.ReadView(idataview, nrows)
+        return CSDataFrame(obj)
 
     @staticmethod
     def read_csv(filename, sep=',', header=True, names=None,
@@ -164,7 +201,7 @@ class CSDataFrame:
                     cl.DataFrameColumnToArrrayint32(obj, i))
                 apply.append((name, numpy.int32))
             elif kind == 'U4':
-                data[name] = list(cl.DataFrameColumnToArrrayuint(obj, i))
+                data[name] = list(cl.DataFrameColumnToArrrayuint32(obj, i))
             elif kind == 'I8':
                 data[name] = list(
                     cl.DataFrameColumnToArrrayint64(obj, i))

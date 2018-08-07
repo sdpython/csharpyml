@@ -75,6 +75,14 @@ namespace CSharPyMLExtension
         }
 
         /// <summary>
+        /// Creates a dataframe from a IDataView.
+        /// </summary>
+        public static DataFrame ReadView(IDataView view, int nrows=-1)
+        {
+            return DataFrame.ReadView(view, nrows);
+        }
+
+        /// <summary>
         /// Reads a string as a IDataView.
         /// Follows pandas API.
         /// </summary>

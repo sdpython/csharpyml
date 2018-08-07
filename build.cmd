@@ -1,5 +1,12 @@
 @echo off
-set PATH=%PATH%;c:\Python365_x64
+set ppythonpath="c:\Python370_x64"
+if not exist %ppythonpath% set ppythonpath="c:\Python366_x64"
+if not exist %ppythonpath% set ppythonpath="c:\Python365_x64"
+if not exist %ppythonpath% set ppythonpath="c:\Python364_x64"
+if not exist %ppythonpath% set ppythonpath="c:\Python363_x64"
+if not exist %ppythonpath% set ppythonpath="c:\Python36_x64"
+
+set PATH=%PATH%;%ppythonpath%
 set PYTHONPATH=%~dp0..\pyquickhelper\src
 
 cd cscode\machinelearning

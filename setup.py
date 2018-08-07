@@ -331,8 +331,11 @@ def copy_assemblies(lib=None, version="Release"):
                  ]
     elif lib == 'mlext':
         folders = ['cscode/machinelearningext/machinelearningext/DataManipulation/bin/%s' % version,
+                   'cscode/machinelearningext/machinelearningext/FeaturesTransforms/bin/%s' % version,
+                   'cscode/machinelearningext/machinelearningext/NearestNeighbors/bin/%s' % version,
                    'cscode/machinelearningext/machinelearningext/PipelineHelper/bin/%s' % version,
                    'cscode/machinelearningext/machinelearningext/PipelineTransforms/bin/%s' % version,
+                   'cscode/machinelearningext/machinelearningext/RandomTransforms/bin/%s' % version,
                    'cscode/machinelearningext/machinelearningext/ScikitAPI/bin/%s' % version,
                    ]
         dests = ['cscode/bin/machinelearningext/%s' % version,
