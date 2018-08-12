@@ -279,3 +279,4 @@ _doc/notebooks/prediction.txt
 src/csharpyml/binaries/*.lib
 src/csharpyml/binaries/*.xml
 src/csharpyml/binaries/*.json
+*.err
