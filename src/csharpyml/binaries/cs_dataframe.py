@@ -198,7 +198,7 @@ class CSDataFrame:
             ctype = schema.GetColumnType(i)
             if ctype.IsVector:
                 raise TypeError(
-                    "Unable to handle type {0} for column {1}: '{2}'.".format(ctype, i, name))                
+                    "Unable to handle type {0} for column {1}: '{2}'.".format(ctype, i, name))
             kind = ctype.ToString()
             if kind == 'I4':
                 data[name] = list(
