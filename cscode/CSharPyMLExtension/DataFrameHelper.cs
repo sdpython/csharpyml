@@ -4,6 +4,7 @@ using System;
 using System.Text;
 using Microsoft.ML.Runtime.Data;
 using Scikit.ML.DataManipulation;
+using Scikit.ML.PipelineHelper;
 
 
 namespace CSharPyMLExtension
@@ -77,7 +78,7 @@ namespace CSharPyMLExtension
         /// <summary>
         /// Creates a dataframe from a IDataView.
         /// </summary>
-        public static DataFrame ReadView(IDataView view, int nrows=-1)
+        public static DataFrame ReadView(IDataView view, int nrows = -1)
         {
             return DataFrame.ReadView(view, nrows);
         }
@@ -90,14 +91,29 @@ namespace CSharPyMLExtension
                                     string[] names = null, int[] dtypes = null,
                                     int nrows = -1, int guess_rows = 10, bool index = false)
         {
-            DataKind?[] kinds = null;
+            var kinds = IntToColumnTypes(dtypes);
+            return DataFrame.ReadStr(content, sep, header, names, kinds, nrows, guess_rows, index);
+        }
+
+        static ColumnType[] IntToColumnTypes(int[] dtypes)
+        {
+            ColumnType[] kinds = null;
             if (dtypes != null)
             {
-                kinds = new DataKind?[dtypes.Length];
+                kinds = new ColumnType[dtypes.Length];
                 for (int i = 0; i < kinds.Length; ++i)
-                    kinds[i] = dtypes[i] < 0 ? (DataKind?)null : (DataKind?)(DataKind)dtypes[i];
+                {
+                    if (dtypes[i] < 0)
+                        kinds[i] = null;
+                    else
+                    {
+                        var kind = (DataKind)dtypes[i];
+                        var ctype = SchemaHelper.DataKind2ColumnType(kind);
+                        kinds[i] = ctype;
+                    }
+                }
             }
-            return DataFrame.ReadStr(content, sep, header, names, kinds, nrows, guess_rows, index);
+            return kinds;
         }
 
         /// <summary>
@@ -109,13 +125,7 @@ namespace CSharPyMLExtension
                                     int nrows = -1, int guess_rows = 10, string encoding = null,
                                     bool index = false)
         {
-            DataKind?[] kinds = null;
-            if (dtypes != null)
-            {
-                kinds = new DataKind?[dtypes.Length];
-                for (int i = 0; i < kinds.Length; ++i)
-                    kinds[i] = dtypes[i] < 0 ? null : (DataKind?)(DataKind)dtypes[i];
-            }
+            var kinds = IntToColumnTypes(dtypes);
             return DataFrame.ReadCsv(filename, sep, header, names, kinds, nrows, guess_rows,
                                      encoding == null ? null : Encoding.GetEncoding(encoding),
                                      index: index);
