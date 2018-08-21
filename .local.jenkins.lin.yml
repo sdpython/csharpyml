@@ -1,0 +1,54 @@
+
+language: python
+
+python:
+  - { PATH: "{{Python37}}", VERSION: 3.7, DIST: std, PYINT: python3.7 }
+  
+virtualenv:
+  - path: {{ospathjoin(root_path, pickname("$NAME_JENKINS", project_name + "_$VERSION_$DIST_$NAME"), "_venv")}}
+  
+install:
+  - $PYINT -c "from pip._internal import main;main(\"install --no-cache-dir --no-deps --index http://localhost:8067/simple/ jyquickhelper pyquickhelper csharpy --extra-index-url=https://pypi.python.org/simple/\".split())"
+  - $PYINT -c "from pip._internal import main;main(\"install -r requirements.txt\".split())"
+  - $PYINT --version
+  - $PYINT -c "from pip._internal import main;main([\"freeze\"])
+
+before_script:
+  - export PATH=/home/circleci/repo/clang+llvm-6.0.0-x86_64-linux-gnu-debian9/bin:$PATH
+  - export LANG=en_US.UTF-8
+  - export DOTNET_CLI_TELEMETRY_OPTOUT=1
+  # Build machinelearning.
+  - cd cscode/machinelearning
+  - ls
+  - bash --help
+  - bash --verbose build.sh -Release
+  - bash --verbose build.sh -Debug
+  - cd ../..
+  # Copy binaries.
+  - $PYINT setup.py copybinml release
+  - $PYINT setup.py copybinml debug
+  # Build machinelearningext
+  - cd cscode/machinelearningext/machinelearningext
+  - dotnet build -c Release machinelearningext.sln
+  - dotnet build -c Debug machinelearningext.sln
+  - cd ../../..
+  # Copy binaries.
+  - $PYINT setup.py copybinmlext release
+  - $PYINT setup.py copybinmlext debug
+  # Build csharpyml helpers
+  - cd cscode
+  - dotnet build -c Release CSharPyMLExtension_netcore.sln
+  - dotnet build -c Debug CSharPyMLExtension_netcore.sln
+  - cd ..
+
+script:
+  - { CMD: "$PYINT -u setup.py unittests", NAME: "UT" }
+  - { CMD: "cd cscode; dotnet test -c Release TestCSharPyMLExtension; dotnet test -c Debug TestCSharPyMLExtension; cd ..", NAME: "UT_CSharp" }
+
+after_script:
+  - $PYINT -u setup.py bdist_wheel
+  - if [ ${VERSION} == "3.7" and ${DIST} != "conda" and ${NAME} == "UT" ] then cp dist/*.whl {{root_path}}/../local_pypi/local_pypi_server fi
+
+documentation:
+  - if [ ${NAME} == "UT" ] then $PYINT -u setup.py build_sphinx fi
+  - if [ ${NAME} == "UT" ] then cp -R -f _doc/sphinxdoc/build/html dist/html fi
