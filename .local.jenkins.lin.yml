@@ -19,7 +19,6 @@ before_script:
   - export DOTNET_CLI_TELEMETRY_OPTOUT=1
   # Build machinelearning.
   - cd cscode/machinelearning
-  - ls
   - bash --verbose build.sh -Release
   - bash --verbose build.sh -Debug
   - cd ../..
