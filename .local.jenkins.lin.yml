@@ -8,19 +8,18 @@ virtualenv:
   - path: {{ospathjoin(root_path, pickname("$NAME_JENKINS", project_name + "_$VERSION_$DIST_$NAME"), "_venv")}}
   
 install:
-  - $PYINT -c "from pip._internal import main;main(\"install --no-cache-dir --no-deps --index http://localhost:8067/simple/ jyquickhelper pyquickhelper csharpy --extra-index-url=https://pypi.python.org/simple/\".split())"
+  - git submodule update --init
+  - $PYINT -c "from pip._internal import main;main(\"install --no-cache-dir --no-deps --index http://localhost:8067/simple/ jyquickhelper pyquickhelper csharpy pyensae pymyinstall --extra-index-url=https://pypi.python.org/simple/\".split())"
   - $PYINT -c "from pip._internal import main;main(\"install -r requirements.txt\".split())"
   - $PYINT --version
-  - $PYINT -c "from pip._internal import main;main([\"freeze\"])
+  - $PYINT -c "from pip._internal import main;main([\"freeze\"])"
 
 before_script:
-  - export PATH=/home/circleci/repo/clang+llvm-6.0.0-x86_64-linux-gnu-debian9/bin:$PATH
   - export LANG=en_US.UTF-8
   - export DOTNET_CLI_TELEMETRY_OPTOUT=1
   # Build machinelearning.
   - cd cscode/machinelearning
   - ls
-  - bash --help
   - bash --verbose build.sh -Release
   - bash --verbose build.sh -Debug
   - cd ../..
