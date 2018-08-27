@@ -449,7 +449,6 @@ if not r:
             packages=packages,
             package_dir=package_dir,
             package_data=package_data,
-            # data_files=data_files,
+            setup_requires=["pyquickhelper"],
             install_requires=['pythonnet', 'pyquickhelper'],
-            # include_package_data=True,
         )
