@@ -1,8 +1,8 @@
-[submodule "cscode/machinelearning"]
-	path = cscode/machinelearning
-	url = https://github.com/sdpython/machinelearning.git
-	branch = branchpy
 [submodule "cscode/machinelearningext"]
 	path = cscode/machinelearningext
 	url = https://github.com/sdpython/machinelearningext.git
 	branch = master
+[submodule "cscode/machinelearning"]
+	path = cscode/machinelearning
+	url = https://github.com/xadupre/machinelearning.git
+	branch = modified
