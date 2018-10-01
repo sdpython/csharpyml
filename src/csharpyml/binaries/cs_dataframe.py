@@ -52,19 +52,19 @@ class CSDataFrame:
                 col = list(df.iloc[:, i])
                 typ = dtypes[i]
                 if typ == numpy.bool_:
-                    cl.AddColumnToDataFramebool(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameBool(res._obj, names[i], col)
                 elif typ == numpy.uint32:
-                    cl.AddColumnToDataFrameuint(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameUint(res._obj, names[i], col)
                 elif typ == numpy.int32:
-                    cl.AddColumnToDataFrameint32(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameInt(res._obj, names[i], col)
                 elif typ == numpy.int64:
-                    cl.AddColumnToDataFrameint64(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameInt64(res._obj, names[i], col)
                 elif typ == numpy.float32:
-                    cl.AddColumnToDataFramefloat32(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameFloat(res._obj, names[i], col)
                 elif typ == numpy.float64:
-                    cl.AddColumnToDataFramefloat64(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameFloat64(res._obj, names[i], col)
                 else:
-                    cl.AddColumnToDataFramestring(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameString(res._obj, names[i], col)
             return res
         elif isinstance(df, numpy.ndarray):
             names = columns or ["X%d" % i for i in range(df.shape[1])]
@@ -72,19 +72,19 @@ class CSDataFrame:
             for i in range(df.shape[1]):
                 col = list(df[:, i])
                 if typ == numpy.bool_:
-                    cl.AddColumnToDataFramebool(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameBool(res._obj, names[i], col)
                 elif typ == numpy.uint32:
-                    cl.AddColumnToDataFrameuint(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameUint(res._obj, names[i], col)
                 elif typ == numpy.int32:
-                    cl.AddColumnToDataFrameint32(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameInt(res._obj, names[i], col)
                 elif typ == numpy.int64:
-                    cl.AddColumnToDataFrameint64(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameInt64(res._obj, names[i], col)
                 elif typ == numpy.float32:
-                    cl.AddColumnToDataFramefloat32(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameFloat(res._obj, names[i], col)
                 elif typ == numpy.float64:
-                    cl.AddColumnToDataFramefloat64(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameFloat64(res._obj, names[i], col)
                 else:
-                    cl.AddColumnToDataFramestring(res._obj, names[i], col)
+                    cl.AddColumnToDataFrameString(res._obj, names[i], col)
             return res
         else:
             raise TypeError("df must be a pandas DataFrame or a numpy array.")

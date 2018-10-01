@@ -7,18 +7,20 @@ from .add_reference import AddReference
 
 def maml(script, catch_output=True):
     """
-    Runs a maml_script through :epkg:`ML.net`.
-
+    Runs a *maml script* through :epkg:`ML.net`.
     @param      script          script
     @param      catch_output    the function returns the output as a result at of the
                                 execution, otherwise, it gets printed on stdout
                                 while being executed
     @return                     stdout, stderr
+
+    See notebook :ref:`csharpformlinnotebookrst`
+    for an example.
     """
     AddReference('CSharPyMLExtension')
-    from CSharPyMLExtension import MamlHelper
+    from CSharPyMLExtension import PyMamlHelper
     if catch_output:
-        res = MamlHelper.MamlAll(script, True)
+        res = PyMamlHelper.MamlAll(script, True)
         res = res.replace('\r', '')
         out, err = res.split('--ERR--')
         out = out.split('--OUT--')[-1]

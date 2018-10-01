@@ -53,7 +53,7 @@ class TestMaml(ExtTestCase):
         data=__DATA__
         loader=text{col=Label:U4[0-2]:0 col=Slength:R4:1 col=Swidth:R4:2 col=Plength:R4:3 col=Pwidth:R4:4 sep=, header=+}
         xf=Concat{col=Features:Slength,Swidth}
-        tr=ova{p=lr}
+        tr=ova{p=ap}
         parallel=1
         out=__MODEL__
         """.strip("\n ").replace('__MODEL__', model).replace('__DATA__', dest)

@@ -14,12 +14,13 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="System.Memory" Version="4.5.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Microsoft.ML">
-      <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.dll</HintPath>
-    </Reference>
+    <Reference Include="Microsoft.ML.Legacy">
+      <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.Legacy.dll</HintPath>
+    </Reference>    
     <Reference Include="Microsoft.ML.Api">
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.Api.dll</HintPath>
     </Reference>    
@@ -61,6 +62,9 @@
     </Reference>
     <Reference Include="Scikit.ML.ScikitAPI">
       <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.ScikitAPI.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.ScikitAPI">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.DocHelperMlExt.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

@@ -147,7 +147,7 @@ else:
 
 
 def build_machinelearning(version="Release"):
-    "builds machinelearning"
+    "Builds machinelearning (ml.net)."
     from pyquickhelper.loghelper import run_cmd
     print('[csharpyml.machinelearning]')
     this = os.path.abspath(os.path.dirname(__file__))
@@ -189,7 +189,7 @@ def build_machinelearning(version="Release"):
 
 
 def build_machinelearningext(version="Release"):
-    "build the module machinelearningext"
+    "Builds the module machinelearningext."
     from pyquickhelper.loghelper import run_cmd
 
     env = os.environ.get('DOTNET_CLI_TELEMETRY_OPTOUT', None)
@@ -313,31 +313,69 @@ def copy_assemblies(lib=None, version="Release"):
     """
     from pyquickhelper.filehelper import synchronize_folder
     if lib == 'ml':
-        folders = ['cscode/machinelearning/packages/google.protobuf',
+        folders = ['cscode/machinelearning/bin/x64.%s/Native' % version,
+                   'cscode/machinelearning/packages/google.protobuf',
+                   'cscode/machinelearning/packages/lightgbm',
+                   'cscode/machinelearning/packages/netstandard.library',
                    'cscode/machinelearning/packages/newtonsoft.json',
                    'cscode/machinelearning/packages/parquet.net',
+                   'cscode/machinelearning/packages/system.codedom',
+                   'cscode/machinelearning/packages/system.collections',
+                   'cscode/machinelearning/packages/system.collections.concurrent',
+                   'cscode/machinelearning/packages/system.collections.immutable',
+                   'cscode/machinelearning/packages/system.collections.nongeneric',
+                   'cscode/machinelearning/packages/system.diagnostics.contracts',
+                   'cscode/machinelearning/packages/system.diagnostics.stacktrace',
+                   'cscode/machinelearning/packages/system.diagnostics.tools',
+                   'cscode/machinelearning/packages/system.dynamic.runtime',
+                   'cscode/machinelearning/packages/system.globalization',
+                   'cscode/machinelearning/packages/system.io',
+                   'cscode/machinelearning/packages/system.linq',
+                   'cscode/machinelearning/packages/system.memory',
                    'cscode/machinelearning/packages/system.reflection',
-                   'cscode/machinelearning/packages/netstandard.library',
-                   "cscode/machinelearning/packages/system.threading.tasks.dataflow",
-                   'cscode/machinelearning/bin/x64.%s/Native' % version,
-                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML' % version,
-                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.Sweeper' % version,
-                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.KMeansClustering' % version,
-                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.StandardLearners' % version,
-                   'cscode/machinelearning/bin/AnyCPU.%s/Microsoft.ML.PCA' % version,
+                   'cscode/machinelearning/packages/system.reflection.emit',
+                   'cscode/machinelearning/packages/system.runtime',
+                   'cscode/machinelearning/packages/system.runtime.compilerservices.unsafe',
+                   'cscode/machinelearning/packages/system.runtime.extensions',
+                   'cscode/machinelearning/packages/system.runtime.interopservices',
+                   'cscode/machinelearning/packages/system.runtime.loader',
+                   'cscode/machinelearning/packages/system.runtime.serialization.formatters',
+                   'cscode/machinelearning/packages/system.runtime.serialization.json',
+                   'cscode/machinelearning/packages/system.runtime.serialization.primitives',
+                   'cscode/machinelearning/packages/system.reflection',
+                   'cscode/machinelearning/packages/system.threading',
+                   'cscode/machinelearning/packages/system.threading.tasks',
+                   'cscode/machinelearning/packages/system.threading.tasks.dataflow',
+                   'cscode/machinelearning/packages/system.valuetuple',
                    ]
+        for lib in ["Microsoft.ML.Console",
+                    "Microsoft.ML.DnnAnalyzer",
+                    "Microsoft.ML.ImageAnalytics",
+                    "Microsoft.ML.KMeansClustering",
+                    "Microsoft.ML.Legacy",
+                    "Microsoft.ML.LightGBM",
+                    "Microsoft.ML.Onnx",
+                    "Microsoft.ML.OnnxTransform",
+                    "Microsoft.ML.PCA",
+                    "Microsoft.ML.PipelineInference",
+                    "Microsoft.ML.Transforms",
+                    "Microsoft.ML.StandardLearners",
+                    "Microsoft.ML.Sweeper",
+                    ]:
+            folders.append('cscode/machinelearning/bin/AnyCPU.%s/%s' % (version, lib))
+
         dests = ['cscode/bin/machinelearning/%s' % version,
                  'cscode/machinelearningext/machinelearning/dist/%s' % version,
                  ]
     elif lib == 'mlext':
-        folders = ['cscode/machinelearningext/machinelearningext/DataManipulation/bin/%s' % version,
-                   'cscode/machinelearningext/machinelearningext/FeaturesTransforms/bin/%s' % version,
-                   'cscode/machinelearningext/machinelearningext/NearestNeighbors/bin/%s' % version,
-                   'cscode/machinelearningext/machinelearningext/PipelineHelper/bin/%s' % version,
-                   'cscode/machinelearningext/machinelearningext/PipelineTransforms/bin/%s' % version,
-                   'cscode/machinelearningext/machinelearningext/RandomTransforms/bin/%s' % version,
-                   'cscode/machinelearningext/machinelearningext/ScikitAPI/bin/%s' % version,
-                   ]
+        folders = []
+        for sub in ['DataManipulation',
+                    'DocHelperMlExt',
+                    'EntryPoints',
+                    'ScikitAPI',
+                    ]:
+            folders.append('cscode/machinelearningext/machinelearningext/%s/bin/%s' % (sub, version))
+
         dests = ['cscode/bin/machinelearningext/%s' % version,
                  'src/csharpyml/binaries/%s' % version,
                  ]
