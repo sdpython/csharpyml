@@ -394,7 +394,10 @@ def copy_assemblies(lib=None, version="Release"):
             synchronize_folder(found, dest, fLOG=print, no_deletion=True)
     
     if lib not in ('ml', 'mlext'):
-        check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.dll" % version
+        if sys.platform.startswith("win"):
+            check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.dll" % version
+        else:
+            check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.so" % version
         if not os.path.exists(check_existence):
             raise FileNotFoundError("Unable to find '{0}'.".format(check_existence))
 
