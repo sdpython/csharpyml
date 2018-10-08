@@ -332,7 +332,7 @@ def copy_assemblies(lib=None, version="Release"):
                     "Microsoft.ML.TensorFlow",
                     "Microsoft.ML.Transforms",
                     "Microsoft.ML.StandardLearners",
-                    "Microsoft.ML.Timeseries",
+                    "Microsoft.ML.TimeSeries",
                     ]:
             folders.append('cscode/machinelearning/bin/AnyCPU.%s/%s' % (version, lib))
             
