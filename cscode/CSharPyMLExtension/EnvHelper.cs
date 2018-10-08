@@ -2,7 +2,7 @@
 
 using System;
 using Microsoft.ML.Runtime;
-using Scikit.ML.ScikitAPI;
+using Scikit.ML.PipelineHelper;
 
 
 namespace CSharPyMLExtension

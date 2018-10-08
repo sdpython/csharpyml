@@ -202,25 +202,25 @@ class CSDataFrame:
             kind = ctype.ToString()
             if kind == 'I4':
                 data[name] = list(
-                    cl.DataFrameColumnToArrrayint32(obj, i))
+                    cl.DataFrameColumnToArrayInt(obj, i))
                 apply.append((name, numpy.int32))
             elif kind == 'U4' or ctype.IsKey:
-                data[name] = list(cl.DataFrameColumnToArrrayuint32(obj, i))
+                data[name] = list(cl.DataFrameColumnToArrayUint32(obj, i))
             elif kind == 'I8':
                 data[name] = list(
-                    cl.DataFrameColumnToArrrayint64(obj, i))
+                    cl.DataFrameColumnToArrayInt64(obj, i))
             elif kind == 'R4':
                 data[name] = list(
-                    cl.DataFrameColumnToArrrayfloat32(obj, i))
+                    cl.DataFrameColumnToArrayFloat32(obj, i))
                 apply.append((name, numpy.float32))
             elif kind == 'R8':
                 data[name] = list(
-                    cl.DataFrameColumnToArrrayfloat64(obj, i))
+                    cl.DataFrameColumnToArrayFloat64(obj, i))
             elif kind in {'TX', 'Text'}:
                 data[name] = list(
-                    cl.DataFrameColumnToArrraystring(obj, i))
+                    cl.DataFrameColumnToArrayString(obj, i))
             elif kind in {'BL', 'Bool'}:
-                data[name] = list(cl.DataFrameColumnToArrraybool(obj, i))
+                data[name] = list(cl.DataFrameColumnToArrayBool(obj, i))
             else:
                 raise TypeError(
                     "Unable to handle type kind {0} for column {1}: '{2}'.".format(kind, i, name))

@@ -24,7 +24,7 @@ namespace CSharPyMLExtension
     {
         public static string MamlAll(string script, bool catch_output)
         {
-            return MamlHelper.MamlAll(script, catch_output);
+            return MamlHelper.MamlScript(script, catch_output);
         }
 
         public static string[] GetAllKinds()

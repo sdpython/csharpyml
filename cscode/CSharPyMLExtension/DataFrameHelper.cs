@@ -59,7 +59,7 @@ namespace CSharPyMLExtension
             df.AddColumn(name, cpy);
         }
 
-        public static void AddColumnToDataFramestring(DataFrame df, string name, string[] values)
+        public static void AddColumnToDataFrameString(DataFrame df, string name, string[] values)
         {
             var bval = new DvText[values.Length];
             for (int i = 0; i < values.Length; ++i)
@@ -129,7 +129,7 @@ namespace CSharPyMLExtension
                 return df.ToString();
         }
 
-        public static bool[] DataFrameColumnToArrrayBool(DataFrame df, int i)
+        public static bool[] DataFrameColumnToArrayBool(DataFrame df, int i)
         {
             var col = df.GetColumn(i).Column as DataColumn<bool>;
             if (col == null)
@@ -137,7 +137,7 @@ namespace CSharPyMLExtension
             return col.Data;
         }
 
-        public static int[] DataFrameColumnToArrrayInt(DataFrame df, int i)
+        public static int[] DataFrameColumnToArrayInt(DataFrame df, int i)
         {
             var col = df.GetColumn(i).Column as DataColumn<int>;
             if (col == null)
@@ -145,7 +145,7 @@ namespace CSharPyMLExtension
             return col.Data;
         }
 
-        public static uint[] DataFrameColumnToArrrayUint(DataFrame df, int i)
+        public static uint[] DataFrameColumnToArrayUint(DataFrame df, int i)
         {
             var col = df.GetColumn(i).Column as DataColumn<uint>;
             if (col == null)
@@ -153,7 +153,7 @@ namespace CSharPyMLExtension
             return col.Data;
         }
 
-        public static Int64[] DataFrameColumnToArrrayInt64(DataFrame df, int i)
+        public static Int64[] DataFrameColumnToArrayInt64(DataFrame df, int i)
         {
             var col = df.GetColumn(i).Column as DataColumn<Int64>;
             if (col == null)
@@ -161,7 +161,7 @@ namespace CSharPyMLExtension
             return col.Data;
         }
 
-        public static float[] DataFrameColumnToArrrayFloat(DataFrame df, int i)
+        public static float[] DataFrameColumnToArrayFloat(DataFrame df, int i)
         {
             var col = df.GetColumn(i).Column as DataColumn<float>;
             if (col == null)
@@ -169,7 +169,7 @@ namespace CSharPyMLExtension
             return col.Data;
         }
 
-        public static double[] DataFrameColumnToArrrayFloat64(DataFrame df, int i)
+        public static double[] DataFrameColumnToArrayFloat64(DataFrame df, int i)
         {
             var col = df.GetColumn(i).Column as DataColumn<double>;
             if (col == null)
@@ -177,7 +177,7 @@ namespace CSharPyMLExtension
             return col.Data;
         }
 
-        public static DvText[] DataFrameColumnToArrrayDvText(DataFrame df, int i)
+        public static DvText[] DataFrameColumnToArrayDvText(DataFrame df, int i)
         {
             var col = df.GetColumn(i).Column as DataColumn<DvText>;
             if (col == null)
@@ -185,7 +185,7 @@ namespace CSharPyMLExtension
             return col.Data;
         }
 
-        public static string[] DataFrameColumnToArrraystring(DataFrame df, int i)
+        public static string[] DataFrameColumnToArrayString(DataFrame df, int i)
         {
             var col = df.GetColumn(i).Column as DataColumn<DvText>;
             if (col == null)

@@ -313,57 +313,29 @@ def copy_assemblies(lib=None, version="Release"):
     """
     from pyquickhelper.filehelper import synchronize_folder
     if lib == 'ml':
-        folders = ['cscode/machinelearning/bin/x64.%s/Native' % version,
-                   'cscode/machinelearning/packages/google.protobuf',
-                   'cscode/machinelearning/packages/lightgbm',
-                   'cscode/machinelearning/packages/netstandard.library',
-                   'cscode/machinelearning/packages/newtonsoft.json',
-                   'cscode/machinelearning/packages/parquet.net',
-                   'cscode/machinelearning/packages/system.codedom',
-                   'cscode/machinelearning/packages/system.collections',
-                   'cscode/machinelearning/packages/system.collections.concurrent',
-                   'cscode/machinelearning/packages/system.collections.immutable',
-                   'cscode/machinelearning/packages/system.collections.nongeneric',
-                   'cscode/machinelearning/packages/system.diagnostics.contracts',
-                   'cscode/machinelearning/packages/system.diagnostics.stacktrace',
-                   'cscode/machinelearning/packages/system.diagnostics.tools',
-                   'cscode/machinelearning/packages/system.dynamic.runtime',
-                   'cscode/machinelearning/packages/system.globalization',
-                   'cscode/machinelearning/packages/system.io',
-                   'cscode/machinelearning/packages/system.linq',
-                   'cscode/machinelearning/packages/system.memory',
-                   'cscode/machinelearning/packages/system.reflection',
-                   'cscode/machinelearning/packages/system.reflection.emit',
-                   'cscode/machinelearning/packages/system.runtime',
-                   'cscode/machinelearning/packages/system.runtime.compilerservices.unsafe',
-                   'cscode/machinelearning/packages/system.runtime.extensions',
-                   'cscode/machinelearning/packages/system.runtime.interopservices',
-                   'cscode/machinelearning/packages/system.runtime.loader',
-                   'cscode/machinelearning/packages/system.runtime.serialization.formatters',
-                   'cscode/machinelearning/packages/system.runtime.serialization.json',
-                   'cscode/machinelearning/packages/system.runtime.serialization.primitives',
-                   'cscode/machinelearning/packages/system.reflection',
-                   'cscode/machinelearning/packages/system.threading',
-                   'cscode/machinelearning/packages/system.threading.tasks',
-                   'cscode/machinelearning/packages/system.threading.tasks.dataflow',
-                   'cscode/machinelearning/packages/system.valuetuple',
-                   ]
-        for lib in ["Microsoft.ML.Console",
+        folders = []
+        for lib in ["Microsoft.ML.Api",
+                    "Microsoft.ML.Console",
                     "Microsoft.ML.DnnAnalyzer",
+                    "Microsoft.ML.Ensemble",
+                    "Microsoft.ML.FastTree",
+                    "Microsoft.ML.HalLearners",
                     "Microsoft.ML.ImageAnalytics",
                     "Microsoft.ML.KMeansClustering",
                     "Microsoft.ML.Legacy",
                     "Microsoft.ML.LightGBM",
+                    "Microsoft.ML.Maml",
                     "Microsoft.ML.Onnx",
                     "Microsoft.ML.OnnxTransform",
                     "Microsoft.ML.PCA",
                     "Microsoft.ML.PipelineInference",
+                    "Microsoft.ML.TensorFlow",
                     "Microsoft.ML.Transforms",
                     "Microsoft.ML.StandardLearners",
-                    "Microsoft.ML.Sweeper",
+                    "Microsoft.ML.Timeseries",
                     ]:
             folders.append('cscode/machinelearning/bin/AnyCPU.%s/%s' % (version, lib))
-
+            
         dests = ['cscode/bin/machinelearning/%s' % version,
                  'cscode/machinelearningext/machinelearning/dist/%s' % version,
                  ]
@@ -374,7 +346,7 @@ def copy_assemblies(lib=None, version="Release"):
                     'EntryPoints',
                     'ScikitAPI',
                     ]:
-            folders.append('cscode/machinelearningext/machinelearningext/%s/bin/%s' % (sub, version))
+            folders.append('cscode/machinelearningext/machinelearningext/bin/AnyCPU.%s/%s/netstandard2.0' % (version, sub))
 
         dests = ['cscode/bin/machinelearningext/%s' % version,
                  'src/csharpyml/binaries/%s' % version,
@@ -383,7 +355,18 @@ def copy_assemblies(lib=None, version="Release"):
         folders = ['cscode/bin/machinelearning/%s' % version,
                    'cscode/bin/machinelearningext/%s' % version,
                    'cscode/CSharPyMLExtension/bin/%s' % version]
+        rootpkg = "cscode/machinelearning/packages"
+        folders.extend([
+            os.path.join(rootpkg, "newtonsoft.json", "10.0.3", "lib", "netstandard1.3"),
+            os.path.join(rootpkg, "system.memory", "4.5.1", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "system.runtime.compilerservices.unsafe", "4.5.0", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "system.collections.immutable", "1.5.0", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "system.collections.immutable", "1.5.0", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "system.numerics.vectors", "4.4.0", "lib", "netstandard2.0"),
+            ])
+
         dests = ['src/csharpyml/binaries/%s' % version]
+
     for dest in dests:
         if not os.path.exists(dest):
             os.makedirs(dest)
@@ -409,6 +392,11 @@ def copy_assemblies(lib=None, version="Release"):
                         "Unable to find a suitable folder binaries '{0}'".format(fold))
             print("[csharpyml.copy] '{0}' -> '{1}'".format(found, dest))
             synchronize_folder(found, dest, fLOG=print, no_deletion=True)
+    
+    if lib not in ('ml', 'mlext'):
+        check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.dll" % version
+        if not os.path.exists(check_existence):
+            raise FileNotFoundError("Unable to find '{0}'.".format(check_existence))
 
 
 if not r:

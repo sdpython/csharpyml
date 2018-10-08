@@ -10,24 +10,33 @@ set PATH=%PATH%;%ppythonpath%
 set PYTHONPATH=%~dp0..\pyquickhelper\src
 
 cd cscode\machinelearning
+if "%1" == "ml" goto buildrelease:
 if exist bin\x64.Release goto mldeb:
 @echo [build.cmd] build machinelearning release
+:buildrelease:
 cmd /C build.cmd -release
 if %errorlevel% neq 0 exit /b %errorlevel%
 :mldeb:
+if "%1" == "ml" goto builddebug:
 if exist bin\x64.Debug goto mlrel:
+:builddebug:
 @echo [build.cmd] build machinelearning debug
 cmd /C build.cmd -debug
 if %errorlevel% neq 0 exit /b %errorlevel%
 :mlrel:
 cd ..\..
 
-if not exist cscode\machinelearning\bin\x64.Debug goto copymlrel:
-@echo [build.cmd] copy binaries for machinelearning
+if "%1" == "ml" goto copydebug:
+if exist cscode\machinelearning\bin\x64.Debug goto copymlrel:
+:copydebug:
+@echo [build.cmd] copy debug binaries for machinelearning
 python -u setup.py copybinml debug
 if %errorlevel% neq 0 exit /b %errorlevel%
 :copymlrel:
-if not exist cscode\machinelearning\bin\x64.Release goto copybin:
+if "%1" == "ml" goto copyrelease:
+if exist cscode\machinelearning\bin\x64.Release goto copybin:
+:copyrelease:
+@echo [build.cmd] copy release binaries for machinelearning
 python -u setup.py copybinml release
 if %errorlevel% neq 0 exit /b %errorlevel%
 
