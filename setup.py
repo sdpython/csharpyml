@@ -306,13 +306,13 @@ def find_folder_package(folder):
         return mx
 
 
-def copy_assemblies(lib=None, version="Release"):
+def copy_assemblies(libdef=None, version="Release"):
     """
     Copies all assemblies in the right location.
-    *lib* can be ``None``, ``ml`` or ``mlext``.
+    *libdef* can be ``None``, ``ml`` or ``mlext``.
     """
     from pyquickhelper.filehelper import synchronize_folder
-    if lib == 'ml':
+    if libdef == 'ml':
         folders = []
         for lib in ["Microsoft.ML.Api",
                     "Microsoft.ML.Console",
@@ -339,7 +339,7 @@ def copy_assemblies(lib=None, version="Release"):
         dests = ['cscode/bin/machinelearning/%s' % version,
                  'cscode/machinelearningext/machinelearning/dist/%s' % version,
                  ]
-    elif lib == 'mlext':
+    elif libdef == 'mlext':
         folders = []
         for sub in ['DataManipulation',
                     'DocHelperMlExt',
@@ -370,7 +370,7 @@ def copy_assemblies(lib=None, version="Release"):
     for dest in dests:
         if not os.path.exists(dest):
             os.makedirs(dest)
-        if lib is None:
+        if libdef is None:
             init = os.path.join(dest, '__init__.py')
             if not os.path.exists(init):
                 with open(init, 'w') as f:
@@ -393,13 +393,14 @@ def copy_assemblies(lib=None, version="Release"):
             print("[csharpyml.copy] '{0}' -> '{1}'".format(found, dest))
             synchronize_folder(found, dest, fLOG=print, no_deletion=True)
     
-    if lib not in ('ml', 'mlext'):
+    if libdef not in ('ml', 'mlext'):
         if sys.platform.startswith("win"):
             check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.dll" % version
         else:
             check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.so" % version
         if not os.path.exists(check_existence):
-            raise FileNotFoundError("Unable to find '{0}'.".format(check_existence))
+            found  = "\n".join(os.listdir(os.path.dirname(check_existence)))
+            warnings.warn("Unable to find '{0}', found:\n{1}".format(check_existence, found))
 
 
 if not r:
