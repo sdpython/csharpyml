@@ -428,13 +428,13 @@ if not r:
     version2 = version if version else "Release"
 
     if "copybinml" in sys.argv:
-        copy_assemblies(lib='ml', version=version2)
+        copy_assemblies(libdef='ml', version=version2)
         end = True
     elif "copybinmlext" in sys.argv:
-        copy_assemblies(lib='mlext', version=version2)
+        copy_assemblies(libdef='mlext', version=version2)
         end = True
     elif "copybin" in sys.argv:
-        copy_assemblies(lib=None, version=version2)
+        copy_assemblies(libdef=None, version=version2)
         end = True
     elif "build_ext" in sys.argv:
         if '--inplace' not in sys.argv:
@@ -443,9 +443,9 @@ if not r:
         if '--submodules' in sys.argv:
             sys.argv = [_ for _ in sys.argv if _ != '--submodules']
             build_machinelearning(version=version2)
-            copy_assemblies(lib="ml", version=version2)
+            copy_assemblies(libdef="ml", version=version2)
             build_machinelearningext(version=version2)
-            copy_assemblies(lib="mlext", version=version2)
+            copy_assemblies(libdef="mlext", version=version2)
         build_module(version=version2)
         copy_assemblies(version=version2)
 
