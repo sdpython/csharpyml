@@ -450,7 +450,7 @@ def copy_assemblies(libdef=None, version="Release"):
         if sys.platform.startswith("win"):
             check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.dll" % version
         else:
-            check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.so" % version
+            check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.dll" % version
         if not os.path.exists(check_existence):
             found = "\n".join(os.listdir(os.path.dirname(check_existence)))
             warnings.warn("Unable to find '{0}', found:\n{1}".format(
