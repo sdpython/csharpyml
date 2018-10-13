@@ -2,32 +2,49 @@
 @file
 @brief Implements function around :epkg:`ML.net` command line.
 """
-from .add_reference import AddReference
+from .add_reference import AddReference, add_csharpml_extension
 
 
-def maml(script, catch_output=True):
+def maml(script, catch_output=True, conc=0, verbose=2, sensitivity=-1):
     """
     Runs a *maml script* through :epkg:`ML.net`.
     @param      script          script
     @param      catch_output    the function returns the output as a result at of the
                                 execution, otherwise, it gets printed on stdout
                                 while being executed
+    @param      conc            concurrency (number of threads or 0 to let the library choose)
+    @parm       verbose         more or less display
+    @param      sensitivity     to hide information about data
     @return                     stdout, stderr
 
     See notebook :ref:`csharpformlinnotebookrst`
     for an example.
     """
-    AddReference('CSharPyMLExtension')
+    add_csharpml_extension()
     from CSharPyMLExtension import PyMamlHelper
     if catch_output:
-        res = PyMamlHelper.MamlAll(script, True)
+        res = PyMamlHelper.MamlScript(script, True, conc, verbose, sensitivity)
         res = res.replace('\r', '')
-        out, err = res.split('--ERR--')
-        out = out.split('--OUT--')[-1]
+        if '--ERR--' in res:
+            out, err = res.split('--ERR--')
+        else:
+            out, err = res, ""
+        if '--OUT--' in res:
+            out = out.split('--OUT--')[-1]
         return out.strip(' \n\r'), err.strip(' \n\r')
     else:
-        MamlHelper.MamlAll(script, False)
+        PyMamlHelper.MamlScript(script, False)
         return None, None
+
+
+def get_maml_helper():
+    """
+    Returns the :epkg:`MamlHelper`.
+    """
+    add_csharpml_extension()
+    AddReference('Scikit.ML.DocHelperMlExt')
+    from Scikit.ML.DocHelperMlExt import MamlHelper  # pylint: disable=E0401
+    return MamlHelper
 
 
 def get_transforms_list():

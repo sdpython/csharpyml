@@ -9,38 +9,43 @@ if not exist %ppythonpath% set ppythonpath="c:\Python36_x64"
 set PATH=%PATH%;%ppythonpath%
 set PYTHONPATH=%~dp0..\pyquickhelper\src
 
+set DOTNET_CLI_TELEMETRY_OPTOUT=1
+set DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
+set DOTNET_MULTILEVEL_LOOKUP=0
+
+set LOCALMLEXT=%~dp0..\machinelearningext
+if exist %LOCALMLEXT% goto copybinaries:
+
 cd cscode\machinelearning
-if "%1" == "ml" goto buildrelease:
-if exist bin\x64.Release goto mldeb:
-@echo [build.cmd] build machinelearning release
-:buildrelease:
+if "%1" == "ml" goto buildml:
+if exist bin goto mlend:
+@echo [build.cmd] build machinelearning debug and release
+:buildml:
+cmd /C build.cmd
+if %errorlevel% neq 0 exit /b %errorlevel%
 cmd /C build.cmd -release
 if %errorlevel% neq 0 exit /b %errorlevel%
-:mldeb:
-if "%1" == "ml" goto builddebug:
-if exist bin\x64.Debug goto mlrel:
-:builddebug:
-@echo [build.cmd] build machinelearning debug
-cmd /C build.cmd -debug
-if %errorlevel% neq 0 exit /b %errorlevel%
-:mlrel:
+:mlend:
 cd ..\..
 
+:copybinaries:
 if "%1" == "ml" goto copydebug:
-if exist cscode\machinelearning\bin\x64.Debug goto copymlrel:
+if exist cscode\machinelearning\bin\AnyCPU.Debug\Microsoft.ML.Api goto copymlrel:
 :copydebug:
 @echo [build.cmd] copy debug binaries for machinelearning
 python -u setup.py copybinml debug
 if %errorlevel% neq 0 exit /b %errorlevel%
 :copymlrel:
 if "%1" == "ml" goto copyrelease:
-if exist cscode\machinelearning\bin\x64.Release goto copybin:
+if exist cscode\machinelearning\bin\AnyCPU.Release\Microsoft.ML.Api goto copybin:
 :copyrelease:
 @echo [build.cmd] copy release binaries for machinelearning
 python -u setup.py copybinml release
 if %errorlevel% neq 0 exit /b %errorlevel%
 
 :copybin:
+if exist %LOCALMLEXT% goto copybinariesext:
+
 @echo [build.cmd] build machinelearningext
 cd cscode\machinelearningext\machinelearningext
 dotnet build -c Release machinelearningext.sln
@@ -48,6 +53,8 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 dotnet build -c debug machinelearningext.sln
 if %errorlevel% neq 0 exit /b %errorlevel%
 cd ..\..\..
+
+:copybinariesext:
 
 @echo [build.cmd] copy binaries for machinelearningext
 python -u setup.py copybinmlext debug

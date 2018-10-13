@@ -3,6 +3,7 @@
 @brief Makes :epkg:`C# ScikitPipeline` available in :epkg:`Python`.
 """
 import sys
+from io import StringIO
 from .add_reference import add_csharpml_extension
 
 
@@ -18,8 +19,8 @@ class CSLogging:
         with :epkg:`C# Pipeline`.
         """
         add_csharpml_extension()
-        from CSharPyMLExtension import EnvHelper
-        return EnvHelper
+        from CSharPyMLExtension import PyEnvHelper
+        return PyEnvHelper
 
     @staticmethod
     def print_stdout(text):
@@ -30,6 +31,11 @@ class CSLogging:
     def print_stderr(text):
         "Writes on ``sys.stderr``."
         sys.stderr.write(text.strip("\r"))
+
+    @staticmethod
+    def print_stderr_out(text):
+        "Writes on ``sys.stdout``."
+        sys.stdout.write(text.strip("\r"))
 
     def __init__(self, stdout="python", seed=-1, verbose=True, sensitivity="All", conc=0):
         """
@@ -57,11 +63,55 @@ class CSLogging:
         if stdout == "C#":
             self._obj = EnvHelper.CreateConsoleEnvironment(
                 seed, verbose, sensitivity, conc)
+        elif stdout == "store":
+            del_out = EnvHelper.PrintDelegate(self.logout)
+            del_err = EnvHelper.PrintDelegate(self.logerr)
+            self._stdout = StringIO()
+            self._stderr = StringIO()
+            self._obj = EnvHelper.CreatePythonEnvironment(seed, verbose, sensitivity, conc,
+                                                          del_out, del_err)
         elif stdout == "python":
             del_out = EnvHelper.PrintDelegate(CSLogging.print_stdout)
             del_err = EnvHelper.PrintDelegate(CSLogging.print_stderr)
             self._obj = EnvHelper.CreatePythonEnvironment(seed, verbose, sensitivity, conc,
                                                           del_out, del_err)
+        elif stdout == "python2":
+            del_out = EnvHelper.PrintDelegate(CSLogging.print_stdout)
+            del_err = EnvHelper.PrintDelegate(CSLogging.print_stderr_out)
+            self._obj = EnvHelper.CreatePythonEnvironment(seed, verbose, sensitivity, conc,
+                                                          del_out, del_err)
         else:
             raise ValueError(
                 "Unable to interpret parameter stdout='{0}'".format(stdout))
+
+    def logout(self, text):
+        """
+        Stores stdout.
+        """
+        self._stdout.write(text)
+
+    def logerr(self, text):
+        """
+        Stores stderr.
+        """
+        self._stderr.write(text)
+
+    @property
+    def StdOut(self):
+        """
+        Returns stored stdout.
+        """
+        if hasattr(self, "_stdout"):
+            return self._stdout.getvalue()
+        else:
+            raise RuntimeError("Output was not saved. Use stdout='python'.")
+
+    @property
+    def StdErr(self):
+        """
+        Returns stored stderr.
+        """
+        if hasattr(self, "_stderr"):
+            return self._stderr.getvalue()
+        else:
+            raise RuntimeError("Output was not saved. Use stdout='python'.")

@@ -281,3 +281,6 @@ src/csharpyml/binaries/*.lib
 src/csharpyml/binaries/*.xml
 src/csharpyml/binaries/*.json
 *.err
+_doc/sphinxdoc/source/components
+cscode/packages
+_doc/examples/model.zip

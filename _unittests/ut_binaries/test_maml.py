@@ -60,7 +60,7 @@ class TestMaml(ExtTestCase):
 
         out, _ = maml(script)
         self.assertExists(model)
-        self.assertIn("LBFGS Optimizer", out)
+        self.assertIn("'Normalize' finished", out)
 
 
 if __name__ == "__main__":

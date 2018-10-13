@@ -3,6 +3,7 @@
 using System;
 using Microsoft.ML.Runtime;
 using Scikit.ML.PipelineHelper;
+using Scikit.ML.ScikitAPI;
 
 
 namespace CSharPyMLExtension
@@ -10,7 +11,7 @@ namespace CSharPyMLExtension
     /// <summary>
     /// Easier functions to use from Python.
     /// </summary>
-    public static class EnvHelper
+    public static class PyEnvHelper
     {
         public static MessageSensitivity MessageSensitivityFromString(string sens)
         {
@@ -30,9 +31,11 @@ namespace CSharPyMLExtension
                                                   string sensitivity = "All", int conc = 0,
                                                   ILogWriter outWriter = null, ILogWriter errWriter = null)
         {
-            return new DelegateEnvironment(seed: seed < 0 ? null : (int?)seed, verbose: verbose,
+            var env = new DelegateEnvironment(seed: seed < 0 ? null : (int?)seed, verbose: verbose,
                                            sensitivity: MessageSensitivityFromString(sensitivity),
                                            conc: conc, outWriter: outWriter, errWriter: errWriter);
+            ComponentHelper.AddStandardComponents(env);
+            return env;
         }
 
         public static IHostEnvironment CreateConsoleEnvironment(int seed = -1, int verbose = 0,
@@ -40,22 +43,27 @@ namespace CSharPyMLExtension
         {
             var outWriter = new LogWriter(s => Console.Write(s));
             var errWriter = new LogWriter(s => Console.Error.Write(s));
-            return new DelegateEnvironment(seed: seed < 0 ? null : (int?)seed, verbose: verbose,
+            var env = new DelegateEnvironment(seed: seed < 0 ? null : (int?)seed, verbose: verbose,
                                            sensitivity: MessageSensitivityFromString(sensitivity),
                                            conc: conc, outWriter: outWriter, errWriter: errWriter);
+            ComponentHelper.AddStandardComponents(env);
+            return env;
         }
 
         public delegate void PrintDelegate(string text);
 
         public static IHostEnvironment CreatePythonEnvironment(int seed = -1, int verbose = 0,
                                                                string sensitivity = "All", int conc = 0,
-                                                               PrintDelegate outFctWriter = null, PrintDelegate errFctWriter = null)
+                                                               PrintDelegate outFctWriter = null,
+                                                               PrintDelegate errFctWriter = null)
         {
             var outWriter = new LogWriter(s => outFctWriter(s));
             var errWriter = new LogWriter(s => errFctWriter(s));
-            return new DelegateEnvironment(seed: seed < 0 ? null : (int?)seed, verbose: verbose,
+            var env = new DelegateEnvironment(seed: seed < 0 ? null : (int?)seed, verbose: verbose,
                                            sensitivity: MessageSensitivityFromString(sensitivity),
                                            conc: conc, outWriter: outWriter, errWriter: errWriter);
+            ComponentHelper.AddStandardComponents(env);
+            return env;
         }
     }
 }

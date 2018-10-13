@@ -2,7 +2,11 @@
 
 using System;
 using System.Linq;
+using System.Text;
+using Microsoft.ML.Runtime;
 using Scikit.ML.DocHelperMlExt;
+using Scikit.ML.PipelineHelper;
+using Scikit.ML.ScikitAPI;
 
 
 namespace CSharPyMLExtension
@@ -22,9 +26,36 @@ namespace CSharPyMLExtension
     /// </summary>
     public static class PyMamlHelper
     {
-        public static string MamlAll(string script, bool catch_output)
+        public static string MamlScript(string script, bool catch_output, int conc = 0, int verbose = 2, int sensitivity = -1)
         {
-            return MamlHelper.MamlScript(script, catch_output);
+            ILogWriter logout, logerr;
+            var stout = new StringBuilder();
+            var sterr = new StringBuilder();
+            if (catch_output)
+            {
+                logout = new LogWriter((string s) => { stout.Append(s); });
+                logerr = new LogWriter((string s) => { sterr.Append(s); });
+            }
+            else
+            {
+                logout = new LogWriter((string s) => { Console.Write(s); });
+                logerr = new LogWriter((string s) => { Console.Error.Write(s); });
+            }
+
+            using (var env = new DelegateEnvironment((int?)null, verbose, (MessageSensitivity)sensitivity, conc, logout, logerr))
+            {
+                ComponentHelper.AddStandardComponents(env);
+                var res = MamlHelper.MamlScript(script, false, env);
+                if (catch_output)
+                {
+                    if (sterr.Length > 0)
+                        return string.Format("---OUT---\n{0}\n---ERR---\n{1}", stout.ToString(), sterr.ToString());
+                    else
+                        return stout.ToString();
+                }
+                else
+                    return res;
+            }
         }
 
         public static string[] GetAllKinds()

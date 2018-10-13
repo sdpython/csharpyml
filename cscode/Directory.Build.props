@@ -1,0 +1,81 @@
+<Project>
+  <!-- Directory.Build.props contains the common build settings for all projects in the repo. -->
+
+  <PropertyGroup>
+    <MajorVersion>0</MajorVersion>
+    <MinorVersion>7</MinorVersion>
+    <PatchVersion>0</PatchVersion>
+    <PreReleaseLabel>preview</PreReleaseLabel>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Version>0.7.0</Version>
+    <DefineConstants>CORECLR</DefineConstants>
+  </PropertyGroup>
+
+  <Import Project="Dependencies.props" />
+
+  <PropertyGroup>
+    <Configuration Condition="'$(Configuration)'==''">Debug</Configuration>
+    <Platform Condition="'$(Platform)'==''">AnyCPU</Platform>
+    <NativeTargetArchitecture Condition="'$(NativeTargetArchitecture)' == ''">x64</NativeTargetArchitecture>
+    <PlatformConfig>$(Platform).$(Configuration)</PlatformConfig>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RestoreSources>
+      https://api.nuget.org/v3/index.json;
+      https://dotnet.myget.org/F/dotnet-core/api/v3/index.json;
+    </RestoreSources>
+  </PropertyGroup>
+
+  <!-- Common repo directories -->
+  <PropertyGroup>
+    <RepoRoot>$(MSBuildThisFileDirectory)</RepoRoot>
+    <SourceDir>$(RepoRoot)src/</SourceDir>
+    <PkgDir>$(RepoRoot)pkg/</PkgDir>
+
+    <!-- Output directories -->
+    <BinDir Condition="'$(BinDir)'==''">$(RepoRoot)bin/</BinDir>
+    <BaseOutputPath Condition="'$(BaseOutputPath)'==''">$(BinDir)</BaseOutputPath>
+    <ObjDir Condition="'$(ObjDir)'==''">$(BinDir)obj/</ObjDir>
+    <RootIntermediateOutputPath Condition="'$(RootIntermediateOutputPath)'==''">$(ObjDir)</RootIntermediateOutputPath>
+
+    <IntermediateOutputRootPath Condition="'$(IntermediateOutputRootPath)' == ''">$(RootIntermediateOutputPath)$(PlatformConfig)\</IntermediateOutputRootPath>
+    <IntermediateOutputPath Condition="'$(IntermediateOutputPath)' == ''">$(IntermediateOutputRootPath)$(MSBuildProjectName)\</IntermediateOutputPath>
+    <BaseIntermediateOutputPath Condition="'$(BaseIntermediateOutputPath)' == ''">$(IntermediateOutputPath)</BaseIntermediateOutputPath>
+
+    <OutputPath Condition="'$(OutputPath)'==''">$(BaseOutputPath)$(PlatformConfig)\$(MSBuildProjectName)\</OutputPath>
+
+    <PackageAssetsPath>$(ObjDir)/packages/</PackageAssetsPath>
+    
+    <PackageOutputPath Condition="'$(PackageOutputPath)'=='' and '$(NonShippingPackage)' == 'true'">$(BinDir)packages_noship/</PackageOutputPath>
+    <PackageOutputPath Condition="'$(PackageOutputPath)'==''">$(BinDir)packages/</PackageOutputPath>
+
+    <!-- Input Directories -->
+    <PackagesDir>$(DotNetRestorePackagesPath)</PackagesDir>
+    <PackagesDir Condition="'$(PackagesDir)'==''">$(RepoRoot)packages/</PackagesDir>
+    <RestorePackagesPath>$(PackagesDir)</RestorePackagesPath>
+  </PropertyGroup>
+
+  <!-- Version properties -->
+  <PropertyGroup>
+    <VersionPrefix>$(MajorVersion).$(MinorVersion).$(PatchVersion)</VersionPrefix>
+    <AssemblyFileVersion Condition="'$(AssemblyFileVersion)'==''">$(MajorVersion).$(MinorVersion).$(BuildNumberMajor).$(BuildNumberMinor)</AssemblyFileVersion>
+
+    <StabilizePackageVersion Condition="'$(StabilizePackageVersion)' == ''">false</StabilizePackageVersion>
+    <IncludeBuildNumberInPackageVersion Condition="'$(StabilizePackageVersion)' != 'true'">true</IncludeBuildNumberInPackageVersion>
+
+    <VersionSuffix></VersionSuffix>
+    <VersionSuffix Condition="'$(StabilizePackageVersion)' != 'true'">$(PreReleaseLabel)</VersionSuffix>
+    <VersionSuffix Condition="'$(IncludeBuildNumberInPackageVersion)' == 'true'">$(VersionSuffix)-$(BuildNumberMajor)-$(BuildNumberMinor)</VersionSuffix>
+  </PropertyGroup>
+
+  <!-- Language configuration -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion> <!-- default to allowing all language features -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  
+  <PropertyGroup>
+    <RunningOnUnix Condition="'$(OS)'!='Windows_NT'">true</RunningOnUnix>
+  </PropertyGroup>
+</Project>

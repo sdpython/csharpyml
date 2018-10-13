@@ -6,6 +6,7 @@ pyensae
 pylint
 pymyinstall
 pyquickhelper>=1.8
+recommonmark
 scikit-learn
 scipy
 sphinx_rtd_theme

@@ -22,15 +22,17 @@ class CSPipeline:
         with :epkg:`C# Pipeline`.
         """
         add_csharpml_extension()
-        from CSharPyMLExtension import PipelineHelper
-        return PipelineHelper
+        from CSharPyMLExtension import PyPipelineHelper
+        return PyPipelineHelper
 
-    def __init__(self, transforms=None, predictor=None, **kwargs):
+    def __init__(self, transforms=None, predictor=None, stdout="store", **kwargs):
         """
         Creates a pipeline :epkg:`C# Pipeline`.
 
         @param      transforms      list of transforms (can be None)
         @param      predictor       predictor (can be None)
+        @param      stdout          see @see cl CSLogging, by default, the class
+                                    catches the standard output
         @param      kwargs          see @see cl CSLogging
 
         The list of available transforms can be obtained by running
@@ -54,7 +56,8 @@ class CSPipeline:
             pass
         else:
             PipelineHelper = CSPipeline.get_cs_class()
-            cs_log = CSLogging(**kwargs)
+            cs_log = CSLogging(stdout=stdout, **kwargs)
+            self._cs_log = cs_log
             self._obj = PipelineHelper.CreateScikitPipeline(
                 transforms, predictor, cs_log._obj)
 
@@ -162,3 +165,17 @@ class CSPipeline:
         pipe = CSPipeline()
         pipe._obj = obj
         return pipe
+
+    @property
+    def StdOut(self):
+        """
+        Returns stored stdout.
+        """
+        return self._cs_log.StdOut
+
+    @property
+    def StdErr(self):
+        """
+        Returns stored stderr.
+        """
+        return self._cs_log.StdErr

@@ -20,8 +20,8 @@ class CSDataFrame:
         with :epkg:`C# DataFrame`.
         """
         add_csharpml_extension()
-        from CSharPyMLExtension import DataFrameHelper
-        return DataFrameHelper
+        from CSharPyMLExtension import PyDataFrameHelper
+        return PyDataFrameHelper
 
     def __init__(self, obj=None):
         """
@@ -114,6 +114,7 @@ class CSDataFrame:
         @param      header          has header
         @param      names           columns names (if no header)
         @param      kinds           types of each columns (see below)
+        @param      nrows           keeps only the first rows
         @param      guess_rows      number of rows to guess the type is not overriden by
                                     kinds
         @param      encoding        encoding
@@ -205,13 +206,13 @@ class CSDataFrame:
                     cl.DataFrameColumnToArrayInt(obj, i))
                 apply.append((name, numpy.int32))
             elif kind == 'U4' or ctype.IsKey:
-                data[name] = list(cl.DataFrameColumnToArrayUint32(obj, i))
+                data[name] = list(cl.DataFrameColumnToArrayUint(obj, i))
             elif kind == 'I8':
                 data[name] = list(
                     cl.DataFrameColumnToArrayInt64(obj, i))
             elif kind == 'R4':
                 data[name] = list(
-                    cl.DataFrameColumnToArrayFloat32(obj, i))
+                    cl.DataFrameColumnToArrayFloat(obj, i))
                 apply.append((name, numpy.float32))
             elif kind == 'R8':
                 data[name] = list(

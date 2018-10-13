@@ -23,3 +23,8 @@ Through documentation
         filechanges
         README
         all_indexes
+
+.. toctree::
+    :hidden:
+
+    blog/index_blog

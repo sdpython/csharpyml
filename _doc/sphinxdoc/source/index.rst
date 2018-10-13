@@ -57,9 +57,16 @@ Documentation
     :maxdepth: 1
 
     api/index
+    mlnetdocs/index
+    components/index
     i_ex
     i_faq
     i_nb
+    all_notebooks
+    blog/blogindex
+    indexmenu
+    HISTORY
+    license
 
 It can easily compile and wrap a :epkg:`C#` function
 into :epkg:`Python`:
@@ -81,15 +88,6 @@ The list of available trainers can be obtained with:
 This function also exists as a magic command
 :ref:`%%maml <cmagic-maml>`.
 
-Galleries
----------
-
-.. toctree::
-    :maxdepth: 2
-
-    all_notebooks
-    blog/blogindex
-
 Installation
 ------------
 
@@ -102,21 +100,6 @@ Follow the instructions described in
 
 Follow the instructions described in
 `config.yml <https://github.com/sdpython/csharpyml/blob/master/.circleci/config.yml>`_.
-
-Navigation
-----------
-
-.. toctree::
-    :maxdepth: 1
-
-    indexmenu
-    HISTORY
-    license
-
-.. toctree::
-    :hidden:
-
-    blog/index_blog
 
 +----------------------+---------------------+---------------------+--------------------+------------------------+------------------------------------------------+
 | :ref:`l-modules`     |  :ref:`l-functions` | :ref:`l-classes`    | :ref:`l-methods`   | :ref:`l-staticmethods` | :ref:`l-properties`                            |

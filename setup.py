@@ -314,6 +314,7 @@ def copy_assemblies(libdef=None, version="Release"):
     from pyquickhelper.filehelper import synchronize_folder
     if libdef == 'ml':
         folders = []
+        copy2 = True
         for lib in ["Microsoft.ML.Api",
                     "Microsoft.ML.Console",
                     "Microsoft.ML.DnnAnalyzer",
@@ -334,11 +335,29 @@ def copy_assemblies(libdef=None, version="Release"):
                     "Microsoft.ML.StandardLearners",
                     "Microsoft.ML.TimeSeries",
                     ]:
-            folders.append('cscode/machinelearning/bin/AnyCPU.%s/%s' % (version, lib))
-            
-        dests = ['cscode/bin/machinelearning/%s' % version,
-                 'cscode/machinelearningext/machinelearning/dist/%s' % version,
-                 ]
+            fold = 'cscode/machinelearning/bin/AnyCPU.%s/%s' % (version, lib)
+            if not os.path.exists(fold):
+                # To avoid copy, we check that machinelearningext is
+                # present at the same level as csharyml.
+                this = os.path.normpath(os.path.abspath(
+                    os.path.join(os.path.dirname(__file__), '..')))
+                mlext = os.path.join(this, 'machinelearningext')
+                if not os.path.exists(mlext):
+                    raise FileNotFoundError(
+                        "Unable to find folder '{0}' or '{1}'.".format(fold, mlext))
+                fold = os.path.join(mlext, "machinelearning",
+                                    'bin/AnyCPU.%s/%s' % (version, lib))
+                if not os.path.exists(mlext):
+                    raise FileNotFoundError(
+                        "Unable to find folder '{0}' or '{1}'.".format(fold, fold))
+                copy2 = False
+            folders.append(fold)
+
+        dests = ['cscode/bin/machinelearning/%s' % version]
+        if copy2:
+            dests.append(
+                'cscode/machinelearningext/machinelearning/dist/%s' % version)
+
     elif libdef == 'mlext':
         folders = []
         for sub in ['DataManipulation',
@@ -346,24 +365,58 @@ def copy_assemblies(libdef=None, version="Release"):
                     'EntryPoints',
                     'ScikitAPI',
                     ]:
-            folders.append('cscode/machinelearningext/machinelearningext/bin/AnyCPU.%s/%s/netstandard2.0' % (version, sub))
+            fold = 'cscode/machinelearningext/machinelearningext/bin/AnyCPU.%s/%s/netstandard2.0' % (
+                version, sub)
+            if not os.path.exists(fold):
+                # To avoid copy, we check that machinelearningext is
+                # present at the same level as csharyml.
+                this = os.path.normpath(os.path.abspath(
+                    os.path.join(os.path.dirname(__file__), '..')))
+                mlext = os.path.join(this, 'machinelearningext')
+                if not os.path.exists(mlext):
+                    raise FileNotFoundError(
+                        "Unable to find folder '{0}' or '{1}'.".format(fold, mlext))
+                fold = os.path.join(mlext, "machinelearningext",
+                                    'bin/AnyCPU.%s/%s' % (version, sub))
+                if not os.path.exists(mlext):
+                    raise FileNotFoundError(
+                        "Unable to find folder '{0}' or '{1}'.".format(fold, fold))
+                copy2 = False
+            folders.append(fold)
 
         dests = ['cscode/bin/machinelearningext/%s' % version,
-                 'src/csharpyml/binaries/%s' % version,
                  ]
+
     else:
         folders = ['cscode/bin/machinelearning/%s' % version,
                    'cscode/bin/machinelearningext/%s' % version,
-                   'cscode/CSharPyMLExtension/bin/%s' % version]
+                   'cscode/bin/AnyCPU.%s/CSharPyMLExtension/netstandard2.0' % version]
         rootpkg = "cscode/machinelearning/packages"
+        if not os.path.exists(rootpkg):
+            # To avoid copy, we check that machinelearningext is
+            # present at the same level as csharyml.
+            this = os.path.normpath(os.path.abspath(
+                os.path.join(os.path.dirname(__file__), '..')))
+            mlext = os.path.join(this, 'machinelearningext')
+            if not os.path.exists(mlext):
+                raise FileNotFoundError(
+                    "Unable to find folder '{0}' or '{1}'.".format(fold, mlext))
+            rootpkg = os.path.join(mlext, "machinelearning", "packages")
+
         folders.extend([
-            os.path.join(rootpkg, "newtonsoft.json", "10.0.3", "lib", "netstandard1.3"),
-            os.path.join(rootpkg, "system.memory", "4.5.1", "lib", "netstandard2.0"),
-            os.path.join(rootpkg, "system.runtime.compilerservices.unsafe", "4.5.0", "lib", "netstandard2.0"),
-            os.path.join(rootpkg, "system.collections.immutable", "1.5.0", "lib", "netstandard2.0"),
-            os.path.join(rootpkg, "system.collections.immutable", "1.5.0", "lib", "netstandard2.0"),
-            os.path.join(rootpkg, "system.numerics.vectors", "4.4.0", "lib", "netstandard2.0"),
-            ])
+            os.path.join(rootpkg, "newtonsoft.json",
+                         "10.0.3", "lib", "netstandard1.3"),
+            os.path.join(rootpkg, "system.memory",
+                         "4.5.1", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "system.runtime.compilerservices.unsafe",
+                         "4.5.0", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "system.collections.immutable",
+                         "1.5.0", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "system.collections.immutable",
+                         "1.5.0", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "system.numerics.vectors",
+                         "4.4.0", "lib", "netstandard2.0"),
+        ])
 
         dests = ['src/csharpyml/binaries/%s' % version]
 
@@ -392,15 +445,16 @@ def copy_assemblies(libdef=None, version="Release"):
                         "Unable to find a suitable folder binaries '{0}'".format(fold))
             print("[csharpyml.copy] '{0}' -> '{1}'".format(found, dest))
             synchronize_folder(found, dest, fLOG=print, no_deletion=True)
-    
+
     if libdef not in ('ml', 'mlext'):
         if sys.platform.startswith("win"):
             check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.dll" % version
         else:
             check_existence = "src/csharpyml/binaries/%s/System.Numerics.Vectors.so" % version
         if not os.path.exists(check_existence):
-            found  = "\n".join(os.listdir(os.path.dirname(check_existence)))
-            warnings.warn("Unable to find '{0}', found:\n{1}".format(check_existence, found))
+            found = "\n".join(os.listdir(os.path.dirname(check_existence)))
+            warnings.warn("Unable to find '{0}', found:\n{1}".format(
+                check_existence, found))
 
 
 if not r:
@@ -481,4 +535,7 @@ if not r:
             package_data=package_data,
             setup_requires=["pyquickhelper"],
             install_requires=['pythonnet', 'pyquickhelper'],
+            extras_require={
+                'sphinxext': ['pyquickhelper'],
+            },
         )
