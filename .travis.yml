@@ -13,14 +13,11 @@ matrix:
       addons: &xplat-addons
         apt:
           sources:
-          - sourceline: deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-ubuntu-trusty-prod trusty main
-            key_url: https://packages.microsoft.com/keys/microsoft.asc
           - sourceline: deb http://download.mono-project.com/repo/ubuntu trusty main
             key_url: http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xA6A19B38D3D831EF
           packages:
             - mono-devel
             - ca-certificates-mono 
-            - dotnet-sdk-2.1.200
 
 env:
   global:
@@ -42,7 +39,6 @@ addons:
       - libunwind8
       - curl
       # ubuntu https://docs.microsoft.com/en-us/dotnet/core/linux-prerequisites?tabs=netcore2x#ubuntu
-      - libunwind8
       - liblttng-ust0
       - libcurl3
       - libssl1.0.0
@@ -64,6 +60,12 @@ before_install:
   - sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-5 90
   - python -m pip install -U pip
   - pip install -U setuptools wheel
+  # dotnet
+  - wget -q https://packages.microsoft.com/config/ubuntu/14.04/packages-microsoft-prod.deb
+  - sudo dpkg -i packages-microsoft-prod.deb
+  - sudo apt-get install apt-transport-https
+  - sudo apt-get update
+  - sudo apt-get install dotnet-sdk-2.1
 
 install:
   - pip install -r requirements.txt
@@ -76,7 +78,6 @@ install:
 
 before_script:
   - sudo unlink /usr/bin/gcc && sudo ln -s /usr/bin/gcc-5 /usr/bin/gcc
-  - gcc --version
   # machinelearning
   - cd cscode/machinelearning
   - ls

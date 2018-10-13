@@ -5,9 +5,11 @@
 History
 =======
 
-current - 2018-06-28 - 0.00Mb
+current - 2018-10-13 - 0.00Mb
 =============================
 
+* `9`: update to ML.net 0.7.0, update documentation, refactoring (2018-10-13)
+* `8`: update to ML.net 0.6.0 (2018-10-13)
 * `6`: add code to play with C# dataframes fron python (2018-06-27)
 * `5`: add submodule on machinelearningext (2018-06-27)
 * `4`: fix missing assemblies (newton, ...) (2018-06-16)
