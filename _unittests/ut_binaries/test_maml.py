@@ -62,6 +62,33 @@ class TestMaml(ExtTestCase):
         self.assertExists(model)
         self.assertIn("'Normalize' finished", out)
 
+    def test_maml_error(self):
+        temp = get_temp_folder(__file__, "temp_maml_error")
+
+        iris = datasets.load_iris()
+        X = iris.data
+        y = iris.target
+        df = pandas.DataFrame(
+            X, columns=['Slength', 'Swidth', 'Plength', 'Pwidth'])
+        df["Label"] = y
+        df = df[["Label"] + ['Slength', 'Swidth', 'Plength', 'Pwidth']]
+        dest = os.path.join(temp, "iris_data_id.txt")
+        df.to_csv(dest, sep=',', index=False)
+        model = os.path.join(temp, "model.zip")
+
+        script = """
+        train
+        data=__DATA__
+        loader=text{col=Label:U4[0-2]:0 col=Slength:R4:1 col=Swidth:R4:2 col=Plength:R4:3 col=Pwidth:R4:4 sep=, header=+}
+        xf=Concat{col=Features:Slength,Swidth}
+        tr=ova{p=ap
+        parallel=1
+        out=__MODEL__
+        """.strip("\n ").replace('__MODEL__', model).replace('__DATA__', dest)
+
+        out, err = maml(script)
+        self.assertIn("Unbalanced quoting in command line arguments", err)
+
 
 if __name__ == "__main__":
     unittest.main()

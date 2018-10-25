@@ -30,6 +30,24 @@ namespace TestCSharPyMLExtension
         }
 
         [TestMethod]
+        public void TestMamlAllError()
+        {
+            var script = "train " +
+                         "data=__DATA__ " +
+                         "loader=text{col=Label:U4[0-2]:0 col=Slength:R4:1 " +
+                         "col=Swidth:R4:2 col=Plength:R4:3 col=Pwidth:R4:4 sep=, header=+} " +
+                         "xf=Concat{col=Features:Slength,Swidth} " +
+                         "tr=ova{p=ap " +
+                         "parallel=1 " +
+                         "out=__MODEL__";
+            script = script.Replace("__DATA__", FileHelper.GetTestFile("iris_data_id.txt"));
+            var model = FileHelper.GetOutputFile("model.zip", "TestMamlAll");
+            script = script.Replace("__MODEL__", model);
+            var res = PyMamlHelper.MamlScript(script, true);
+            Assert.IsTrue(res.Contains("Unbalanced quoting"));
+        }
+
+        [TestMethod]
         public void TestTrainIris()
         {
             var file = FileHelper.GetTestFile("iris_data_id.txt");
