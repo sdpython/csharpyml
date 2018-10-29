@@ -4,8 +4,7 @@ using System;
 using System.IO;
 using Microsoft.ML.Runtime;
 using Scikit.ML.ScikitAPI;
-using Scikit.ML.DocHelperMlExt;
-using Scikit.ML.PipelineHelper;
+using Scikit.ML.DataManipulation;
 
 
 namespace CSharPyMLExtension
@@ -34,6 +33,13 @@ namespace CSharPyMLExtension
             if (host == null)
                 throw new ArgumentNullException("host cannot be null.");
             return new ScikitPipeline(transforms, predictor, host);
+        }
+
+        public static DataFrame FastPredictOrTransform(ScikitPipeline pipe, DataFrame df, int conc = 1)
+        {
+            DataFrame res = null;
+            pipe.Predict(df, ref res, conc);
+            return res;
         }
     }
 }

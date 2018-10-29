@@ -1,8 +1,8 @@
 
 .. _l-EX2:
 
-Examples
-========
+Short Examples
+==============
 
 .. exreflist::
     :sort: title

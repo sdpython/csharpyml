@@ -84,13 +84,17 @@ def builds_components_pages(epkg):
     """
     Returns components pages.
 
-    @param  ekpg        dictionary used to replace substrings by hyperlinks
+    @param  epkg        dictionary used to replace substrings by hyperlinks
     @return             list of modified pages
     """
     try:
         from .sphinx_mlext_templates import index_template, kind_template, component_template
     except (ModuleNotFoundError, ImportError):
         from sphinx_mlext_templates import index_template, kind_template, component_template
+    try:
+        from .machinelearning_docs import components
+    except (ModuleNotFoundError, ImportError):
+        from machinelearning_docs import components
     try:
         from pyquickhelper.texthelper import add_rst_links
     except ImportError:
@@ -182,7 +186,11 @@ def builds_components_pages(epkg):
                                                    namespace=comp.Namespace,
                                                    sorted_params=sorted_params,
                                                    assembly=assembly_name,
-                                                   len=len, linkdocs=linkdocs)
+                                                   len=len, linkdocs=linkdocs,
+                                                   docadd=components.get(
+                                                       comp.Name, ''),
+                                                   MicrosoftML="Microsoft.ML" in assembly_name,
+                                                   ScikitML="Scikit.ML" in assembly_name)
     return pages
 
 

@@ -284,3 +284,4 @@ src/csharpyml/binaries/*.json
 _doc/sphinxdoc/source/components
 cscode/packages
 _doc/examples/model.zip
+_doc/sphinxdoc/source/nbcov*

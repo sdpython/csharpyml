@@ -23,7 +23,8 @@ def maml(script, catch_output=True, conc=0, verbose=2, sensitivity=-1):
     add_csharpml_extension()
     from CSharPyMLExtension import PyMamlHelper
     if catch_output:
-        res = PyMamlHelper.MamlScript(script, True, conc, verbose, sensitivity, True)
+        res = PyMamlHelper.MamlScript(
+            script, True, conc, verbose, sensitivity, True)
         res = res.replace('\r', '')
         if '--ERR--' in res:
             out, err = res.split('--ERR--')
@@ -33,7 +34,8 @@ def maml(script, catch_output=True, conc=0, verbose=2, sensitivity=-1):
             out = out.split('--OUT--')[-1]
         return out.strip(' \n\r'), err.strip(' \n\r')
     else:
-        PyMamlHelper.MamlScript(script, False, conc, verbose, sensitivity, True)
+        PyMamlHelper.MamlScript(script, False, conc,
+                                verbose, sensitivity, True)
         return None, None
 
 

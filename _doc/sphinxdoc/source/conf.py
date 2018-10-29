@@ -1,14 +1,14 @@
 import sys
 import os
 import sphinx_gallery
-import sphinx_rtd_theme
+# import sphinx_rtd_theme
+import alabaster
 from pyquickhelper.helpgen.default_conf import set_sphinx_variables, get_default_stylesheet
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.split(__file__)[0])))
 
 set_sphinx_variables(__file__, "csharpyml", "sdpython", 2018,
-                     "sphinx_rtd_theme", [
-                         sphinx_rtd_theme.get_html_theme_path()],
+                     "alabaster", [alabaster.get_path()],
                      locals(), book=True,
                      extlinks=dict(issue=('https://github.com/sdpython/csharpyml/issues/%s', 'issue')))
 
@@ -39,6 +39,7 @@ def custom_latex_processing(latex):
 
 epkg_dictionary.update({
     'C#': 'https://en.wikipedia.org/wiki/C_Sharp_(programming_language)',
+    'C# Streaming DataFrame': 'https://github.com/sdpython/machinelearningext/blob/master/machinelearningext/DataManipulation/StreamingDataFrame.cs',
     'C# DataFrame': 'https://github.com/sdpython/machinelearningext/blob/master/machinelearningext/DataManipulation/DataFrame.cs',
     'C# IDataView': 'https://github.com/dotnet/machinelearning/blob/master/src/Microsoft.ML.Core/Data/IDataView.cs',
     'C# LogWriter': 'https://github.com/xadupre/machinelearningext/blob/master/machinelearningext/PipelineHelper/DelegateEnvironment.cs',
@@ -48,11 +49,25 @@ epkg_dictionary.update({
     'DataFrame': 'https://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.html',
     'DataKind': 'https://github.com/dotnet/machinelearning/blob/master/src/Microsoft.ML.Core/Data/DataKind.cs#L13',
     'DBSCAN': 'https://en.wikipedia.org/wiki/DBSCAN',
+    'dotnet/machinelearning': 'https://github.com/dotnet/machinelearning',
+    'LightGBM': 'https://github.com/Microsoft/LightGBM',
+    'MIT License': 'https://github.com/dotnet/machinelearning/blob/master/LICENSE',
     'ML.net': 'https://github.com/dotnet/machinelearning',
     'OPTICS': 'https://en.wikipedia.org/wiki/OPTICS_algorithm',
+    'Scikit.ML': 'https://github.com/xadupre/machinelearningext',
+    'Scikit.ML Documentation': 'http://www.xavierdupre.fr/app/machinelearningext/helpsphinx/index.html',
     'Windows': 'https://www.microsoft.com/',
+    'xadupre/machinelearningext': 'https://github.com/xadupre/machinelearningext',
 })
 
+html_sidebars = {
+    '**': [
+        'about.html',
+        'navigation.html',
+        'relations.html',
+        'searchbox.html',
+    ]
+}
 
 from recommonmark.parser import CommonMarkParser
 source_parsers = {'.md': CommonMarkParser}

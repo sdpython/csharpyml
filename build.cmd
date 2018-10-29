@@ -14,6 +14,7 @@ set DOTNET_SKIP_FIRST_TIME_EXPERIENCE=1
 set DOTNET_MULTILEVEL_LOOKUP=0
 
 set LOCALMLEXT=%~dp0..\machinelearningext
+if "%1" == "py" goto buildpy:
 if exist %LOCALMLEXT% goto copybinaries:
 
 cd cscode\machinelearning
@@ -22,8 +23,6 @@ if exist bin goto mlend:
 @echo [build.cmd] build machinelearning debug and release
 :buildml:
 cmd /C build.cmd
-if %errorlevel% neq 0 exit /b %errorlevel%
-cmd /C build.cmd -release
 if %errorlevel% neq 0 exit /b %errorlevel%
 :mlend:
 cd ..\..
@@ -50,7 +49,7 @@ if exist %LOCALMLEXT% goto copybinariesext:
 cd cscode\machinelearningext\machinelearningext
 dotnet build -c Release machinelearningext.sln
 if %errorlevel% neq 0 exit /b %errorlevel%
-dotnet build -c debug machinelearningext.sln
+dotnet build -c Debug machinelearningext.sln
 if %errorlevel% neq 0 exit /b %errorlevel%
 cd ..\..\..
 
@@ -62,6 +61,7 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 python -u setup.py copybinmlext release
 if %errorlevel% neq 0 exit /b %errorlevel%
 
+:buildpy:
 @echo [build.cmd] build CSharPyMLExtension_netcore
 cd cscode
 cmd /C dotnet build -c Release CSharPyMLExtension_netcore.sln

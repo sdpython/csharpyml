@@ -129,6 +129,21 @@ class TestCsPipeline(ExtTestCase):
         pred2 = pipe2.predict(X_test)
         self.assertEqual(pred, pred2)
 
+    def test_check_outout(self):
+        X, y = datasets.load_iris(return_X_y=True)
+        X_train, __, y_train, _ = train_test_split(
+            X.astype(numpy.float32), y.astype(numpy.float32))
+        df_train = pandas.DataFrame(data=X_train, columns=[
+                                    "FA", "FB", "FC", "FD"])
+        df_train["Label"] = y_train
+
+        # store
+        pipe = CSPipeline(["concat{col=Feat:FA,FB,FC,FD}"],
+                          "oova{p=ap}", verbose=2)
+        pipe.fit(df_train, feature="Feat", label="Label")
+        stdout = pipe.StdOut
+        self.assertIn('Training learner 1', stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

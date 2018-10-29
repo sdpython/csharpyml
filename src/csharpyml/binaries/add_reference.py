@@ -10,11 +10,11 @@ def AddReference(name, version=None):
     Imports a :epkg:`C#` dll.
 
     @param      name        name of the DLL.
-    @param      version     ``'Release'`` or ``'Debug'`
+    @param      version     `'Release'` or `'Debug'`
     @return                 imported DLL
 
-    If the version is None, it first tries ``'Release'``
-    then ``'Debug'``.
+    If the version is None, it first tries `'Release'`
+    then `'Debug'`.
     """
     try:
         return ClrAddReference(name)

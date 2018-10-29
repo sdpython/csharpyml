@@ -3,7 +3,7 @@ Trains a Random Forest on Iris dataset
 ======================================
 
 The following example shows how to create and train
-a pipeline using :ref:`l-fasttree-(boosted-trees)-classification`.
+a pipeline using :ref:`l-fasttree-boosted-trees-classification`.
 """
 import sys
 import os

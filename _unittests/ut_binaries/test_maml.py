@@ -86,7 +86,7 @@ class TestMaml(ExtTestCase):
         out=__MODEL__
         """.strip("\n ").replace('__MODEL__', model).replace('__DATA__', dest)
 
-        out, err = maml(script)
+        _, err = maml(script)
         self.assertIn("Unbalanced quoting in command line arguments", err)
 
 

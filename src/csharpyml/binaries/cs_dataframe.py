@@ -25,7 +25,7 @@ class CSDataFrame:
 
     def __init__(self, obj=None):
         """
-        Creates an empty :epkg:`C# DataFrame`.
+        Creates a :epkg:`C# DataFrame`.
 
         @param      obj     :epkg:`C# DataFrame` or None to create an empty one
         """
@@ -94,9 +94,9 @@ class CSDataFrame:
         """
         Converts a :epkg:`C# IDataView` into a :epkg:`C# IDataView`.
 
-        @param      df      :epkg:`C# IDataView`
-        @param      nrows   keeps only the first rows
-        @return             @see cl CSDataFrame
+        @param      idataview   :epkg:`C# IDataView`
+        @param      nrows       keeps only the first rows
+        @return                 @see cl CSDataFrame
         """
         cl = CSDataFrame.get_cs_class()
         obj = cl.ReadView(idataview, nrows)
@@ -145,21 +145,14 @@ class CSDataFrame:
         @param      header          has header
         @param      names           columns names (if no header)
         @param      kinds           types of each columns (see below)
-        @param      guess_rows      number of rows to guess the type is not overriden by
-                                    kinds
+        @param      rows            number of rows to read
+        @param      guess_rows      number of rows to guess the type is not overriden by kinds
         @param      index           add a column with the row index
         @return                     @see cl CSDataFrame
 
         *kinds* can be None to let the function guess the right type,
         or it can be an array to change the type of every column.
         *-1* indicates the function should guess.
-
-        .. faqref::
-            :title: What are kinds?
-
-            *kind* are an enum class which indicates the type
-            of a variable or an array. It is equivalent to an integer.
-            The mapping is defined in file :epkg:`DataKind`.
         """
         return CSDataFrame(CSDataFrame.get_cs_class().ReadStr(content, sep, header, names, kinds, nrows, guess_rows, index))
 
@@ -189,10 +182,11 @@ class CSDataFrame:
             obj = self._obj
         else:
             obj = self._obj.Copy()
+        obj = obj.Flatten()
 
-        shape = self._obj.Shape
+        shape = obj.Shape
         data = OrderedDict()
-        schema = self._obj.Schema
+        schema = obj.Schema
         apply = []
         for i in range(shape.Item2):
             name = schema.GetColumnName(i)

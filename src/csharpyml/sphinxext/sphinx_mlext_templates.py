@@ -1,20 +1,23 @@
 """
-@file
-@brief Templates for documentation.
+Template for documentation.
 """
 
-mddocs_index_template = """
+mddocs_index_template_docs = """
 ML.net implementation details
 =============================
 
-`MLnet on <https://github.com/dotnet/machinelearning>`_
+The following pages were generated from content released in
+`machinelearning/docs/docs <https://github.com/dotnet/machinelearning/tree/master/docs/code>`_
 
 .. toctree::
     :maxdepth: 1
 {% for doc in docs %}
     {{doc}}{% endfor %}
+"""
 
-*Release notes*
+mddocs_index_template_releases = """
+ML.net releases details
+=======================
 
 .. toctree::
     :maxdepth: 1
@@ -45,20 +48,40 @@ kind_template = """
 
 component_template = """
 
-.. _l-{{title.replace(" ", "-").lower()}}:
+.. _l-{{title.replace("(", "").replace(")", "").replace(" ", "-").lower()}}:
 
 {{title}}
 {{"=" * len(title)}}
 
-**Type:** {{kind}}
-**Aliases:** *{{aliases}}*
-**Namespace:** {{namespace}}
-**Assembly:** {{assembly}}
-{{linkdocs}}
+.. only:: not md
+
+    {% if MicrosoftML %}
+    The documentation is generated based on the sources available at
+    :epkg:`dotnet/machinelearning` and released under :epkg:`MIT License`.
+    {% endif %}
+    {% if ScikitML %}
+    The documentation is generated based on the sources available at
+    :epkg:`xadupre/machinelearningext` and released under :epkg:`MIT License`.
+    {% endif %}
+
+.. only:: md
+
+    **Type:** {{kind}}
+    **Aliases:** *{{aliases}}*
+    **Namespace:** {{namespace}}
+    **Assembly:** {{assembly}}
+
+.. only:: not md
+
+    **Type:** {{kind}}
+    **Aliases:** *{{aliases}}*
+    **Namespace:** {{namespace}}
+    **Assembly:** {{assembly}}
+    {{linkdocs}}
 
 **Description**
 
-{{summary}}
+{{summary}}{{docadd}}
 
 {% if sorted_params %}
 **Parameters**

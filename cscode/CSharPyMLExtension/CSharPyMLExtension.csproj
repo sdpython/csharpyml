@@ -54,6 +54,7 @@
     <Reference Include="Microsoft.ML.Sweeper">
       <HintPath>..\bin\machinelearning\$(Configuration)\Microsoft.ML.Sweeper.dll</HintPath>
     </Reference>
+    
     <Reference Include="Scikit.ML.DataManipulation">
       <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.DataManipulation.dll</HintPath>
     </Reference>
@@ -66,5 +67,40 @@
     <Reference Include="Scikit.ML.ScikitAPI">
       <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.DocHelperMlExt.dll</HintPath>
     </Reference>
+
+    <Reference Include="Scikit.ML.Clustering">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.Clustering.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.FeaturesTransforms">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.FeaturesTransforms.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.ModelSelection">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.ModelSelection.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.MultiClass">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.MultiClass.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.NearestNeighbors">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.NearestNeighbors.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.PipelineGraphTraining">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.PipelineGraphTraining.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.PipelineGraphTransforms">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.PipelineGraphTransforms.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.PipelineLambdaTransforms">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.PipelineLambdaTransforms.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.ProductionPrediction">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.ProductionPrediction.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.RandomTransforms">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.RandomTransforms.dll</HintPath>
+    </Reference>
+    <Reference Include="Scikit.ML.TimeSeries">
+      <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.TimeSeries.dll</HintPath>
+    </Reference>
+    
   </ItemGroup>
 </Project>

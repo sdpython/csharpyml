@@ -60,8 +60,8 @@ namespace CSharPyMLExtension
             var outWriter = new LogWriter(s => outFctWriter(s));
             var errWriter = new LogWriter(s => errFctWriter(s));
             var env = new DelegateEnvironment(seed: seed < 0 ? null : (int?)seed, verbose: verbose,
-                                           sensitivity: MessageSensitivityFromString(sensitivity),
-                                           conc: conc, outWriter: outWriter, errWriter: errWriter);
+                                              sensitivity: MessageSensitivityFromString(sensitivity),
+                                              conc: conc, outWriter: outWriter, errWriter: errWriter);
             ComponentHelper.AddStandardComponents(env);
             return env;
         }

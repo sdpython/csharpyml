@@ -60,6 +60,7 @@ class CSPipeline:
             self._cs_log = cs_log
             self._obj = PipelineHelper.CreateScikitPipeline(
                 transforms, predictor, cs_log._obj)
+            self._pipe_helper = PipelineHelper
 
     def fit(self, data, feature=None, label=None, group_id=None, weight=None):
         """
@@ -90,29 +91,33 @@ class CSPipeline:
             # IDataView
             self._obj.Train(data, feature, label, weight, group_id)
 
-    def predict(self, data):
+    def predict(self, data, conc=1):
         """
         Predicts with a trained pipeline.
 
         @param      data        dataframe (*pandas* or *C#*)
+        @param      conc        number of threads to use
         @return                 prediction, with the same type as the one used for data
         """
-        return self._predict_transform(data, lambda arg: self._obj.Predict(arg))
+        return self._predict_transform(data, "predict", conc)
 
-    def transform(self, data):
+    def transform(self, data, conc=1):
         """
         Transforms with a trained pipeline.
 
         @param      data        dataframe (*pandas* or *C#*)
+        @param      conc        number of threads to use
         @return                 prediction, with the same type as the one used for data
         """
-        return self._predict_transform(data, lambda arg: self._obj.Transform(arg))
+        return self._predict_transform(data, "transform", conc)
 
-    def _predict_transform(self, data, fct):
+    def _predict_transform(self, data, fctname, conc=1):
         """
         Transforms pr predicts with a trained pipeline, there is no predictor.
 
         @param      data        dataframe (*pandas* or *C#*)
+        @param      fctname     `'predict'` or `'transform'`
+        @param      conc        number of threads to use
         @return                 prediction, with the same type as the one used for data
         """
         if isinstance(data, pandas.DataFrame):
@@ -128,15 +133,16 @@ class CSPipeline:
 
         if isinstance(data, CSDataFrame):
             # CSDataFrame
-            res = fct(data._obj)
-            dfcs = CSDataFrame.read_view(res)
+            res = self._pipe_helper.FastPredictOrTransform(
+                self._obj, data._obj, 1)
+            dfcs = CSDataFrame(res)
             if convert_back:
                 return dfcs.to_df()
             else:
                 return dfcs
         else:
             # IDataView
-            return fct(data)
+            return self._obj.Transform(data)
 
     def save(self, filename):
         """
@@ -163,7 +169,8 @@ class CSPipeline:
         PipelineHelper = CSPipeline.get_cs_class()
         obj = PipelineHelper.CreateScikitPipeline(filename, cs_log._obj)
         pipe = CSPipeline()
-        pipe._obj = obj
+        pipe._obj = obj  # pylint: disable=W0212
+        pipe._pipe_helper = PipelineHelper  # pylint: disable=W0212
         return pipe
 
     @property

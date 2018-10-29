@@ -109,11 +109,19 @@ namespace CSharPyMLExtension
         }
 
         /// <summary>
-        /// Creates a dataframe from a IDataView.
+        /// Creates a <see cref="DataFrame"/> from a IDataView.
         /// </summary>
         public static DataFrame ReadView(IDataView view, int nrows = -1)
         {
             return DataFrameIO.ReadView(view, nrows);
+        }
+
+        /// <summary>
+        /// Creates a <see cref="StreamingDataFrame"/> from a IDataView.
+        /// </summary>
+        public static StreamingDataFrame ReadStreamingView(IDataView view)
+        {
+            return new StreamingDataFrame(view);
         }
 
         /// <summary>
@@ -150,7 +158,7 @@ namespace CSharPyMLExtension
         }
 
         /// <summary>
-        /// Reads a string as a IDataView.
+        /// Reads a file as a <see cref="DataFrame"/>.
         /// Follows pandas API.
         /// </summary>
         public static DataFrame ReadCsv(string filename, char sep = ',', bool header = true,
@@ -160,6 +168,36 @@ namespace CSharPyMLExtension
         {
             var kinds = IntToColumnTypes(dtypes);
             return DataFrameIO.ReadCsv(filename, sep, header, names, kinds, nrows, guess_rows,
+                                     encoding == null ? null : Encoding.GetEncoding(encoding),
+                                     index: index);
+        }
+
+        /// <summary>
+        /// Reads a file as a <see cref="StreamingDataFrame"/>
+        /// Follows pandas API.
+        /// </summary>
+        public static StreamingDataFrame ReadStreamingCsv(string filename, char sep = ',', bool header = true,
+                                                         string[] names = null, int[] dtypes = null,
+                                                         int nrows = -1, int guess_rows = 10, string encoding = null,
+                                                         bool index = false)
+        {
+            var kinds = IntToColumnTypes(dtypes);
+            return StreamingDataFrame.ReadCsv(filename, sep, header, names, kinds, nrows, guess_rows,
+                                     encoding == null ? null : Encoding.GetEncoding(encoding),
+                                     index: index);
+        }
+
+        /// <summary>
+        /// Reads a set of files as a <see cref="StreamingDataFrame"/>
+        /// Follows pandas API.
+        /// </summary>
+        public static StreamingDataFrame ReadStreamingCsvs(string[] filenames, char sep = ',', bool header = true,
+                                                           string[] names = null, int[] dtypes = null,
+                                                           int nrows = -1, int guess_rows = 10, string encoding = null,
+                                                           bool index = false)
+        {
+            var kinds = IntToColumnTypes(dtypes);
+            return StreamingDataFrame.ReadCsv(filenames, sep, header, names, kinds, nrows, guess_rows,
                                      encoding == null ? null : Encoding.GetEncoding(encoding),
                                      index: index);
         }

@@ -1,3 +1,4 @@
+alabaster
 coverage
 jyquickhelper
 Pillow
@@ -8,6 +9,6 @@ pymyinstall
 pyquickhelper>=1.8
 recommonmark
 scikit-learn
+scikit-plot
 scipy
-sphinx_rtd_theme
 wheel

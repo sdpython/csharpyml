@@ -1,5 +1,5 @@
 
-csharpymlml
+csharpyml
 =========
 
 .. only:: html
@@ -45,24 +45,23 @@ csharpymlml
 What is it?
 -----------
 
-*csharpyml* implements an easy way to play
-with :epkg:`C#`, :epkg:`Python` and :epkg:`ML.net`.
-The module relies in `pythonnet <https://github.com/pythonnet/pythonnet>`_
-and adds continuous integration other projects could leverage.
+*csharpyml* implements a way to interact
+with :epkg:`C#` and :epkg:`ML.net` from :epkg:`Python`.
+The module relies on `pythonnet <https://github.com/pythonnet/pythonnet>`_,
+wraps :epkg:`ML.net` and :epkg:`Scikit.ML`
+(see also :epkg:`Scikit.ML Documentation`).
 
 Documentation
 -------------
 
 .. toctree::
-    :maxdepth: 1
+    :maxdepth: 2
 
     api/index
-    mlnetdocs/index
     components/index
-    i_ex
+    examples
     i_faq
     i_nb
-    all_notebooks
     blog/blogindex
     indexmenu
     HISTORY

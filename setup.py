@@ -414,6 +414,8 @@ def copy_assemblies(libdef=None, version="Release"):
                          "1.5.0", "lib", "netstandard2.0"),
             os.path.join(rootpkg, "system.numerics.vectors",
                          "4.4.0", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "lightgbm",
+                         "2.2.1.1", "runtimes", "win-x64", "native"),
         ])
 
         dests = ['src/csharpyml/binaries/%s' % version]
