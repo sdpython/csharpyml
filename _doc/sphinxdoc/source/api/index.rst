@@ -18,6 +18,8 @@ DataFrame
 
 .. autosignature:: csharpyml.binaries.cs_dataframe.CSDataFrame
 
+.. autosignature:: csharpyml.binaries.cs_streaming_dataframe.CSStreamingDataFrame
+
 Help
 ====
 
