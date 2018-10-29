@@ -17,6 +17,9 @@ init:
 
 install:
   - git submodule update --init
+  - cd machinelearning
+  - git submodule update --init --recursive
+  - cd ..
   - "%PYTHON%\\python -m pip install --upgrade pip"
   - "%PYTHON%\\Scripts\\pip install pymyinstall"
   - "%PYTHON%\\Scripts\\pymy_install3 --set=pyquickhelper"

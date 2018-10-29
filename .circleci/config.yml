@@ -24,6 +24,9 @@ jobs:
           name: submodules
           command: |
             git submodule update --init
+            cd machinelearning
+            git submodule update --init --recursive
+            cd ..
             
       - run:
           name: install apt-transport-https
