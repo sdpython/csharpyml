@@ -1,6 +1,7 @@
 ﻿// See the LICENSE file in the project root for more information.
 
 using System;
+using System.Text;
 using Microsoft.ML.Runtime;
 using Scikit.ML.PipelineHelper;
 using Scikit.ML.ScikitAPI;
@@ -64,6 +65,21 @@ namespace CSharPyMLExtension
                                               conc: conc, outWriter: outWriter, errWriter: errWriter);
             ComponentHelper.AddStandardComponents(env);
             return env;
+        }
+
+        public static Tuple<IHostEnvironment, StringBuilder, StringBuilder> CreateStoreEnvironment(int seed = -1, int verbose = 0,
+                                                  string sensitivity = "All", int conc = 0)
+        {
+            ILogWriter logout, logerr;
+            var stout = new StringBuilder();
+            var sterr = new StringBuilder();
+            logout = new LogWriter((string s) => { stout.Append(s); });
+            logerr = new LogWriter((string s) => { sterr.Append(s); });
+            var env = new DelegateEnvironment(seed: seed < 0 ? null : (int?)seed, verbose: verbose,
+                                           sensitivity: MessageSensitivityFromString(sensitivity),
+                                           conc: conc, outWriter: logout, errWriter: logerr);
+            ComponentHelper.AddStandardComponents(env);
+            return new Tuple<IHostEnvironment, StringBuilder, StringBuilder>(env, stout, sterr);
         }
     }
 }

@@ -37,7 +37,7 @@ class CSLogging:
         "Writes on ``sys.stdout``."
         sys.stdout.write(text.strip("\r"))
 
-    def __init__(self, stdout="python", seed=-1, verbose=True, sensitivity="All", conc=0):
+    def __init__(self, stdout="python", seed=-1, verbose=0, sensitivity="All", conc=0):
         """
         Creates en environment which defines multiple variables such
         as the random seed, more or less display, the sensitivity of message,
@@ -45,8 +45,10 @@ class CSLogging:
 
         @param      stdout          ``'python'`` or ``'C#'``, where the log should
                                     be printed, on the standard python output or the C#'s one.
-                                    The *C#* output is faster but appears on Jupyter's servee
+                                    The *C#* output is faster but appears on Jupyter's server
                                     standard output instead of the notebook itself.
+                                    A third option is available, ``'notebook'`` to let C#
+                                    catch the standard output and retrieve it later.
         @param      seed            seed for random generator, -1 for a random one
         @param      verbose         display training information or not
         @param      sensitivity     *All*, *None*, *UserData*, *Schema*, defines what kind of
@@ -80,6 +82,12 @@ class CSLogging:
             del_err = EnvHelper.PrintDelegate(CSLogging.print_stderr_out)
             self._obj = EnvHelper.CreatePythonEnvironment(seed, verbose, sensitivity, conc,
                                                           del_out, del_err)
+        elif stdout == "notebook":
+            obj = EnvHelper.CreateStoreEnvironment(
+                seed, verbose, sensitivity, conc)
+            self._obj = obj.Item1
+            self._csstdout = obj.Item2
+            self._csstderr = obj.Item3
         else:
             raise ValueError(
                 "Unable to interpret parameter stdout='{0}'".format(stdout))
@@ -101,17 +109,23 @@ class CSLogging:
         """
         Returns stored stdout.
         """
-        if hasattr(self, "_stdout"):
+        if hasattr(self, "_csstdout"):
+            return self._csstdout.ToString()
+        elif hasattr(self, "_stdout"):
             return self._stdout.getvalue()
         else:
-            raise RuntimeError("Output was not saved. Use stdout='python'.")
+            raise RuntimeError(
+                "Output was not saved. Use stdout='python' or 'notebook'.")
 
     @property
     def StdErr(self):
         """
         Returns stored stderr.
         """
-        if hasattr(self, "_stderr"):
+        if hasattr(self, "_csstderr"):
+            return self._csstderr.ToString()
+        elif hasattr(self, "_stderr"):
             return self._stderr.getvalue()
         else:
-            raise RuntimeError("Output was not saved. Use stdout='python'.")
+            raise RuntimeError(
+                "Output was not saved. Use stdout='python' or 'notebook'.")
