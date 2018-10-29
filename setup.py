@@ -330,6 +330,7 @@ def copy_assemblies(libdef=None, version="Release"):
                     # "Microsoft.ML.OnnxTransform",
                     # "Microsoft.ML.PCA",
                     # "Microsoft.ML.PipelineInference",
+                    "Microsoft.ML.Sweeper",
                     "Microsoft.ML.TensorFlow",
                     # "Microsoft.ML.Transforms",
                     # "Microsoft.ML.StandardLearners",
