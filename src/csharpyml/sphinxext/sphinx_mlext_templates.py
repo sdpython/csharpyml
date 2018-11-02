@@ -16,6 +16,9 @@ The following pages were generated from content released in
 """
 
 mddocs_index_template_releases = """
+
+.. _l-mlnet-releases-details:
+
 ML.net releases details
 =======================
 
@@ -26,8 +29,11 @@ ML.net releases details
 """
 
 index_template = """
-List of Machine Learning Components
-===================================
+
+.. _l-ml-net-components:
+
+ML Components
+=============
 
 .. toctree::
     :maxdepth: 1
@@ -48,7 +54,7 @@ kind_template = """
 
 component_template = """
 
-.. _l-{{title.replace("(", "").replace(")", "").replace(" ", "-").lower()}}:
+.. _l-{{title.replace("(", "").replace(")", "").replace(" ", "-").replace(".", "-").lower()}}:
 
 {{title}}
 {{"=" * len(title)}}

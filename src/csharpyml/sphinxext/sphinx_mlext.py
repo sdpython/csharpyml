@@ -61,6 +61,8 @@ def mlnet_components_kinds():
     """
     MamlHelper = get_maml_helper()
     kinds = list(MamlHelper.GetAllKinds())
+    kinds += ["argument", "command"]
+    kinds = list(set(kinds))
     titles = {
         'anomalydetectortrainer': 'Anomaly Detection',
         'binaryclassifiertrainer': 'Binary Classification',
@@ -75,7 +77,9 @@ def mlnet_components_kinds():
         'ngramextractorfactory': 'N-Grams',
         'rankertrainer': 'Ranking',
         'regressortrainer': 'Regression',
-        'tokenizetransform': 'Tokenization'
+        'tokenizetransform': 'Tokenization',
+        'argument': 'Arguments',
+        'command': 'Commands',
     }
     return {k: titles[k] for k in kinds if k in titles}
 
@@ -107,6 +111,9 @@ def builds_components_pages(epkg):
     def process_default(default_value):
         if not default_value:
             return ''
+        if "+" in default_value:
+            default_value = default_value.split(".")[-1].replace("+", ".")
+            return default_value
         if len(default_value) > 28:
             if len(default_value.split(".")) > 2:
                 default_value = default_value.replace(".", ". ")
@@ -124,6 +131,9 @@ def builds_components_pages(epkg):
             raise TypeError("desc must be a string not {0}".format(type(desc)))
         return add_rst_links(desc, epkg)
 
+    def clean_name(name):
+        return name.replace(" ", "_").replace(".", "_").replace("(", "").replace(")", "").lower()
+
     kinds = mlnet_components_kinds()
     pages = {}
 
@@ -138,6 +148,21 @@ def builds_components_pages(epkg):
 
     MamlHelper = get_maml_helper()
 
+    # builds references
+    refs = {}
+    for v, k in sorted_kinds:
+        enumc = MamlHelper.EnumerateComponents(k)
+        try:
+            comps = list(enumc)
+        except Exception as e:  # pylint: disable=W0703
+            logger.warning("[csml] issue with kind {0}\n{1}".format(k, e))
+            continue
+        if len(comps) == 0:
+            logger.warning("[csml] empty kind {0}\n{1}".format(k, e))
+            continue
+        for comp in comps:
+            refs[comp.Name] = ":ref:`l-{0}`".format(comp.Name.lower().replace(".", "-"))
+
     # kinds and components
     for v, k in sorted_kinds:
         enumc = MamlHelper.EnumerateComponents(k)
@@ -147,26 +172,27 @@ def builds_components_pages(epkg):
             logger.warning("[csml] issue with kind {0}\n{1}".format(k, e))
             continue
         if len(comps) == 0:
+            logger.warning("[csml] empty kind {0}\n{1}".format(k, e))
             continue
 
-        comp_names = list(sorted(c.Name.replace(" ", "_") for c in comps))
+        comp_names = list(sorted(clean_name(c.Name) for c in comps))
         kind_name = v
         kind_kind = k
         pages[k] = kind_tpl.render(title=kind_name, fnames=comp_names, len=len)
 
         for comp in comps:
 
-            if comp.Arguments is None:
+            if comp.Arguments is None and "version" not in comp.Name.lower():
                 logger.info(
                     "[csml] ---- SKIP ---- {}-{}-{}".format(k, comp.Name, comp.Description))
             else:
                 assembly_name = comp.AssemblyName
                 args = {}
-                for arg in comp.Arguments:
-                    args[arg.Name] = dict(Name=arg.Name, ShortName=arg.ShortName or '',
-                                          Default=process_default(
-                                              arg.DefaultValue),
-                                          Description=arg.Help)
+                if comp.Arguments is not None:
+                    for arg in comp.Arguments:
+                        dv = process_default(arg.DefaultValue)
+                        args[arg.Name] = dict(Name=arg.Name, ShortName=arg.ShortName or '',
+                                              Default=refs.get(dv, dv), Description=arg.Help)
                 sorted_params = [v for k, v in sorted(args.items())]
                 aliases = ", ".join(comp.Aliases)
 
@@ -177,7 +203,7 @@ def builds_components_pages(epkg):
                 else:
                     linkdocs = ""
 
-                comp_name = comp.Name.replace(" ", "_")
+                comp_name = clean_name(comp.Name)
                 pages[comp_name] = comp_tpl.render(title=comp.Name,
                                                    aliases=aliases,
                                                    summary=process_description(
@@ -205,8 +231,77 @@ def write_components_pages(app, env, docnames):
         os.mkdir(dest)
     for k, v in pages.items():
         d = os.path.join(dest, k) + ".rst"
-        with open(d, "w", encoding="utf-8") as f:
-            f.write(v)
+        if os.path.exists(d):
+            with open(d, "r", encoding="utf-8") as f:
+                content = f.read()
+        else:
+            content = None
+            
+        if content != v:
+            with open(d, "w", encoding="utf-8") as f:
+                f.write(v)
+
+
+def get_mlnet_assemblies(chdir=False):
+    """
+    Retrieves assemblies.
+    """
+    if chdir:
+        cur = os.getcwd()
+        os.chdir(dll)
+    res = MamlHelper.GetLoadedAssembliesLocation(True)
+    if chdir:
+        os.chdir(cur)
+    dependencies = []
+    # addition = ["Core", "Data", "Maml", "Api"]
+    # root = os.path.dirname(res[0].Location)
+    # dependencies = [os.path.join(root, "Microsoft.ML.{0}.dll").format(a) for a in addition]
+    dependencies.extend([a for a in res if ".pyd" not in a and ".so" not in a])
+    usings = ["System", "System.Linq", "System.Collections.Generic", "System.IO",
+              "System.Text"]
+    usings.extend([
+            "Microsoft.ML.Runtime",
+            "Microsoft.ML.Runtime.Api",
+            "Microsoft.ML.Runtime.Data",
+            "Microsoft.ML.Runtime.Learners",
+            "Microsoft.ML.Runtime.Ensemble",
+            "Microsoft.ML.Runtime.LightGBM",
+            "Microsoft.ML.Runtime.Model.Onnx",
+            "Microsoft.ML.Runtime.TimeSeriesProcessing",
+            "Microsoft.ML.Runtime.Tools",
+            "Microsoft.ML.Trainers",
+            "Microsoft.ML.Trainers.HalLearners",
+            "Microsoft.ML.Trainers.KMeans",
+            "Microsoft.ML.Trainers.FastTree",
+            "Microsoft.ML.Trainers.Online",
+            "Microsoft.ML.Trainers.PCA",
+            "Microsoft.ML.Transforms",
+            "Microsoft.ML.Transforms.Categorical",
+            "Microsoft.ML.Transforms.Normalizers",
+            "Microsoft.ML.Transforms.Projections",
+            "Microsoft.ML.Transforms.TensorFlow",
+            "Microsoft.ML.Transforms.Text",
+            "Microsoft.ML.Runtime.Sweeper",
+        ])
+    res = MamlHelper.GetAssemblies()
+    usings.extend([a.FullName.split(',')[0] for a in res if "Scikit" in a.FullName])
+    return dependencies, usings
+    
+
+class RunCSharpMLDirective(RunCSharpDirective):
+    """
+    Implicits "and dependencies.
+    """
+
+    def modify_script_before_running(self, script):
+        """
+        The methods modifies the script to *csharpy* to
+        run :epkg:`C#` from :epkg:`Python`.
+        """
+        if not hasattr(RunCSharpDirective, 'deps_using'):
+            RunCSharpDirective.deps_using = get_mlnet_assemblies()
+        dependencies, usings = RunCSharpMLDirective.deps_using
+        return self._modify_script_before_running(script, usings, dependencies)
 
 
 def setup(app):
@@ -215,4 +310,5 @@ def setup(app):
     """
     app.add_directive('mlcmd', MlCmdDirective)
     app.connect("env-before-read-docs", write_components_pages)
+    app.add_directive('runcsharpml', RunCSharpMLDirective)
     return {'version': sphinx.__display_version__, 'parallel_read_safe': True}
