@@ -145,7 +145,7 @@ class CSDataFrame:
         @param      header          has header
         @param      names           columns names (if no header)
         @param      kinds           types of each columns (see below)
-        @param      rows            number of rows to read
+        @param      nrows           number of rows to read
         @param      guess_rows      number of rows to guess the type is not overriden by kinds
         @param      index           add a column with the row index
         @return                     @see cl CSDataFrame

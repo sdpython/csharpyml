@@ -13,7 +13,7 @@ def maml(script, catch_output=True, conc=0, verbose=2, sensitivity=-1):
                                 execution, otherwise, it gets printed on stdout
                                 while being executed
     @param      conc            concurrency (number of threads or 0 to let the library choose)
-    @parm       verbose         more or less display
+    @param      verbose         more or less display
     @param      sensitivity     to hide information about data
     @return                     stdout, stderr
 

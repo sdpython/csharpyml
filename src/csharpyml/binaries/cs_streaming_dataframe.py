@@ -50,7 +50,7 @@ class CSStreamingDataFrame:
                  kinds=None, nrows=-1, guess_rows=10, encoding=None,
                  index=False):
         """
-        Creates a dataframe from a :epkg:`csv` file.
+        Creates a streaming dataframe from a :epkg:`csv` file.
 
         @param      filename        filename or list of filenames
         @param      sep             separator
@@ -67,13 +67,6 @@ class CSStreamingDataFrame:
         *kinds* can be None to let the function guess the right type,
         or it can be an array to change the type of every column.
         *-1* indicates the function should guess.
-
-        .. faqref::
-            :title: What are kinds?
-
-            *kind* are an enum class which indicates the type
-            of a variable or an array. It is equivalent to an integer.
-            The mapping is defined in file :epkg:`DataKind`.
         """
         cl = CSStreamingDataFrame.get_cs_class()
         if isinstance(filename, list):
