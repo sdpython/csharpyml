@@ -285,3 +285,4 @@ _doc/sphinxdoc/source/components
 cscode/packages
 _doc/examples/model.zip
 _doc/sphinxdoc/source/nbcov*
+_unittests/ut_binaries/diabete.csv

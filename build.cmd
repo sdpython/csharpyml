@@ -76,6 +76,11 @@ if %errorlevel% neq 0 exit /b %errorlevel%
 python -u setup.py copybin release
 if %errorlevel% neq 0 exit /b %errorlevel%
 
+:finalcopy:
+
+copy cscode\bin\machinelearningext\Release\mkl*.dll cscode\bin\AnyCPU.Release\TestCSharPyMLExtension\netcoreapp2.1
+copy cscode\bin\machinelearningext\Debug\mkl*.dll cscode\bin\AnyCPU.Debug\TestCSharPyMLExtension\netcoreapp2.1
+
 
 :end:
 @echo [build.cmd] Completed.

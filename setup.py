@@ -41,8 +41,8 @@ CLASSIFIERS = [
 
 packages = find_packages('src', exclude='src')
 package_dir = {k: "src/" + k.replace(".", "/") for k in packages}
-package_data = {project_var_name
-                + ".binaries.Release": ["*.dll", "*.so", "*.json", "*.xml"]}
+package_data = {project_var_name +
+                ".binaries.Release": ["*.dll", "*.so", "*.json", "*.xml"]}
 
 ############
 # functions
@@ -417,7 +417,14 @@ def copy_assemblies(libdef=None, version="Release"):
                          "4.4.0", "lib", "netstandard2.0"),
             os.path.join(rootpkg, "lightgbm",
                          "2.2.1.1", "runtimes", "win-x64", "native"),
+            os.path.join(rootpkg, "google.protobuf",
+                         "3.5.1", "lib", "netstandard1.0"),
         ])
+
+        if sys.platform.startswith("win"):
+            sub = "win-x64"
+        else:
+            sub = "linux-x64"
 
         # Additional dependencies.
         folders.extend([
@@ -425,6 +432,8 @@ def copy_assemblies(libdef=None, version="Release"):
                          "4.8.0", "lib", "netstandard2.0"),
             os.path.join(rootpkg, "system.drawing.common",
                          "4.5.0", "lib", "netstandard2.0"),
+            os.path.join(rootpkg, "mlnetmkldeps", "0.0.0.7",
+                         "runtimes", sub, "native"),
         ])
 
         dests = ['src/csharpyml/binaries/%s' % version]

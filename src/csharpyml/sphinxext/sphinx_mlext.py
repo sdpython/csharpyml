@@ -161,7 +161,8 @@ def builds_components_pages(epkg):
             logger.warning("[csml] empty kind {0}\n{1}".format(k, e))
             continue
         for comp in comps:
-            refs[comp.Name] = ":ref:`l-{0}`".format(comp.Name.lower().replace(".", "-"))
+            refs[comp.Name] = ":ref:`l-{0}`".format(
+                comp.Name.lower().replace(".", "-"))
 
     # kinds and components
     for v, k in sorted_kinds:
@@ -236,7 +237,7 @@ def write_components_pages(app, env, docnames):
                 content = f.read()
         else:
             content = None
-            
+
         if content != v:
             with open(d, "w", encoding="utf-8") as f:
                 f.write(v)
@@ -248,8 +249,8 @@ def get_mlnet_assemblies(chdir=False):
     """
     if chdir:
         cur = os.getcwd()
-        os.chdir(dll)
-    res = MamlHelper.GetLoadedAssembliesLocation(True)
+        os.chdir(chdir)
+    res = MamlHelper.GetLoadedAssembliesLocation(True)  # pylint: disable=E0602
     if chdir:
         os.chdir(cur)
     dependencies = []
@@ -260,35 +261,36 @@ def get_mlnet_assemblies(chdir=False):
     usings = ["System", "System.Linq", "System.Collections.Generic", "System.IO",
               "System.Text"]
     usings.extend([
-            "Microsoft.ML.Runtime",
-            "Microsoft.ML.Runtime.Api",
-            "Microsoft.ML.Runtime.Data",
-            "Microsoft.ML.Runtime.Learners",
-            "Microsoft.ML.Runtime.Ensemble",
-            "Microsoft.ML.Runtime.LightGBM",
-            "Microsoft.ML.Runtime.Model.Onnx",
-            "Microsoft.ML.Runtime.TimeSeriesProcessing",
-            "Microsoft.ML.Runtime.Tools",
-            "Microsoft.ML.Trainers",
-            "Microsoft.ML.Trainers.HalLearners",
-            "Microsoft.ML.Trainers.KMeans",
-            "Microsoft.ML.Trainers.FastTree",
-            "Microsoft.ML.Trainers.Online",
-            "Microsoft.ML.Trainers.PCA",
-            "Microsoft.ML.Transforms",
-            "Microsoft.ML.Transforms.Categorical",
-            "Microsoft.ML.Transforms.Normalizers",
-            "Microsoft.ML.Transforms.Projections",
-            "Microsoft.ML.Transforms.TensorFlow",
-            "Microsoft.ML.Transforms.Text",
-            "Microsoft.ML.Runtime.Sweeper",
-        ])
-    res = MamlHelper.GetAssemblies()
-    usings.extend([a.FullName.split(',')[0] for a in res if "Scikit" in a.FullName])
+        "Microsoft.ML.Runtime",
+        "Microsoft.ML.Runtime.Api",
+        "Microsoft.ML.Runtime.Data",
+        "Microsoft.ML.Runtime.Learners",
+        "Microsoft.ML.Runtime.Ensemble",
+        "Microsoft.ML.Runtime.LightGBM",
+        "Microsoft.ML.Runtime.Model.Onnx",
+        "Microsoft.ML.Runtime.TimeSeriesProcessing",
+        "Microsoft.ML.Runtime.Tools",
+        "Microsoft.ML.Trainers",
+        "Microsoft.ML.Trainers.HalLearners",
+        "Microsoft.ML.Trainers.KMeans",
+        "Microsoft.ML.Trainers.FastTree",
+        "Microsoft.ML.Trainers.Online",
+        "Microsoft.ML.Trainers.PCA",
+        "Microsoft.ML.Transforms",
+        "Microsoft.ML.Transforms.Categorical",
+        "Microsoft.ML.Transforms.Normalizers",
+        "Microsoft.ML.Transforms.Projections",
+        "Microsoft.ML.Transforms.TensorFlow",
+        "Microsoft.ML.Transforms.Text",
+        "Microsoft.ML.Runtime.Sweeper",
+    ])
+    res = MamlHelper.GetAssemblies()  # pylint: disable=E0602
+    usings.extend([a.FullName.split(',')[0]
+                   for a in res if "Scikit" in a.FullName])
     return dependencies, usings
-    
 
-class RunCSharpMLDirective(RunCSharpDirective):
+
+class RunCSharpMLDirective(RunCSharpDirective):  # pylint: disable=E0602
     """
     Implicits "and dependencies.
     """
@@ -298,8 +300,8 @@ class RunCSharpMLDirective(RunCSharpDirective):
         The methods modifies the script to *csharpy* to
         run :epkg:`C#` from :epkg:`Python`.
         """
-        if not hasattr(RunCSharpDirective, 'deps_using'):
-            RunCSharpDirective.deps_using = get_mlnet_assemblies()
+        if not hasattr(RunCSharpDirective, 'deps_using'):  # pylint: disable=E0602
+            RunCSharpDirective.deps_using = get_mlnet_assemblies()  # pylint: disable=E0602
         dependencies, usings = RunCSharpMLDirective.deps_using
         return self._modify_script_before_running(script, usings, dependencies)
 

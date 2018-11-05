@@ -144,6 +144,36 @@ class TestCsPipeline(ExtTestCase):
         stdout = pipe.StdOut
         self.assertIn('Training learner 1', stdout)
 
+    def test_diabetes_ols(self):
+        from sklearn.datasets import load_diabetes
+        diabetes = load_diabetes()
+        diabetes_X_train = diabetes.data[:-20]
+        diabetes_X_test = diabetes.data[-20:]
+        diabetes_y_train = diabetes.target[:-20]
+        # diabetes_y_test = diabetes.target[-20:]
+
+        conc_train = pandas.DataFrame(diabetes_X_train.astype(numpy.float32),
+                                      columns=["F%d" % i for i in range(0, diabetes_X_train.shape[1])])
+        concat = f"concat{{col=Feature:{','.join(conc_train.columns)}}}"
+        self.assertEqual(
+            concat, "concat{col=Feature:F0,F1,F2,F3,F4,F5,F6,F7,F8,F9}")
+        conc_train["Label"] = diabetes_y_train.astype(numpy.float32)
+        conc_train.to_csv("diabete.csv", index=False)
+
+        pipe = CSPipeline([concat], "ols")
+        pipe.fit(conc_train, feature="Feature", label="Label")
+
+        pred = pipe.predict(conc_train)
+        self.assertEqual(pred.shape, (422, 22))
+
+        conc_test = pandas.DataFrame(diabetes_X_test.astype(numpy.float32),
+                                     columns=["F%d" % i for i in range(0, diabetes_X_train.shape[1])])
+        conc_test["Label"] = numpy.zeros(
+            (conc_test.shape[0],), dtype=numpy.float32)
+
+        pred2 = pipe.predict(conc_test)
+        self.assertEqual(pred2.shape, (20, 22))
+
 
 if __name__ == "__main__":
     unittest.main()

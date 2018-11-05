@@ -113,7 +113,7 @@ class CSPipeline:
 
     def _predict_transform(self, data, fctname, conc=1):
         """
-        Transforms pr predicts with a trained pipeline, there is no predictor.
+        Transforms or predicts with a trained pipeline, there is no predictor.
 
         @param      data        dataframe (*pandas* or *C#*)
         @param      fctname     `'predict'` or `'transform'`

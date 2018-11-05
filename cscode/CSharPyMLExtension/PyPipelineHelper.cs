@@ -25,7 +25,7 @@ namespace CSharPyMLExtension
         {
             if (host == null)
                 throw new ArgumentNullException("host cannot be null.");
-            return new ScikitPipeline(st, host);
+            return new ScikitPipeline(st, ScikitPipeline.SaveFormat.Zip, host);
         }
 
         public static ScikitPipeline CreateScikitPipeline(string[] transforms = null, string predictor = null, IHostEnvironment host = null)

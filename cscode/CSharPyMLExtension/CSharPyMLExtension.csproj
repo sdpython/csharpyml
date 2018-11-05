@@ -67,7 +67,6 @@
     <Reference Include="Scikit.ML.ScikitAPI">
       <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.DocHelperMlExt.dll</HintPath>
     </Reference>
-
     <Reference Include="Scikit.ML.Clustering">
       <HintPath>..\bin\machinelearningext\$(Configuration)\Scikit.ML.Clustering.dll</HintPath>
     </Reference>
