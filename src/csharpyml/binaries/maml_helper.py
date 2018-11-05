@@ -108,7 +108,7 @@ def get_mlnet_assemblies(chdir=False):
     .. runpython::
         :showcode:
 
-        from csharpyml.binaires import get_mlnet_assemblies
+        from csharpyml.binaries import get_mlnet_assemblies
         deps, usings = get_mlnet_assemblies()
 
         for i, d in enumerate(deps):
@@ -157,6 +157,9 @@ def get_mlnet_assemblies(chdir=False):
     res = MamlHelper.GetAssemblies()  # pylint: disable=E0602
     usings.extend([a.FullName.split(',')[0]
                    for a in res if "Scikit" in a.FullName])
+    for miss in ["Scikit.ML.DataManipulation", "Scikit.ML.ScikitAPI"]:
+        if miss not in usings:
+            usings.append(miss)
     return dependencies, usings
 
 

@@ -144,16 +144,22 @@ class CSPipeline:
             # IDataView
             return self._obj.Transform(data)
 
-    def save(self, filename):
+    def save(self, filename, remove_first_transform=False):
         """
         Saves the pipeline as a filename.
 
-        @param  filename    filename (zip)
+        @param  filename                filename (zip)
+        @param  remove_first_transform  remove the first transform
+
+        The first transform is a :epkg:`PassThroughTransform`
+        which allows the user to change the source as he wants.
+        It is used to speed up the prediction but can restored at
+        loading time.
         """
         ext = os.path.splitext(filename)[-1]
         if ext != ".zip":
             raise ValueError("The filename must have extension .zip")
-        self._obj.Save(filename)
+        self._obj.Save(filename, remove_first_transform)
 
     @staticmethod
     def load(filename, **kwargs):

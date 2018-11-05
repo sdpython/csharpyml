@@ -56,6 +56,7 @@ epkg_dictionary.update({
     'MIT License': 'https://github.com/dotnet/machinelearning/blob/master/LICENSE',
     'ML.net': 'https://github.com/dotnet/machinelearning',
     'OPTICS': 'https://en.wikipedia.org/wiki/OPTICS_algorithm',
+    'PassThroughTransform': 'http://www.xavierdupre.fr/app/machinelearningext/helpsphinx/components/pass_through_transform.html',
     'Scikit.ML': 'https://github.com/xadupre/machinelearningext',
     'Scikit.ML Documentation': 'http://www.xavierdupre.fr/app/machinelearningext/helpsphinx/index.html',
     'Windows': 'https://www.microsoft.com/',

@@ -7,6 +7,7 @@ import jinja2
 import sphinx
 from sphinx.util import logging
 from pyquickhelper.sphinxext.sphinx_runpython_extension import RunPythonDirective
+from csharpy.sphinxext import RunCSharpDirective
 from ..binaries import get_maml_helper
 
 
