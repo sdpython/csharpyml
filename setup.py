@@ -134,9 +134,9 @@ if is_local():
         github_owner=project_owner,
         fLOG=logging_function, covtoken=(
             "d911f0bb-f250-415d-860b-19b342a4f168", "'_UT_37_std' in outfile"),
-        requirements=["pyquickhelper", "jyquickhelper"],
-        additional_notebook_path=["pyquickhelper", "jyquickhelper"],
-        additional_local_path=["pyquickhelper", "jyquickhelper"],
+        requirements=["pyquickhelper", "jyquickhelper", "csharpy"],
+        additional_notebook_path=["pyquickhelper", "jyquickhelper", "csharpy"],
+        additional_local_path=["pyquickhelper", "jyquickhelper", "csharpy"],
         copy_add_ext=["dll", 'so'], layout=["html"])
     if not r and not ({"bdist_msi", "sdist",
                        "bdist_wheel", "publish", "publish_doc", "register",

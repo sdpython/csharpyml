@@ -2,6 +2,8 @@
 @file
 @brief Implements function around :epkg:`ML.net` command line.
 """
+import os
+from csharpy.runtime import create_cs_function
 from .add_reference import AddReference, add_csharpml_extension
 
 
@@ -94,3 +96,89 @@ def get_help(cl):
     """
     out, _ = maml("? " + cl)
     return out
+
+
+def get_mlnet_assemblies(chdir=False):
+    """
+    Makes the list required dependencies to run a C# script using :epkg:`ML.net`.
+
+    @param      chdir       change directory to the current one before computing the list
+    @return                 list of assemblies, list of usings
+
+    .. runpython::
+        :showcode:
+
+        from csharpyml.binaires import get_mlnet_assemblies
+        deps, usings = get_mlnet_assemblies()
+
+        for i, d in enumerate(deps):
+            print("dependencies %d: %s" % (i, d))
+        for i, u in enumerate(usings):
+            print("using %d: %s" % (i, u))
+    """
+    if chdir:
+        cur = os.getcwd()
+        os.chdir(chdir)
+    MamlHelper = get_maml_helper()
+    res = MamlHelper.GetLoadedAssembliesLocation(True)  # pylint: disable=E0602
+    if chdir:
+        os.chdir(cur)
+    dependencies = []
+    # addition = ["Core", "Data", "Maml", "Api"]
+    # root = os.path.dirname(res[0].Location)
+    # dependencies = [os.path.join(root, "Microsoft.ML.{0}.dll").format(a) for a in addition]
+    dependencies.extend([a for a in res if ".pyd" not in a and ".so" not in a])
+    usings = ["System", "System.Linq", "System.Collections.Generic", "System.IO",
+              "System.Text"]
+    usings.extend([
+        "Microsoft.ML.Runtime",
+        "Microsoft.ML.Runtime.Api",
+        "Microsoft.ML.Runtime.Data",
+        "Microsoft.ML.Runtime.Learners",
+        "Microsoft.ML.Runtime.Ensemble",
+        "Microsoft.ML.Runtime.LightGBM",
+        "Microsoft.ML.Runtime.Model.Onnx",
+        "Microsoft.ML.Runtime.TimeSeriesProcessing",
+        "Microsoft.ML.Runtime.Tools",
+        "Microsoft.ML.Trainers",
+        "Microsoft.ML.Trainers.HalLearners",
+        "Microsoft.ML.Trainers.KMeans",
+        "Microsoft.ML.Trainers.FastTree",
+        "Microsoft.ML.Trainers.Online",
+        "Microsoft.ML.Trainers.PCA",
+        "Microsoft.ML.Transforms",
+        "Microsoft.ML.Transforms.Categorical",
+        "Microsoft.ML.Transforms.Normalizers",
+        "Microsoft.ML.Transforms.Projections",
+        "Microsoft.ML.Transforms.TensorFlow",
+        "Microsoft.ML.Transforms.Text",
+        "Microsoft.ML.Runtime.Sweeper",
+    ])
+    res = MamlHelper.GetAssemblies()  # pylint: disable=E0602
+    usings.extend([a.FullName.split(',')[0]
+                   for a in res if "Scikit" in a.FullName])
+    return dependencies, usings
+
+
+def mlnet(name, code, usings=None, dependencies=None, redirect=False):
+    """
+    Compiles a :epkg:`C#` function using :epkg:`ML.net`.
+    It automatically adds the necessary dependencies including
+    in this package.
+    Relies on :epkg:`create_cs_function`
+
+    @param      name            function name
+    @param      code            :epkg:`C#` code
+    @param      usings          *using* to add, such as *System*, *System.Linq*, ...
+    @param      dependencies    dependencies, can be absolute path file
+    @param      redirect        redirect standard output and error
+    @return                     :epkg:`Python` wrapper on the compiled :epkg:`C#`
+
+    The default dependencies are returned by @see fn get_mlnet_assemblies.
+    """
+    deps, us = get_mlnet_assemblies()
+    if usings is not None:
+        us.extend(usings)
+    if dependencies is not None:
+        deps.extend(dependencies)
+    return create_cs_function(name, code, us, deps, redirect)

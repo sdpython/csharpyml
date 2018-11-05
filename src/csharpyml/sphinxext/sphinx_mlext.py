@@ -243,53 +243,6 @@ def write_components_pages(app, env, docnames):
                 f.write(v)
 
 
-def get_mlnet_assemblies(chdir=False):
-    """
-    Retrieves assemblies.
-    """
-    if chdir:
-        cur = os.getcwd()
-        os.chdir(chdir)
-    res = MamlHelper.GetLoadedAssembliesLocation(True)  # pylint: disable=E0602
-    if chdir:
-        os.chdir(cur)
-    dependencies = []
-    # addition = ["Core", "Data", "Maml", "Api"]
-    # root = os.path.dirname(res[0].Location)
-    # dependencies = [os.path.join(root, "Microsoft.ML.{0}.dll").format(a) for a in addition]
-    dependencies.extend([a for a in res if ".pyd" not in a and ".so" not in a])
-    usings = ["System", "System.Linq", "System.Collections.Generic", "System.IO",
-              "System.Text"]
-    usings.extend([
-        "Microsoft.ML.Runtime",
-        "Microsoft.ML.Runtime.Api",
-        "Microsoft.ML.Runtime.Data",
-        "Microsoft.ML.Runtime.Learners",
-        "Microsoft.ML.Runtime.Ensemble",
-        "Microsoft.ML.Runtime.LightGBM",
-        "Microsoft.ML.Runtime.Model.Onnx",
-        "Microsoft.ML.Runtime.TimeSeriesProcessing",
-        "Microsoft.ML.Runtime.Tools",
-        "Microsoft.ML.Trainers",
-        "Microsoft.ML.Trainers.HalLearners",
-        "Microsoft.ML.Trainers.KMeans",
-        "Microsoft.ML.Trainers.FastTree",
-        "Microsoft.ML.Trainers.Online",
-        "Microsoft.ML.Trainers.PCA",
-        "Microsoft.ML.Transforms",
-        "Microsoft.ML.Transforms.Categorical",
-        "Microsoft.ML.Transforms.Normalizers",
-        "Microsoft.ML.Transforms.Projections",
-        "Microsoft.ML.Transforms.TensorFlow",
-        "Microsoft.ML.Transforms.Text",
-        "Microsoft.ML.Runtime.Sweeper",
-    ])
-    res = MamlHelper.GetAssemblies()  # pylint: disable=E0602
-    usings.extend([a.FullName.split(',')[0]
-                   for a in res if "Scikit" in a.FullName])
-    return dependencies, usings
-
-
 class RunCSharpMLDirective(RunCSharpDirective):  # pylint: disable=E0602
     """
     Implicits "and dependencies.
