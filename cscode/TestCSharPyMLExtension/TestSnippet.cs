@@ -1,38 +1,24 @@
-"""
-@brief      test log(time=2s)
-"""
-import sys
-import os
-import unittest
-from sklearn import datasets
-import pandas
-from pyquickhelper.pycode import ExtTestCase, get_temp_folder
+﻿// See the LICENSE file in the project root for more information.
 
-try:
-    import src
-except ImportError:
-    path = os.path.normpath(
-        os.path.abspath(
-            os.path.join(
-                os.path.split(__file__)[0],
-                "..",
-                "..")))
-    if path not in sys.path:
-        sys.path.append(path)
-    import src
-
-from src.csharpyml.notebook.csmlmagics import CsMLMagics
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
+using System.IO;
+using Microsoft.ML.Runtime.Api;
+using Microsoft.ML.Runtime.Data;
+using Microsoft.ML.Transforms;
+using Microsoft.ML.Runtime.Learners;
 
 
-class TestDynamicCS(ExtTestCase):
-    """Test dynamic compilation."""
-
-    _script = """
+namespace TestCSharPyMLExtension
+{
+    [TestClass]
+    public class TestSnippet
+    {
         public class IrisObservation
         {
             [Column("0")]
             [ColumnName("Label")]
-            public string Label;
+            public float Label;
 
             [Column("1")]
             public float Sepal_length;
@@ -67,7 +53,7 @@ class TestDynamicCS(ExtTestCase):
 
             public void Train()
             {
-                using (var env = new ConsoleEnvironment(verbose:false))
+                using (var env = new ConsoleEnvironment(verbose: false))
                 {
                     var args = new TextLoader.Arguments()
                     {
@@ -121,37 +107,14 @@ class TestDynamicCS(ExtTestCase):
         {
             return new TrainTestIris(ds);
         }
-        """
 
-    def test_src(self):
-        "skip pylint"
-        self.assertFalse(src is None)
-
-    def test_magic_cs(self):
-        cm = CsMLMagics()
-        fct = cm.mlnet("ReturnMLClass", TestDynamicCS._script)
-        if fct is None:
-            raise Exception(TestDynamicCS._script)
-
-        temp = get_temp_folder(__file__, "temp_nb_mlnet")
-        iris = datasets.load_iris()
-        X = iris.data
-        y = iris.target
-        features = ['Slength', 'Swidth', 'Plength', 'Pwidth']
-        df = pandas.DataFrame(X, columns=features)
-        df["Label"] = y
-        df = df[["Label"] + ['Slength', 'Swidth', 'Plength', 'Pwidth']]
-        dest = os.path.join(temp, "iris_data_id.txt")
-        df.to_csv(dest, sep=',', index=False)
-
-        cl = fct(dest)
-        cl.Train()
-        res = cl.Predict(3.4, 5.4, 3.2, 5.6)
-        label = res.PredictedLabel
-        score = list(res.Score)
-        self.assertEqual(label, 3)
-        self.assertEqual(len(score), 3)
-
-
-if __name__ == "__main__":
-    unittest.main()
+        [TestMethod]
+        public void TestSnippetIris()
+        {
+            var iris = FileHelper.GetTestFile("iris_data_id.txt");
+            var res = ReturnMLClass(iris);
+            Assert.IsNotNull(res);
+            res.Train();
+        }
+    }
+}

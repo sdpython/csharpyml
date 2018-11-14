@@ -77,7 +77,7 @@ class TestMamlMlnet(ExtTestCase):
                         Separator = ",",
                         HasHeader = true,
                         Column = new TextLoader.Column[] {
-                            new TextLoader.Column("Label", DataKind.R4, 0),
+                            TextLoader.Column.Parse("Label:U4[0-2]:0"),
                             new TextLoader.Column("Sepal_length", DataKind.R4, 1),
                             new TextLoader.Column("Sepal_width", DataKind.R4, 2),
                             new TextLoader.Column("Petal_length", DataKind.R4, 3),
@@ -89,7 +89,7 @@ class TestMamlMlnet(ExtTestCase):
                     var concat = new ColumnConcatenatingEstimator(env,
                                                                   "Features", "Sepal_length",
                                                                   "Sepal_width", "Petal_length", "Petal_width");
-                    var km = new MulticlassLogisticRegression(env, "Features", "Label");
+                    var km = new MulticlassLogisticRegression(env, "Label", "Features");
                     var pipeline = concat.Append(km);
 
                     IDataView trainingDataView = reader.Read(new MultiFileSource(_dataset));
