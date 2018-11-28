@@ -5,4 +5,4 @@
 [submodule "cscode/machinelearning"]
 	path = cscode/machinelearning
 	url = https://github.com/xadupre/machinelearning.git
-	branch = modified
+	branch = ext

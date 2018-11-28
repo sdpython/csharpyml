@@ -131,6 +131,7 @@ def get_mlnet_assemblies(chdir=False):
     usings = ["System", "System.Linq", "System.Collections.Generic", "System.IO",
               "System.Text"]
     usings.extend([
+        "Microsoft.ML",
         "Microsoft.ML.Runtime",
         "Microsoft.ML.Runtime.Api",
         "Microsoft.ML.Runtime.Data",
