@@ -363,7 +363,6 @@ def copy_assemblies(libdef=None, version="Release"):
         folders = []
         for sub in ['DataManipulation',
                     'DocHelperMlExt',
-                    'EntryPoints',
                     'ScikitAPI',
                     ]:
             fold = 'cscode/machinelearningext/machinelearningext/bin/AnyCPU.%s/%s/netstandard2.0' % (

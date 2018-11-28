@@ -1,8 +1,7 @@
 ﻿// See the LICENSE file in the project root for more information.
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
+using Microsoft.ML;
 using Microsoft.ML.Runtime.Api;
 using Microsoft.ML.Runtime.Data;
 using Microsoft.ML.Transforms;
