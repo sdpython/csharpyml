@@ -191,7 +191,8 @@ class CSDataFrame:
         for i in range(shape.Item2):
             name = schema.GetColumnName(i)
             ctype = schema.GetColumnType(i)
-            if ctype.IsVector:
+            str_ctype = str(ctype)
+            if "VBuffer" in str_ctype:
                 raise TypeError(
                     "Unable to handle type {0} for column {1}: '{2}'.".format(ctype, i, name))
             kind = ctype.ToString()
@@ -199,7 +200,7 @@ class CSDataFrame:
                 data[name] = list(
                     cl.DataFrameColumnToArrayInt(obj, i))
                 apply.append((name, numpy.int32))
-            elif kind == 'U4' or ctype.IsKey:
+            elif kind == 'U4' or "Key" in str_ctype:
                 data[name] = list(cl.DataFrameColumnToArrayUint(obj, i))
             elif kind == 'I8':
                 data[name] = list(
