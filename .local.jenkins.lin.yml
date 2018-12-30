@@ -13,6 +13,7 @@ install:
   - $PYINT -c "from pip._internal import main;main(\"install -r requirements.txt\".split())"
   - $PYINT --version
   - $PYINT -c "from pip._internal import main;main([\"freeze\"])"
+  - export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 before_script:
   - export LANG=en_US.UTF-8

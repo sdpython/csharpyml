@@ -15,6 +15,7 @@ install:
   - pip freeze
   - pip freeze > pip_freeze.txt
   - git submodule update --init
+  - export DOTNET_CLI_TELEMETRY_OPTOUT=1
 
 before_script:
   # machinelearning
