@@ -7,7 +7,7 @@ from pyquickhelper.helpgen.default_conf import set_sphinx_variables, get_default
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.split(__file__)[0])))
 
-set_sphinx_variables(__file__, "csharpyml", "sdpython", 2018,
+set_sphinx_variables(__file__, "csharpyml", "sdpython", 2019,
                      "alabaster", [alabaster.get_path()],
                      locals(), book=True,
                      extlinks=dict(issue=('https://github.com/sdpython/csharpyml/issues/%s', 'issue')))
