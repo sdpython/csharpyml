@@ -1,9 +1,4 @@
 
-.. _l-README:
-
-README
-======
-
 .. image:: https://travis-ci.org/sdpython/csharpyml.svg?branch=master
     :target: https://travis-ci.org/sdpython/csharpyml
     :alt: Build status
@@ -37,22 +32,17 @@ README
     :target: http://www.xavierdupre.fr/app/csharpyml/helpsphinx/all_notebooks_coverage.html
     :alt: Notebook Coverage
 
-**Links:**
+.. _l-README:
 
-* `GitHub/csharpyml <https://github.com/sdpython/csharpyml/>`_
-* `documentation <http://www.xavierdupre.fr/app/csharpyml/helpsphinx2/index.html>`_
-* `Blog <http://www.xavierdupre.fr/app/csharpyml/helpsphinx/blog/main_0000.html#ap-main-0>`_
-
-Introduction
-------------
+csharpyml
+=========
 
 Helpers to play with *C#*, *Python* and *ML.net*.
 The module also relies on
 `pythonnet <https://github.com/pythonnet/pythonnet>`_ and
 `csharpy <http://www.xavierdupre.fr/app/csharpy/helpsphinx/index.html>`_.
 
-Installation
-------------
+**Installation**
 
 *Windows*
 
@@ -64,3 +54,10 @@ Installation
 
 Follow the instructions described in
 `config.yml <https://github.com/sdpython/csharpyml/blob/master/.circleci/config.yml>`_.
+
+**Links:**
+
+* `GitHub/csharpyml <https://github.com/sdpython/csharpyml/>`_
+* `documentation <http://www.xavierdupre.fr/app/csharpyml/helpsphinx2/index.html>`_
+* `Blog <http://www.xavierdupre.fr/app/csharpyml/helpsphinx/blog/main_0000.html#ap-main-0>`_
+
