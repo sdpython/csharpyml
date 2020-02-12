@@ -9,6 +9,7 @@ virtualenv:
   
 install:
   - git submodule update --init
+  - $PYINT -m pip install --upgrade pip
   - $PYINT -m pip install --no-cache-dir --no-deps --index http://localhost:8067/simple/ jyquickhelper pyquickhelper csharpy pyensae pymyinstall pythonnet --extra-index-url=https://pypi.python.org/simple/
   - $PYINT -m pip install -r requirements.txt
   - $PYINT --version
