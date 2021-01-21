@@ -42,8 +42,8 @@ before_script:
   - cd ..
 
 script:
-  - { CMD: "$PYINT -u setup.py unittests", NAME: "UT", CLEAN: "0" }
-  - { CMD: "cd cscode; dotnet test -c Release TestCSharPyMLExtension; dotnet test -c Debug TestCSharPyMLExtension; cd ..", NAME: "UT_CSharp", CLEAN: "0" }
+  - { CMD: "$PYINT -u setup.py unittests", NAME: "UT", CLEAN: "0", SCHEDULER: "H H(1-2) 8 * *" }
+  - { CMD: "cd cscode; dotnet test -c Release TestCSharPyMLExtension; dotnet test -c Debug TestCSharPyMLExtension; cd ..", NAME: "UT_CSharp", CLEAN: "0", SCHEDULER: "H H(1-2) 9 * *" }
 
 after_script:
   - $PYINT -u setup.py bdist_wheel
