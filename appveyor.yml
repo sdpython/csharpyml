@@ -8,8 +8,8 @@ environment:
 
   matrix:
 
-    - PYTHON: "C:\\Python37-x64"
-      PYTHON_VERSION: "3.7.x"
+    - PYTHON: "C:\\Python39-x64"
+      PYTHON_VERSION: "3.9.x"
       PYTHON_ARCH: "64"
 
 init:
