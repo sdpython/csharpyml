@@ -1,6 +1,6 @@
 
 .. image:: https://travis-ci.com/sdpython/csharpyml.svg?branch=master
-    :target: https://travis-ci.com/sdpython/csharpyml
+    :target: https://app.travis-ci.com/github/sdpython/csharpyml
     :alt: Build status
 
 .. image:: https://ci.appveyor.com/api/projects/status/ldrgt6sxeyfwtoo2?svg=true
