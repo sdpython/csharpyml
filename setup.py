@@ -20,7 +20,7 @@ readme = 'README.rst'
 history = 'HISTORY.rst'
 
 
-KEYWORDS = project_var_name + ', first name, last name'
+KEYWORDS = [project_var_name, 'Xavier Dupré', 'C#']
 DESCRIPTION = "Tools to use C# + Python mostly from Python."
 
 
